@@ -49,18 +49,47 @@ function toggleProductCollapsible(productNum) {
   }
 }
 
-// ========== ФУНКЦІЇ ДЛЯ COLLAPSIBLE ПРОДУКТІВ ==========
+// ========== ФУНКЦІЇ ДЛЯ КОЛЬОРОВОГО ВИБОРУ ==========
 
-function toggleProductCollapsible(productNum) {
-  const content = document.getElementById(`productContent${productNum}`);
-  const chevron = document.getElementById(`chevron${productNum}`);
+function syncColorPickerDisplay(productNum) {
+  const colorInput = document.getElementById(`product${productNum}ColorHex`);
+  const displayInput = document.getElementById(`product${productNum}ColorHexDisplay`);
 
-  if (content.style.display === 'none' || content.style.display === '') {
-    content.style.display = 'block';
-    chevron.style.transform = 'rotate(180deg)';
-  } else {
-    content.style.display = 'none';
-    chevron.style.transform = 'rotate(0deg)';
+  if (colorInput && displayInput) {
+    displayInput.value = colorInput.value;
+    console.log(`🎨 Колір продукту ${productNum} синхронізовано: ${colorInput.value}`);
+  }
+}
+
+// ========== ФУНКЦІЇ ДЛЯ РОЗМІРІВ ==========
+
+function getSelectedSizes(productNum) {
+  const checkboxes = document.querySelectorAll(`.product${productNum}-size:checked`);
+  const sizes = Array.from(checkboxes).map(cb => cb.value);
+  return sizes;
+}
+
+function getSelectedSizesAsString(productNum) {
+  const sizes = getSelectedSizes(productNum);
+  return sizes.join(', ');
+}
+
+function setSelectedSizes(productNum, sizesString) {
+  // Clear all checkboxes first
+  document.querySelectorAll(`.product${productNum}-size`).forEach(cb => {
+    cb.checked = false;
+  });
+
+  // Parse the string and check relevant boxes
+  if (sizesString && sizesString.trim()) {
+    const sizes = sizesString.split(',').map(s => s.trim());
+    sizes.forEach(size => {
+      const checkbox = document.querySelector(`.product${productNum}-size[value="${size}"]`);
+      if (checkbox) {
+        checkbox.checked = true;
+      }
+    });
+    console.log(`📏 Розміри продукту ${productNum} завантажені: ${sizesString}`);
   }
 }
 
@@ -325,9 +354,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (data[`product${i}Color`]) document.getElementById(`product${i}Color`).value = data[`product${i}Color`];
 
-        if (data[`product${i}ColorHex`]) document.getElementById(`product${i}ColorHex`).value = data[`product${i}ColorHex`];
+        if (data[`product${i}ColorHex`]) {
+          document.getElementById(`product${i}ColorHex`).value = data[`product${i}ColorHex`];
+          document.getElementById(`product${i}ColorHexDisplay`).value = data[`product${i}ColorHex`];
+        }
 
-        if (data[`product${i}Size`]) document.getElementById(`product${i}Size`).value = data[`product${i}Size`];
+        if (data[`product${i}Size`]) setSelectedSizes(i, data[`product${i}Size`]);
 
         if (data[`product${i}Material`]) document.getElementById(`product${i}Material`).value = data[`product${i}Material`];
 
@@ -357,6 +389,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         initBenefitsForm(data.benefits);
 
+      }
+
+      // Встановити слухачі для синхронізації кольорових вибірок
+      for (let i = 1; i <= 5; i++) {
+        const colorInput = document.getElementById(`product${i}ColorHex`);
+        if (colorInput) {
+          colorInput.addEventListener('input', function() {
+            syncColorPickerDisplay(i);
+          });
+        }
       }
 
     })
@@ -448,7 +490,7 @@ async function saveFormToServer() {
 
     product1ColorHex: document.getElementById('product1ColorHex').value,
 
-    product1Size: document.getElementById('product1Size').value,
+    product1Size: getSelectedSizesAsString(1),
 
     product1Material: document.getElementById('product1Material').value,
 
@@ -464,7 +506,7 @@ async function saveFormToServer() {
 
     product2ColorHex: document.getElementById('product2ColorHex').value,
 
-    product2Size: document.getElementById('product2Size').value,
+    product2Size: getSelectedSizesAsString(2),
 
     product2Material: document.getElementById('product2Material').value,
 
@@ -480,7 +522,7 @@ async function saveFormToServer() {
 
     product3ColorHex: document.getElementById('product3ColorHex').value,
 
-    product3Size: document.getElementById('product3Size').value,
+    product3Size: getSelectedSizesAsString(3),
 
     product3Material: document.getElementById('product3Material').value,
 
@@ -496,7 +538,7 @@ async function saveFormToServer() {
 
     product4ColorHex: document.getElementById('product4ColorHex').value,
 
-    product4Size: document.getElementById('product4Size').value,
+    product4Size: getSelectedSizesAsString(4),
 
     product4Material: document.getElementById('product4Material').value,
 
@@ -512,7 +554,7 @@ async function saveFormToServer() {
 
     product5ColorHex: document.getElementById('product5ColorHex').value,
 
-    product5Size: document.getElementById('product5Size').value,
+    product5Size: getSelectedSizesAsString(5),
 
     product5Material: document.getElementById('product5Material').value,
 
@@ -628,9 +670,12 @@ async function loadOriginalValues() {
 
       if (formData[`product${i}Color`]) document.getElementById(`product${i}Color`).value = formData[`product${i}Color`];
 
-      if (formData[`product${i}ColorHex`]) document.getElementById(`product${i}ColorHex`).value = formData[`product${i}ColorHex`];
+      if (formData[`product${i}ColorHex`]) {
+        document.getElementById(`product${i}ColorHex`).value = formData[`product${i}ColorHex`];
+        document.getElementById(`product${i}ColorHexDisplay`).value = formData[`product${i}ColorHex`];
+      }
 
-      if (formData[`product${i}Size`]) document.getElementById(`product${i}Size`).value = formData[`product${i}Size`];
+      if (formData[`product${i}Size`]) setSelectedSizes(i, formData[`product${i}Size`]);
 
       if (formData[`product${i}Material`]) document.getElementById(`product${i}Material`).value = formData[`product${i}Material`];
 
@@ -751,9 +796,12 @@ async function loadSavedValues() {
 
       document.getElementById(`product${i}Color`).value = formData[`product${i}Color`] || '';
 
-      document.getElementById(`product${i}ColorHex`).value = formData[`product${i}ColorHex`] || '';
+      const colorHex = formData[`product${i}ColorHex`] || '';
+      document.getElementById(`product${i}ColorHex`).value = colorHex;
+      document.getElementById(`product${i}ColorHexDisplay`).value = colorHex;
 
-      document.getElementById(`product${i}Size`).value = formData[`product${i}Size`] || '';
+      const sizes = formData[`product${i}Size`] || '';
+      setSelectedSizes(i, sizes);
 
       document.getElementById(`product${i}Material`).value = formData[`product${i}Material`] || '';
 
@@ -994,7 +1042,7 @@ if (videoUploadInput) {
       alert('? ??????? ??? ???????????? ?????: ' + error.message);
       e.target.value = '';
       videoUrlValue = '';
-      showVideoPreview();
+      showVideoPreview('');
     }
   });
 }
@@ -1091,7 +1139,7 @@ function getFormParams() {
 
     product1ColorHex: document.getElementById('product1ColorHex').value,
 
-    product1Size: document.getElementById('product1Size').value,
+    product1Size: getSelectedSizesAsString(1),
 
     product1Material: document.getElementById('product1Material').value,
 
@@ -1107,7 +1155,7 @@ function getFormParams() {
 
     product2ColorHex: document.getElementById('product2ColorHex').value,
 
-    product2Size: document.getElementById('product2Size').value,
+    product2Size: getSelectedSizesAsString(2),
 
     product2Material: document.getElementById('product2Material').value,
 
@@ -1123,7 +1171,7 @@ function getFormParams() {
 
     product3ColorHex: document.getElementById('product3ColorHex').value,
 
-    product3Size: document.getElementById('product3Size').value,
+    product3Size: getSelectedSizesAsString(3),
 
     product3Material: document.getElementById('product3Material').value,
 
@@ -1139,7 +1187,7 @@ function getFormParams() {
 
     product4ColorHex: document.getElementById('product4ColorHex').value,
 
-    product4Size: document.getElementById('product4Size').value,
+    product4Size: getSelectedSizesAsString(4),
 
     product4Material: document.getElementById('product4Material').value,
 
@@ -1155,7 +1203,7 @@ function getFormParams() {
 
     product5ColorHex: document.getElementById('product5ColorHex').value,
 
-    product5Size: document.getElementById('product5Size').value,
+    product5Size: getSelectedSizesAsString(5),
 
     product5Material: document.getElementById('product5Material').value,
 
