@@ -42,34 +42,51 @@ function initBenefitsForm(benefits) {
 
 // Ініціалізуємо форму при завантаженні сторінки
 document.addEventListener('DOMContentLoaded', function() {
-  // Спочатку завантажуємо оригінальні значення
-  fetch('/api/original-form-data')
+  // Спочатку намагаємось завантажити збережені дані користувача
+  fetch('/api/get-user-config')
     .then(res => res.json())
     .then(data => {
-      console.log('📥 Отримані оригінальні дані:', data);
-
-      // Заповнити всі поля форми
-      if (data.headerText) document.getElementById('headerText').value = data.headerText;
-      if (data.heroTitle) document.getElementById('heroTitle').value = data.heroTitle;
-      if (data.heroPrice) document.getElementById('heroPrice').value = data.heroPrice;
-      if (data.enableTimer !== undefined) document.getElementById('enableTimer').checked = data.enableTimer;
-      if (data.enableStock !== undefined) document.getElementById('enableStock').checked = data.enableStock;
-      if (data.heroImage) {
-        uploadedHeroImageFilename = data.heroImage;
-        showImagePreview(data.heroImage);
-      }
-      if (data.enableImage !== undefined) document.getElementById('enableImage').checked = data.enableImage;
-      if (data.imageUrl) {
-        imageUrlValue = data.imageUrl;
-      }
-
-      // Ініціалізувати форму переваг
-      if (data.benefits && Array.isArray(data.benefits) && data.benefits.length > 0) {
-        initBenefitsForm(data.benefits);
+      // Перевіримо чи є збережені дані
+      if (data.headerText || data.heroTitle || data.heroImage) {
+        console.log('📥 Завантажені збережені дані користувача:', data);
+        loadFormData(data);
+      } else {
+        // Якщо немає збережених даних, завантажимо оригіналу
+        console.log('📥 Немає збережених даних, завантажуємо оригіналу...');
+        fetch('/api/original-form-data')
+          .then(res => res.json())
+          .then(originalData => {
+            console.log('📥 Отримані оригінальні дані:', originalData);
+            loadFormData(originalData);
+          })
+          .catch(err => console.error('❌ Помилка при завантаженні оригіналу:', err));
       }
     })
-    .catch(err => console.error('❌ Помилка при завантаженні оригіналу:', err));
+    .catch(err => console.error('❌ Помилка при завантаженні конфігу:', err));
 });
+
+// Функція для заповнення даних форми
+function loadFormData(data) {
+  // Заповнити всі поля форми
+  if (data.headerText) document.getElementById('headerText').value = data.headerText;
+  if (data.heroTitle) document.getElementById('heroTitle').value = data.heroTitle;
+  if (data.heroPrice) document.getElementById('heroPrice').value = data.heroPrice;
+  if (data.enableTimer !== undefined) document.getElementById('enableTimer').checked = data.enableTimer;
+  if (data.enableStock !== undefined) document.getElementById('enableStock').checked = data.enableStock;
+  if (data.heroImage) {
+    uploadedHeroImageFilename = data.heroImage;
+    showImagePreview(data.heroImage);
+  }
+  if (data.enableImage !== undefined) document.getElementById('enableImage').checked = data.enableImage;
+  if (data.imageUrl) {
+    imageUrlValue = data.imageUrl;
+  }
+
+  // Ініціалізувати форму переваг
+  if (data.benefits && Array.isArray(data.benefits) && data.benefits.length > 0) {
+    initBenefitsForm(data.benefits);
+  }
+}
 
 // ========== ФУНКЦІЇ ДЛЯ ТРЬОХ КНОПОК ==========
 
