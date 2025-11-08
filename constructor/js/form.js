@@ -240,10 +240,10 @@ document.getElementById('imageUpload').addEventListener('change', async function
   if (!file) return;
 
   const formData = new FormData();
-  formData.append('imageUpload', file);
+  formData.append('heroImage', file);
 
   try {
-    const response = await fetch('/upload-image', {
+    const response = await fetch('/upload-hero-image', {
       method: 'POST',
       body: formData
     });
