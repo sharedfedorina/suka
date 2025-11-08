@@ -234,7 +234,92 @@ function renderProductImages(productNum) {
 
 }
 
+// ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 1 З FILE PICKER ==========
 
+function handleProduct1ImageUpload() {
+  const fileInput = document.getElementById('product1ImageInput');
+  const files = fileInput.files;
+
+  if (files.length === 0) {
+    alert('Будь ласка, виберіть файли');
+    return;
+  }
+
+  // Добавляємо файли з обираних фото Product 1
+  Array.from(files).forEach(file => {
+    // Використовуємо ім'я файлу як identifier для фото
+    const fileName = `Product 1 - ${file.name} (${new Date().toLocaleTimeString()})`;
+
+    // Читаємо файл як Data URL для preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      // Зберігаємо Data URL як шлях фото
+      const dataUrl = e.target.result;
+
+      if (!product1Images.includes(dataUrl)) {
+        product1Images.push(dataUrl);
+        renderProduct1Images();
+        console.log(`✅ Фото додано до Product 1`);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Очищаємо file input
+  fileInput.value = '';
+}
+
+function removeProduct1Image(index) {
+  product1Images.splice(index, 1);
+  renderProduct1Images();
+  console.log(`❌ Фото видалено з Product 1 на індексі ${index}`);
+}
+
+function renderProduct1Images() {
+  const container = document.getElementById('product1ImagesList');
+
+  if (!container) return;
+
+  if (product1Images.length === 0) {
+    container.innerHTML = '<div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>';
+    return;
+  }
+
+  container.innerHTML = product1Images.map((imageData, index) => {
+    // Если це Data URL від file picker, показуємо preview
+    if (imageData.startsWith('data:')) {
+      return `
+        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: #ecf0f1; margin-bottom: 8px; border-radius: 4px;">
+          <img src="${imageData}" alt="preview" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 12px; color: #333; word-break: break-all;">Новое фото</div>
+          </div>
+          <button
+            type="button"
+            onclick="removeProduct1Image(${index})"
+            style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; flex-shrink: 0;">
+            Видалити
+          </button>
+        </div>
+      `;
+    } else {
+      // Це шлях з конфіга, показуємо як текст
+      return `
+        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: #ecf0f1; margin-bottom: 8px; border-radius: 4px;">
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 12px; color: #333; word-break: break-all;">${imageData}</div>
+          </div>
+          <button
+            type="button"
+            onclick="removeProduct1Image(${index})"
+            style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; flex-shrink: 0;">
+            Видалити
+          </button>
+        </div>
+      `;
+    }
+  }).join('');
+}
 
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
 
@@ -406,7 +491,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
           window[`product${i}Images`] = data[`product${i}Images`];
 
-          renderProductImages(i);
+          if (i === 1) {
+            renderProduct1Images();
+          } else {
+            renderProductImages(i);
+          }
 
         }
 
@@ -728,7 +817,11 @@ async function loadOriginalValues() {
 
         window[`product${i}Images`] = formData[`product${i}Images`];
 
-        renderProductImages(i);
+        if (i === 1) {
+          renderProduct1Images();
+        } else {
+          renderProductImages(i);
+        }
 
       }
 
@@ -860,7 +953,11 @@ async function loadSavedValues() {
 
         window[`product${i}Images`] = formData[`product${i}Images`];
 
-        renderProductImages(i);
+        if (i === 1) {
+          renderProduct1Images();
+        } else {
+          renderProductImages(i);
+        }
 
       }
 
@@ -1075,14 +1172,14 @@ if (videoUploadInput) {
         body: formData
       });
 
-      if (!response.ok) throw new Error('??????? ??? ???????????? ?????');
+      if (!response.ok) throw new Error('Не вдалося завантажити відео');
 
       const result = await response.json();
       videoUrlValue = result.filename;
       showVideoPreview(videoUrlValue);
-      console.log('? ????? ???????????:', videoUrlValue);
+      console.log('Відео завантажено:', videoUrlValue);
     } catch (error) {
-      alert('? ??????? ??? ???????????? ?????: ' + error.message);
+      alert('Не вдалося завантажити відео: ' + error.message);
       e.target.value = '';
       videoUrlValue = '';
       showVideoPreview('');
