@@ -1,0 +1,3 @@
+date	size'/'remotesize	flags(request:Update,Range state:File response:Modified,Chunked,gZipped)	statuscode	status ('servermsg')	MIME	Etag|Date	URL	localfile	(from URL)
+23:46:02	162/162	---M--	301	error ('Moved%20Permanently')	text/html	date:Tue,%2004%20Nov%202025%2021:46:02%20GMT	http://oversized.kopo.ua/robots.txt		(from )
+23:46:03	162/162	---M--	301	error ('Moved%20Permanently')	text/html	date:Tue,%2004%20Nov%202025%2021:46:03%20GMT	http://oversized.kopo.ua/	C:/ComoYo/Landing/Landing/Target/Landing/oversized.kopo.ua/index.html	(from )

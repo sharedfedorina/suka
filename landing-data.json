@@ -1,0 +1,241 @@
+{
+  "metadata": {
+    "name": "printer-landing",
+    "title": "Професійні 3D принтери для виробництва | Printex Pro",
+    "description": "Професійні 3D принтери для виробництва",
+    "brand": "Printex Pro",
+    "lang": "uk"
+  },
+  "header": {
+    "text": "СПЕЦІАЛЬНА АКЦІЯ на 3D принтери!",
+    "icon": "icons/header-icon.svg"
+  },
+  "hero": {
+    "title": "Професійні 3D принтери",
+    "price": "8 500",
+    "currency": "грн",
+    "count": "12",
+    "count_unit": "принтерів за акційною ціною",
+    "button_text": "ВИБРАТИ",
+    "timer_text": "До кінця акції залишилося",
+    "image": "img/start/start-1.png",
+    "image_mobile": "img/start/start-1_m.webp"
+  },
+  "action_block": {
+    "title": "Виберіть модель або комплект",
+    "subtitle": "Знижки до 35% сьогодні!",
+    "button_text": "ЗАМОВИТИ"
+  },
+  "advantages": [
+    {
+      "id": "plus1",
+      "title": "Безкоштовна доставка",
+      "description": "Доставимо будь-куди по Україні без прихованих платежів. Страховка включена.",
+      "icon": "icons/plus/plus-1.svg"
+    },
+    {
+      "id": "plus2",
+      "title": "Гарантія 2 роки",
+      "description": "Повна гарантія на всі компоненти. Сервіс розташований у Києві, Харкові, Львові.",
+      "icon": "icons/plus/plus-2.svg"
+    },
+    {
+      "id": "plus3",
+      "title": "Встановлення та навчання",
+      "description": "Безплатна розпакування, установка та базове навчання персоналу на місці.",
+      "icon": "icons/plus/plus-3.svg"
+    },
+    {
+      "id": "plus4",
+      "title": "Технічна підтримка 24/7",
+      "description": "Лінія гарячої підтримки завжди готова допомогти. Онлайн консультація з інженерами.",
+      "icon": "icons/plus/plus-4.svg"
+    },
+    {
+      "id": "plus5",
+      "title": "Офіційний дилер",
+      "description": "Оригінальні запчастини та матеріали. Авторизований сервіс виробника!",
+      "icon": "icons/plus/plus-5.svg"
+    }
+  ],
+  "promo": {
+    "label": "Демонстрація роботи",
+    "title": "Подивись як працює",
+    "video": "video/promo-1.mp4",
+    "thumbnail_desktop": "img/promo/promo-1.jpg",
+    "thumbnail_mobile": "img/promo/promo-1_m.webp"
+  },
+  "products": {
+    "label": "Замовляйте зі знижкою",
+    "title": "Популярні моделі 3D принтерів",
+    "items": [
+      {
+        "id": "product1",
+        "name": "3D Принтер FDM Pro Max",
+        "subtitle": "Точність: 0.1мм",
+        "price_old": "13 200",
+        "price_new": "8 500",
+        "currency": "грн",
+        "discount_percent": "35",
+        "images": {
+          "desktop": "img/products/product_1.jpg",
+          "mobile": "img/products/product_1_m.webp",
+          "gallery": [
+            "img/products/product_1.jpg",
+            "img/products/product_1_1.jpg",
+            "img/products/product_1_2.jpg",
+            "img/products/product_1_3.jpg",
+            "img/products/product_1_4.jpg",
+            "img/products/product_1_5.jpg",
+            "img/products/product_1_6.jpg",
+            "img/products/product_1_7.jpg"
+          ]
+        },
+        "specs": {
+          "type": "FDM",
+          "color": "#19161a",
+          "bed_size": "300x300x400мм",
+          "materials": "PLA, PETG, ABS, TPU"
+        },
+        "button_text": "ЗАМОВИТИ",
+        "description": "Професійний 3D принтер для промислового виробництва. Висока точність друку та надійність."
+      },
+      {
+        "id": "product2",
+        "name": "3D Принтер SLA Ultra",
+        "subtitle": "Точність: 0.025мм",
+        "price_old": "24 500",
+        "price_new": "16 800",
+        "currency": "грн",
+        "discount_percent": "31",
+        "images": {
+          "desktop": "img/products/product_3.jpg",
+          "mobile": "img/products/product_3_m.webp",
+          "gallery": [
+            "img/products/product_3.jpg",
+            "img/products/product_3_1.jpg",
+            "img/products/product_3_2.jpg"
+          ]
+        },
+        "specs": {
+          "type": "SLA",
+          "color": "#0D78F1",
+          "platform": "120x68x80мм",
+          "materials": "Смола Standard, Tough, Dental"
+        },
+        "button_text": "ЗАМОВИТИ",
+        "description": "Найточніший 3D принтер для ювелірних та дентальних робіт."
+      },
+      {
+        "id": "product3",
+        "name": "Комплект FDM + SLA",
+        "subtitle": "Универсальне рішення",
+        "price_old": "37 700",
+        "price_new": "24 900",
+        "currency": "грн",
+        "discount_percent": "34",
+        "images": {
+          "desktop": "img/products/product_4.jpg",
+          "mobile": "img/products/product_4_m.webp",
+          "gallery": [
+            "img/products/product_4.jpg"
+          ]
+        },
+        "specs": {
+          "type": "FDM + SLA",
+          "color": "#FF5B5B",
+          "bed_size": "Комбіновано",
+          "materials": "Всі типи"
+        },
+        "button_text": "ЗАМОВИТИ",
+        "description": "Комплект двох принтерів для максимальної гнучкості в виробництві."
+      },
+      {
+        "id": "product4",
+        "name": "Матеріали для печати (комплект)",
+        "subtitle": "1 кг філаменту",
+        "price_old": "2 400",
+        "price_new": "1 800",
+        "currency": "грн",
+        "discount_percent": "25",
+        "images": {
+          "desktop": "img/products/product_5.jpg",
+          "mobile": "img/products/product_5_m.webp",
+          "gallery": [
+            "img/products/product_5.jpg"
+          ]
+        },
+        "specs": {
+          "type": "FDM Materials",
+          "color": "#888",
+          "weight": "1 кг",
+          "materials": "PLA + PETG + ABS"
+        },
+        "button_text": "ЗАМОВИТИ",
+        "description": "Набір якісних філаментів для принтерів серії Pro."
+      },
+      {
+        "id": "product5",
+        "name": "Сервісний пакет (1 рік)",
+        "subtitle": "Обслуговування + запчастини",
+        "price_old": "5 000",
+        "price_new": "3 500",
+        "currency": "грн",
+        "discount_percent": "30",
+        "images": {
+          "desktop": "img/products/product_6.jpg",
+          "mobile": "img/products/product_6_m.webp",
+          "gallery": [
+            "img/products/product_6.jpg"
+          ]
+        },
+        "specs": {
+          "type": "Service",
+          "color": "#00AA00",
+          "duration": "12 місяців",
+          "includes": "ТО, запчастини, консультації"
+        },
+        "button_text": "ЗАМОВИТИ",
+        "description": "Розширена гарантія та обслуговування на рік."
+      }
+    ]
+  },
+  "media": {
+    "images": {
+      "logo": "img/logo.png",
+      "favicon": "favicon/favicon-32x32.png"
+    },
+    "videos": [
+      {
+        "id": "promo1",
+        "src": "video/promo-1.mp4",
+        "thumbnail": "img/promo/promo-1.jpg"
+      }
+    ]
+  },
+  "colors": {
+    "primary": "#0D78F1",
+    "accent": "#FF5B5B",
+    "text": "#3C4043",
+    "background": "#FFFFFF"
+  },
+  "fonts": {
+    "family": "GoogleSans",
+    "weights": [400, 500, 700],
+    "files": [
+      "fonts/GoogleSans-Regular.woff",
+      "fonts/GoogleSans-Medium.woff",
+      "fonts/GoogleSans-Bold.woff"
+    ]
+  },
+  "contacts": {
+    "phone": "+380 00 000 00 00",
+    "email": "info@printex.pro",
+    "address": "Київ, Україна"
+  },
+  "seo": {
+    "keywords": "3D принтер, FDM, SLA, виробництво, Україна",
+    "author": "Printex Pro",
+    "robots": "index, follow"
+  }
+}

@@ -221,6 +221,19 @@ src="https://www.facebook.com/tr?id=1217177219438590&amp;ev=PageView&amp;noscrip
     </div>
     <!--/promo-->
 
+    <!--video-->
+    <section class="section promo video-block">
+     <div class="container">
+      <div class="section-top">
+       <span class="section-label">Відео-огляд</span>
+       <h2 class="title-x">Подивіться сет у дії</h2>
+      </div>
+      <div class="promo-video video-block_player">
+       <video class="promo-video_player" src="{{videoUrl}}" controls playsinline preload="metadata"></video>
+      </div>
+     </div>
+    </section>
+    <!--/video-->
     <!--products-->
     <section class="section products" id="products">
      <div class="container">
@@ -434,7 +447,7 @@ src="https://www.facebook.com/tr?id=1217177219438590&amp;ev=PageView&amp;noscrip
            390 грн
           </span>
          </div>
-         <button class="products-text_btn btn-one btn-modal" data-id="product4">ЗАМОВИТИ<span></span></button>
+         <button class="products-text_btn btn-one btn-modal" data-id="product3">ЗАМОВИТИ<span></span></button>
         </div>
        </div>
 
@@ -462,13 +475,13 @@ src="https://www.facebook.com/tr?id=1217177219438590&amp;ev=PageView&amp;noscrip
         </div>
         <div class="products-text">
          <h3 class="products-text_title">
-          Жіноча футболка оверсайз <br> Колір: Червоний         </h3>
+          Жіноча футболка оверсайз <br> Колір: {{product4Color}}         </h3>
          <ul class="products-text_list">
           <li class="info-list_point">
            <span>Колір:</span>
            <span>
             <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <circle cx="13" cy="13" r="13" fill="#f80e28" />
+             <circle cx="13" cy="13" r="13" fill="{{product4ColorHex}}" />
             </svg>
            </span>
           </li>
@@ -488,7 +501,7 @@ src="https://www.facebook.com/tr?id=1217177219438590&amp;ev=PageView&amp;noscrip
            390 грн
           </span>
          </div>
-         <button class="products-text_btn btn-one btn-modal" data-id="product5">ЗАМОВИТИ<span></span></button>
+         <button class="products-text_btn btn-one btn-modal" data-id="product4">ЗАМОВИТИ<span></span></button>
         </div>
        </div>
 
@@ -517,13 +530,13 @@ src="https://www.facebook.com/tr?id=1217177219438590&amp;ev=PageView&amp;noscrip
         </div>
         <div class="products-text">
          <h3 class="products-text_title">
-          Жіноча футболка оверсайз <br> Колір: Білий         </h3>
+          Жіноча футболка оверсайз <br> Колір: {{product5Color}}         </h3>
          <ul class="products-text_list">
           <li class="info-list_point">
            <span>Колір:</span>
            <span>
             <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <circle cx="13" cy="13" r="13" fill="#eef2f6" />
+             <circle cx="13" cy="13" r="13" fill="{{product5ColorHex}}" />
             </svg>
            </span>
           </li>
@@ -543,7 +556,7 @@ src="https://www.facebook.com/tr?id=1217177219438590&amp;ev=PageView&amp;noscrip
            390 грн
           </span>
          </div>
-         <button class="products-text_btn btn-one btn-modal" data-id="product6">ЗАМОВИТИ<span></span></button>
+         <button class="products-text_btn btn-one btn-modal" data-id="product5">ЗАМОВИТИ<span></span></button>
         </div>
        </div>
 

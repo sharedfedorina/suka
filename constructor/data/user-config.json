@@ -6,7 +6,9 @@
   "enableStock": false,
   "heroImage": "/public/img/hero/hero-1762609126184_m.webp",
   "enableImage": true,
-  "imageUrl": "/public/img/hero/hero-1762611101603_m.webp",
+  "imageUrl": "/public/img/hero/hero-1762611101603_m.webp",
+  "enableVideo": true,
+  "videoUrl": "video/promo-1.mp4",
   "benefits": [
     {
       "id": 1,

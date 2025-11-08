@@ -28,6 +28,11 @@ if (!fs.existsSync(imageDir)) {
   fs.mkdirSync(imageDir, { recursive: true });
 }
 
+const videoDir = path.join(__dirname, 'video');
+if (!fs.existsSync(videoDir)) {
+  fs.mkdirSync(videoDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, heroImageDir);
@@ -69,6 +74,29 @@ const uploadImage = multer({
       cb(null, true);
     } else {
       cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+const videoStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, videoDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.mp4';
+    const timestamp = Date.now();
+    cb(null, 'custom-video-' + timestamp + ext);
+  }
+});
+
+const uploadVideo = multer({
+  storage: videoStorage,
+  limits: { fileSize: 30 * 1024 * 1024 }, // 30MB ?????
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('video/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('????????? ???? ??????????'));
     }
   }
 });
@@ -176,9 +204,21 @@ function generateHTML(dataObj, options = {}) {
     const finalImageUrl = (options.imageUrl && options.imageUrl.trim()) ? options.imageUrl : (dataObj.imageUrl || '');
     html = html.replace(`{{imageUrl}}`, finalImageUrl);
 
+    const imageToggle = (options.enableImage !== undefined) ? options.enableImage : dataObj.enableImage;
+
+
     // Видалити image блок якщо вимкнено
-    if (options.enableImage !== 'on' && options.enableImage !== true) {
+    if (imageToggle !== 'on' && imageToggle !== true) {
       html = html.replace(/\s*<!--\s*image\s*-->[\s\S]*?<!--\s*\/image\s*-->\s*/g, '');
+    }
+
+    const finalVideoUrl = (options.videoUrl && options.videoUrl.trim()) ? options.videoUrl : (dataObj.videoUrl || '');
+    html = html.replace('{{videoUrl}}', finalVideoUrl);
+    const videoToggle = (options.enableVideo !== undefined) ? options.enableVideo : dataObj.enableVideo;
+
+
+    if (videoToggle !== 'on' && videoToggle !== true) {
+      html = html.replace(/\s*<!--\s*video\s*-->[\s\S]*?<!--\s*\/video\s*-->\s*/g, '');
     }
 
     // Замінити плейсхолдери для 5 продуктів
@@ -255,6 +295,8 @@ app.get('/api/original-form-data', (req, res) => {
       heroImage: data.heroImage,
       enableImage: data.enableImage,
       imageUrl: data.imageUrl,
+      enableVideo: data.enableVideo,
+      videoUrl: data.videoUrl,
       benefits: data.benefits || [],
       // Product data
       product1Name: data.product1Name || '',
@@ -328,6 +370,8 @@ app.get('/api/get-user-config', (req, res) => {
         heroImage: '',
         enableImage: true,
         imageUrl: '',
+        enableVideo: true,
+        videoUrl: '',
         benefits: [],
         // Product data defaults
         product1Name: '', product1Color: '', product1ColorHex: '', product1Size: '', product1Material: '', product1PriceOld: '', product1Price: '', enableProduct1: true,
@@ -427,6 +471,37 @@ app.post('/upload-image', uploadImage.single('imageUpload'), async (req, res) =>
   }
 });
 
+// POST /upload-video - ??????????? ????? ??? ????? ?????
+app.post('/upload-video', uploadVideo.single('videoUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: '???? ????? ?? ????????' });
+    }
+
+    console.log(\n?? ?????-????: ???? ????????);
+    console.log(?? ?????: );
+    console.log(?? ??????:  KB);
+
+    const relativePath = /video/;
+
+    res.json({
+      success: true,
+      filename: relativePath,
+      message: '????? ??????? ???????????'
+    });
+  } catch (err) {
+    console.error('? ??????? ??? ???????????? ?????:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // cleanup ?? ?????????
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /upload-hero-image - Завантажити нове фото для hero блоку
 app.post('/upload-hero-image', upload.single('heroImage'), async (req, res) => {
   try {
@@ -503,7 +578,9 @@ app.get('/generate', (req, res) => {
       enableStock: req.query.enableStock,
       heroImage: req.query.heroImage,
       enableImage: req.query.enableImage,
-      imageUrl: req.query.imageUrl
+      imageUrl: req.query.imageUrl,
+      enableVideo: req.query.enableVideo,
+      videoUrl: req.query.videoUrl
     };
 
     // Парсити benefits якщо передано як JSON string
@@ -569,7 +646,9 @@ app.get('/export', (req, res) => {
       enableStock: req.query.enableStock,
       heroImage: req.query.heroImage,
       enableImage: req.query.enableImage,
-      imageUrl: req.query.imageUrl
+      imageUrl: req.query.imageUrl,
+      enableVideo: req.query.enableVideo,
+      videoUrl: req.query.videoUrl
     };
 
     // Парсити benefits якщо передано як JSON string

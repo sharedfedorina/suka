@@ -5,7 +5,9 @@
   "enableStock": true,
   "enableImage": true,
   "heroImage": "img/start/start-1_m.webp",
-  "imageUrl": "img/plus/plus-1.png",
+  "imageUrl": "img/plus/plus-1.png",
+  "enableVideo": true,
+  "videoUrl": "video/promo-1.mp4",
   "page": {
     "title": "Жіночі футболки оверсайз від українскського бренду Kopo",
     "brand": "Kopo™ (Україна)"
