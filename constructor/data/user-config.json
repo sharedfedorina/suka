@@ -6,9 +6,9 @@
   "enableStock": false,
   "heroImage": "/public/img/hero/hero-1762609126184_m.webp",
   "enableImage": true,
-  "imageUrl": "/public/img/hero/hero-1762611101603_m.webp",
-  "enableVideo": true,
-  "videoUrl": "video/promo-1.mp4",
+  "imageUrl": "/public/img/hero/hero-1762611101603_m.webp",
+  "enableVideo": true,
+  "videoUrl": "/video/custom-video-1762635566467.mp4",
   "benefits": [
     {
       "id": 1,
@@ -44,7 +44,7 @@
   "product1Name": "Жіноча футболка оверсайз",
   "product1Color": "Чорний",
   "product1ColorHex": "#19161a",
-  "product1Size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+  "product1Size": "",
   "product1Material": "95% бавовна, 5% еластан",
   "product1PriceOld": "585 грн",
   "product1Price": "390 грн",
@@ -52,7 +52,7 @@
   "product2Name": "Жіноча футболка оверсайз",
   "product2Color": "Рожевий",
   "product2ColorHex": "#fc5f88",
-  "product2Size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+  "product2Size": "S, M, L, XL",
   "product2Material": "95% бавовна, 5% еластан",
   "product2PriceOld": "585 грн",
   "product2Price": "390 грн",
@@ -81,53 +81,9 @@
   "product5PriceOld": "585 грн",
   "product5Price": "390 грн",
   "enableProduct5": true,
-  "product1Images": [
-    "img/products/product_1.jpg",
-    "img/products/product_1_1.jpg",
-    "img/products/product_1_2.jpg",
-    "img/products/product_1_3.jpg",
-    "img/products/product_1_4.jpg",
-    "img/products/product_1_5.jpg",
-    "img/products/product_1_6.jpg",
-    "img/products/product_1_7.jpg"
-  ],
-  "product2Images": [
-    "img/products/product_3.jpg",
-    "img/products/product_3_1.jpg",
-    "img/products/product_3_2.jpg",
-    "img/products/product_3_3.jpg",
-    "img/products/product_3_4.jpg",
-    "img/products/product_3_5.jpg",
-    "img/products/product_3_6.jpg",
-    "img/products/product_3_7.jpg",
-    "img/products/product_3_8.jpg"
-  ],
-  "product3Images": [
-    "img/products/product_4.jpg",
-    "img/products/product_4_1.jpg",
-    "img/products/product_4_2.jpg",
-    "img/products/product_4_3.jpg",
-    "img/products/product_4_4.jpg",
-    "img/products/product_4_5.jpg",
-    "img/products/product_4_6.jpg",
-    "img/products/product_4_7.jpg"
-  ],
-  "product4Images": [
-    "img/products/product_5.jpg",
-    "img/products/product_5_1.jpg",
-    "img/products/product_5_2.jpg",
-    "img/products/product_5_3.jpg",
-    "img/products/product_5_4.jpg",
-    "img/products/product_5_5.jpg",
-    "img/products/product_5_6.jpg",
-    "img/products/product_5_7.jpg"
-  ],
-  "product5Images": [
-    "img/products/product_6.jpg",
-    "img/products/product_6_1.jpg",
-    "img/products/product_6_2.jpg",
-    "img/products/product_6_3.jpg",
-    "img/products/product_6_4.jpg",
-    "img/products/product_6_5.jpg"
-  ]
+  "product1Images": [],
+  "product2Images": [],
+  "product3Images": [],
+  "product4Images": [],
+  "product5Images": []
 }

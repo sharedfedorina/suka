@@ -155,11 +155,11 @@
 
       <div class="form-group" style="margin-top: 30px;">
 
-        <h3 style="margin-bottom: 10px;">?????-???? ????? ????????</h3>
+        <h3 style="margin-bottom: 10px;">Промо-відео для блоку</h3>
 
 
 
-        <p style="color: #555; margin-bottom: 12px;">???? ????? MP4 ?? 30 ??. ??? ????????? ????? ??????? ? 5 ????????.</p>
+        <p style="color: #555; margin-bottom: 12px;">Додайте MP4/WebM до 30 МБ. Після збереження відео з'явиться у промо-секції.</p>
 
 
 
@@ -175,7 +175,7 @@
 
 
 
-            ?????????? ?????-????
+            Увімкнути відео-блок
 
 
 
@@ -187,7 +187,7 @@
 
 
 
-        <label for="videoUpload" style="font-weight: 600;">??????????? ?????</label>
+        <label for="videoUpload" style="font-weight: 600;">Завантажити відео</label>
 
 
 
@@ -199,7 +199,7 @@
 
 
 
-        <small style="color: #666; display: block; margin-top: 5px;">MP4/WebM, ?? 30MB, ???? ???? ????.</small>
+        <small style="color: #666; display: block; margin-top: 5px;">MP4/WebM, до 30 МБ, без звуку або зі звуком.</small>
 
 
 
@@ -211,7 +211,7 @@
 
 
 
-        <label style="font-weight: 600; display: block; margin-bottom: 8px;">?????????? ???????? ?????</label>
+        <label style="font-weight: 600; display: block; margin-bottom: 8px;">Попередній перегляд відео</label>
 
 
 
@@ -252,10 +252,26 @@
             <input type="text" id="product1Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product1Color">Колір:</label>
             <input type="text" id="product1Color" placeholder="Чорний" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product1ColorHex">Hex:</label>
-            <input type="text" id="product1ColorHex" placeholder="#19161a" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product1Size">Розміри:</label>
-            <input type="text" id="product1Size" placeholder="S, M, L..." style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product1ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product1ColorHex" value="#19161a" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product1ColorHexDisplay" value="#19161a" placeholder="#19161a" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product1SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
             <label for="product1Material">Матеріал:</label>
             <input type="text" id="product1Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product1PriceOld">Стара ціна:</label>
@@ -360,10 +376,26 @@
             <input type="text" id="product3Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product3Color">Колір:</label>
             <input type="text" id="product3Color" placeholder="Пудра" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product3ColorHex">Hex:</label>
-            <input type="text" id="product3ColorHex" placeholder="#e2bcc9" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product3Size">Розміри:</label>
-            <input type="text" id="product3Size" placeholder="S, M, L..." style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product3ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product3ColorHex" value="#e2bcc9" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product3ColorHexDisplay" value="#e2bcc9" placeholder="#e2bcc9" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product3SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
             <label for="product3Material">Матеріал:</label>
             <input type="text" id="product3Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product3PriceOld">Стара ціна:</label>
@@ -406,10 +438,26 @@
             <input type="text" id="product4Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product4Color">Колір:</label>
             <input type="text" id="product4Color" placeholder="Бежевий" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product4ColorHex">Hex:</label>
-            <input type="text" id="product4ColorHex" placeholder="#d9cfc1" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product4Size">Розміри:</label>
-            <input type="text" id="product4Size" placeholder="S, M, L..." style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product4ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product4ColorHex" value="#d9cfc1" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product4ColorHexDisplay" value="#d9cfc1" placeholder="#d9cfc1" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product4SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
             <label for="product4Material">Матеріал:</label>
             <input type="text" id="product4Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product4PriceOld">Стара ціна:</label>
@@ -452,10 +500,26 @@
             <input type="text" id="product5Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product5Color">Колір:</label>
             <input type="text" id="product5Color" placeholder="Хакі" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product5ColorHex">Hex:</label>
-            <input type="text" id="product5ColorHex" placeholder="#9b9c7c" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
-            <label for="product5Size">Розміри:</label>
-            <input type="text" id="product5Size" placeholder="S, M, L..." style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product5ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product5ColorHex" value="#9b9c7c" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product5ColorHexDisplay" value="#9b9c7c" placeholder="#9b9c7c" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product5SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
             <label for="product5Material">Матеріал:</label>
             <input type="text" id="product5Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
             <label for="product5PriceOld">Стара ціна:</label>
