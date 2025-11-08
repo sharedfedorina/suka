@@ -107,11 +107,11 @@ function generateHTML(dataObj, options = {}) {
       // Замінити путь до фото в srcset та src
       html = html.replace(
         /img\/start\/start-1\.png/g,
-        `img/hero/${options.heroImage}`
+        `public/img/hero/${options.heroImage}`
       );
       html = html.replace(
         /img\/start\/start-1_m\.webp/g,
-        `img/hero/${options.heroImage}`
+        `public/img/hero/${options.heroImage}`
       );
     }
 
