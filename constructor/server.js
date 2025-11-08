@@ -23,6 +23,11 @@ if (!fs.existsSync(heroImageDir)) {
   fs.mkdirSync(heroImageDir, { recursive: true });
 }
 
+const imageDir = path.join(__dirname, 'public', 'img', 'image');
+if (!fs.existsSync(imageDir)) {
+  fs.mkdirSync(imageDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, heroImageDir);
@@ -36,6 +41,28 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, imageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, 'custom-image' + ext);
+  }
+});
+
+const uploadImage = multer({
+  storage: imageStorage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -126,6 +153,15 @@ function generateHTML(dataObj, options = {}) {
       );
     }
 
+    // Замінити imageUrl у plus-logo блоці
+    const finalImageUrl = (options.imageUrl && options.imageUrl.trim()) ? options.imageUrl : (dataObj.imageUrl || '');
+    html = html.replace(`{{imageUrl}}`, finalImageUrl);
+
+    // Видалити image блок якщо вимкнено
+    if (options.enableImage !== 'on' && options.enableImage !== true) {
+      html = html.replace(/\s*<!--\s*image\s*-->[\s\S]*?<!--\s*\/image\s*-->\s*/g, '');
+    }
+
     // Замінити переваги (простій текстовий заміни плейсхолдерів)
     if (options.benefits && Array.isArray(options.benefits)) {
       options.benefits.forEach((benefit) => {
@@ -169,6 +205,8 @@ app.get('/api/original-form-data', (req, res) => {
       enableTimer: data.enableTimer,
       enableStock: data.enableStock,
       heroImage: data.heroImage,
+      enableImage: data.enableImage,
+      imageUrl: data.imageUrl,
       benefits: data.benefits || []
     };
 
@@ -194,6 +232,8 @@ app.get('/api/get-user-config', (req, res) => {
         enableTimer: true,
         enableStock: true,
         heroImage: '',
+        enableImage: true,
+        imageUrl: '',
         benefits: []
       });
     }
@@ -223,6 +263,67 @@ app.post('/api/save-config', express.json(), (req, res) => {
   } catch (err) {
     console.error('❌ Помилка при збереженні конфігурації:', err.message);
     res.status(500).json({ error: 'Помилка при збереженні даних' });
+  }
+});
+
+// POST /upload-image - Завантажити нове фото для plus-logo блоку
+app.post('/upload-image', uploadImage.single('imageUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n🖼️ ФОТО PLUS-LOGO ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `image-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити та оптимізувати для десктопу (1200x600 - cover)
+    const desktopPath = path.join(imageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1200, 600, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (1200x600, 85% quality)`);
+
+    // Пересохранити та оптимізувати для мобільного (600x400 - cover)
+    const mobilePath = path.join(imageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(600, 400, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (600x400, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/image/${basename}_m.webp`,
+      message: 'Фото успішно оптимізовано та завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    // Спробуємо видалити файл якщо сталася помилка
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -300,7 +401,9 @@ app.get('/generate', (req, res) => {
       heroPrice: req.query.heroPrice,
       enableTimer: req.query.enableTimer,
       enableStock: req.query.enableStock,
-      heroImage: req.query.heroImage
+      heroImage: req.query.heroImage,
+      enableImage: req.query.enableImage,
+      imageUrl: req.query.imageUrl
     };
 
     // Парсити benefits якщо передано як JSON string
@@ -364,7 +467,9 @@ app.get('/export', (req, res) => {
       heroPrice: req.query.heroPrice,
       enableTimer: req.query.enableTimer,
       enableStock: req.query.enableStock,
-      heroImage: req.query.heroImage
+      heroImage: req.query.heroImage,
+      enableImage: req.query.enableImage,
+      imageUrl: req.query.imageUrl
     };
 
     // Парсити benefits якщо передано як JSON string

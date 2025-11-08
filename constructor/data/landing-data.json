@@ -3,7 +3,9 @@
   "heroTitle": "Жіночі футболки оверсайз",
   "enableTimer": true,
   "enableStock": true,
+  "enableImage": true,
   "heroImage": "img/start/start-1_m.webp",
+  "imageUrl": "img/plus/plus-1.png",
 
   "page": {
     "title": "Жіночі футболки оверсайз від українскського бренду Kopo",

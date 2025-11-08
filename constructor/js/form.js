@@ -174,6 +174,10 @@ async function loadSavedValues() {
     showImagePreview(formData.heroImage);
     document.getElementById('enableImage').checked = formData.enableImage;
     imageUrlValue = formData.imageUrl;
+    if (formData.imageUrl) {
+      document.getElementById('previewImageUpload').src = formData.imageUrl;
+      document.getElementById('imageUploadPreview').style.display = 'block';
+    }
 
     // Завантажити переваги
     if (formData.benefits) {
