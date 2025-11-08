@@ -1,15 +1,17 @@
 {
-  "headerText": "РОЗПРОДАЖ футболок!",
-  "heroTitle": "Жіночі футболки оверсайз",
-  "heroPrice": "від 330 грн",
-  "enableTimer": true,
-  "enableStock": true,
-  "heroImage": "img/start/start-1_m.webp",
+  "headerText": "РОЗПРОДАЖ ХУДІ!",
+  "heroTitle": "Жіночі худі на флісі",
+  "heroPrice": "всього 610 грн",
+  "enableTimer": false,
+  "enableStock": false,
+  "heroImage": "/public/img/hero/hero-1762609126184_m.webp",
+  "enableImage": false,
+  "imageUrl": "/public/img/hero/hero-1762610247032_m.webp",
   "benefits": [
     {
       "id": 1,
       "enabled": true,
-      "title": "Відправимо БЕЗ жодних передоплат",
+      "title": "Безкоштовна доставка",
       "description": "Ми не вимагаємо ніяких передоплат перед відправкою - ми пропонуємо Максимально Безпечну покупку!"
     },
     {
@@ -33,8 +35,8 @@
     {
       "id": 5,
       "enabled": true,
-      "title": "Офіційно зареєстрована торгова марка!",
-      "description": "Зроблено українцями для українців з коханням. Власне виробництво в Україні!"
+      "title": "Власне виробництво в Україні!",
+      "description": "Зроблено українцями для українців з коханням. "
     }
   ]
 }
