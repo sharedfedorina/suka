@@ -63,6 +63,11 @@ function syncColorPickerDisplay(productNum) {
 
 // ========== ФУНКЦІЇ ДЛЯ РОЗМІРІВ ==========
 
+// Helper function to determine if product uses color picker (1,2) or text input (3,4,5)
+function usesColorPickerUI(productNum) {
+  return productNum === 1 || productNum === 2;
+}
+
 function getSelectedSizes(productNum) {
   const checkboxes = document.querySelectorAll(`.product${productNum}-size:checked`);
   const sizes = Array.from(checkboxes).map(cb => cb.value);
@@ -70,11 +75,31 @@ function getSelectedSizes(productNum) {
 }
 
 function getSelectedSizesAsString(productNum) {
+  // For products 3,4,5 that use text input instead of checkboxes
+  if (!usesColorPickerUI(productNum)) {
+    const textInput = document.getElementById(`product${productNum}Size`);
+    if (textInput) {
+      return textInput.value;
+    }
+    return '';
+  }
+
+  // For products 1,2 that use checkboxes
   const sizes = getSelectedSizes(productNum);
   return sizes.join(', ');
 }
 
 function setSelectedSizes(productNum, sizesString) {
+  // For products 3,4,5 that use text input instead of checkboxes
+  if (!usesColorPickerUI(productNum)) {
+    const textInput = document.getElementById(`product${productNum}Size`);
+    if (textInput) {
+      textInput.value = sizesString || '';
+    }
+    return;
+  }
+
+  // For products 1,2 that use checkboxes
   // Clear all checkboxes first
   document.querySelectorAll(`.product${productNum}-size`).forEach(cb => {
     cb.checked = false;
@@ -356,7 +381,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (data[`product${i}ColorHex`]) {
           document.getElementById(`product${i}ColorHex`).value = data[`product${i}ColorHex`];
-          document.getElementById(`product${i}ColorHexDisplay`).value = data[`product${i}ColorHex`];
+          // Only set ColorHexDisplay for products 1,2 that have the color picker UI
+          if (usesColorPickerUI(i)) {
+            const displayEl = document.getElementById(`product${i}ColorHexDisplay`);
+            if (displayEl) {
+              displayEl.value = data[`product${i}ColorHex`];
+            }
+          }
         }
 
         if (data[`product${i}Size`]) setSelectedSizes(i, data[`product${i}Size`]);
@@ -672,7 +703,13 @@ async function loadOriginalValues() {
 
       if (formData[`product${i}ColorHex`]) {
         document.getElementById(`product${i}ColorHex`).value = formData[`product${i}ColorHex`];
-        document.getElementById(`product${i}ColorHexDisplay`).value = formData[`product${i}ColorHex`];
+        // Only set ColorHexDisplay for products 1,2 that have the color picker UI
+        if (usesColorPickerUI(i)) {
+          const displayEl = document.getElementById(`product${i}ColorHexDisplay`);
+          if (displayEl) {
+            displayEl.value = formData[`product${i}ColorHex`];
+          }
+        }
       }
 
       if (formData[`product${i}Size`]) setSelectedSizes(i, formData[`product${i}Size`]);
@@ -798,7 +835,13 @@ async function loadSavedValues() {
 
       const colorHex = formData[`product${i}ColorHex`] || '';
       document.getElementById(`product${i}ColorHex`).value = colorHex;
-      document.getElementById(`product${i}ColorHexDisplay`).value = colorHex;
+      // Only set ColorHexDisplay for products 1,2 that have the color picker UI
+      if (usesColorPickerUI(i)) {
+        const displayEl = document.getElementById(`product${i}ColorHexDisplay`);
+        if (displayEl) {
+          displayEl.value = colorHex;
+        }
+      }
 
       const sizes = formData[`product${i}Size`] || '';
       setSelectedSizes(i, sizes);

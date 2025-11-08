@@ -132,56 +132,27 @@ function generateHTML(dataObj, options = {}) {
       `<title>${dataObj.page.title}</title>`
     );
 
-    // Замінити хедер текст (якщо передано)
-    if (options.headerText) {
-      html = html.replace(
-        /РОЗПРОДАЖ футболок!/g,
-        options.headerText
-      );
-    } else {
-      html = html.replace(
-        /РОЗПРОДАЖ футболок!/g,
-        dataObj.header.announcement
-      );
-    }
+    // Замінити плейсхолдери для хедер текст, титл, ціна
+    const finalHeaderText = (options.headerText && options.headerText.trim()) ? options.headerText : (dataObj.headerText || '');
+    const finalHeroTitle = (options.heroTitle && options.heroTitle.trim()) ? options.heroTitle : (dataObj.heroTitle || '');
+    const finalHeroPrice = (options.heroPrice && options.heroPrice.trim()) ? options.heroPrice : (dataObj.hero?.price || '');
+    const finalStockCount = (options.stockCount && options.stockCount.toString().trim()) ? options.stockCount : (dataObj.hero?.stock_count || '19');
 
-    // Замінити заголовок (назва товару) (якщо передано)
-    if (options.heroTitle) {
-      // Замінити в title сторінки
-      html = html.replace(
-        new RegExp(dataObj.hero.title, 'g'),
-        options.heroTitle
-      );
-      // Замінити в h1
-      html = html.replace(
-        /<h1[^>]*>Жіночі футболки оверсайз<\/h1>/g,
-        `<h1 class="start-title title-xl">${options.heroTitle}</h1>`
-      );
-      // Замінити в request-title
-      html = html.replace(
-        /<h1 class="request-title title-xl">Жіночі футболки оверсайз<\/h1>/g,
-        `<h1 class="request-title title-xl">${options.heroTitle}</h1>`
-      );
-    }
+    html = html.replace('{{headerText}}', finalHeaderText);
+    html = html.replace('{{heroTitle}}', finalHeroTitle);
+    html = html.replace('{{heroPrice}}', finalHeroPrice);
+    html = html.replace('{{stockCount}}', finalStockCount);
 
     // Видалити таймер якщо вимкнено
     if (options.enableTimer !== 'on' && options.enableTimer !== true) {
-      // Видалити весь блок start-timer
-      html = html.replace(/<div class="start-timer timer">[\s\S]*?<\/div>/g, '');
-      // Видалити весь блок request-timer
-      html = html.replace(/<div class="request-timer timer">[\s\S]*?<\/div>/g, '');
-      // Видалити весь блок popup-timer
-      html = html.replace(/<div class="popup-timer timer">[\s\S]*?<\/div>/g, '');
+      // Видалити весь блок за допомогою HTML коментарів
+      html = html.replace(/\s*<!--\s*timer\s*-->[\s\S]*?<!--\s*\/timer\s*-->\s*/g, '');
     }
 
     // Видалити блок "Залишилось X футболок" якщо вимкнено
     if (options.enableStock !== 'on' && options.enableStock !== true) {
-      // Видалити span з "request-numbers" класом (внизу заявки)
-      html = html.replace(/<span class="request-numbers">[\s\S]*?<\/span>/g, '');
-      // Видалити span з "start-numbers" класом (у героїчної секції)
-      html = html.replace(/<span class="start-numbers">[\s\S]*?<\/span>/g, '');
-      // Видалити span з "popup-numbers" класом (у спливаючому вікні)
-      html = html.replace(/<span class="popup-numbers">[\s\S]*?<\/span>/g, '');
+      // Видалити весь блок за допомогою HTML коментарів
+      html = html.replace(/\s*<!--\s*stock\s*-->[\s\S]*?<!--\s*\/stock\s*-->\s*/g, '');
     }
 
     // Замінити hero фото
@@ -189,14 +160,6 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(
         /img\/start\/start-1_m\.webp/g,
         options.heroImage
-      );
-    }
-
-    // Замінити ціну (якщо передано)
-    if (options.heroPrice) {
-      html = html.replace(
-        /від 330 грн/g,
-        options.heroPrice
       );
     }
 
@@ -471,31 +434,33 @@ app.post('/upload-image', uploadImage.single('imageUpload'), async (req, res) =>
   }
 });
 
-// POST /upload-video - ??????????? ????? ??? ????? ?????
+// POST /upload-video - Завантажити нове відео для відео блоку
 app.post('/upload-video', uploadVideo.single('videoUpload'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: '???? ????? ?? ????????' });
+      return res.status(400).json({ error: 'Файл не завантажений' });
     }
 
-    console.log(\n?? ?????-????: ???? ????????);
-    console.log(?? ?????: );
-    console.log(?? ??????:  KB);
+    console.log(`\n🎬 ВІДЕО ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const relativePath = /video/;
+    const timestamp = Date.now();
+    const basename = `video-${timestamp}`;
+    const relativePath = `/video/${req.file.filename}`;
 
     res.json({
       success: true,
       filename: relativePath,
-      message: '????? ??????? ???????????'
+      message: 'Відео успішно завантажено'
     });
   } catch (err) {
-    console.error('? ??????? ??? ???????????? ?????:', err.message);
+    console.error('❌ Помилка при завантаженні відео:', err.message);
     if (req.file && req.file.path) {
       try {
         fs.unlinkSync(req.file.path);
       } catch (e) {
-        // cleanup ?? ?????????
+        // cleanup при помилці
       }
     }
     res.status(500).json({ error: err.message });
