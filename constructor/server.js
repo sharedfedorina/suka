@@ -216,6 +216,15 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(/\s*<!--\s*video\s*-->[\s\S]*?<!--\s*\/video\s*-->\s*/g, '');
     }
 
+    const finalVideoThumbnailDesktop = (options.videoThumbnailDesktop && options.videoThumbnailDesktop.trim()) ? options.videoThumbnailDesktop : (dataObj.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP);
+    const finalVideoThumbnailMobile = (options.videoThumbnailMobile && options.videoThumbnailMobile.trim()) ? options.videoThumbnailMobile : (dataObj.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE);
+    html = html.replace('{{videoThumbnailDesktop}}', finalVideoThumbnailDesktop);
+    html = html.replace('{{videoThumbnailMobile}}', finalVideoThumbnailMobile);
+    const videoThumbnailToggle = (options.enableVideoThumbnail !== undefined) ? options.enableVideoThumbnail : (dataObj.enableVideoThumbnail !== undefined ? dataObj.enableVideoThumbnail : true);
+    if (videoThumbnailToggle !== 'on' && videoThumbnailToggle !== true) {
+      html = html.replace(/\s*<!--\s*videoThumbnail\s*-->[\s\S]*?<!--\s*\/videoThumbnail\s*-->\s*/g, '');
+    }
+
     // Замінити плейсхолдери для 5 продуктів
     for (let i = 1; i <= 5; i++) {
       const productName = options[`product${i}Name`] || '';
@@ -292,6 +301,9 @@ app.get('/api/original-form-data', (req, res) => {
       imageUrl: data.imageUrl,
       enableVideo: data.enableVideo,
       videoUrl: data.videoUrl,
+      enableVideoThumbnail: (data.enableVideoThumbnail !== undefined) ? data.enableVideoThumbnail : true,
+      videoThumbnailDesktop: data.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP,
+      videoThumbnailMobile: data.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE,
       benefits: data.benefits || [],
       // Product data
       product1Name: data.product1Name || '',
