@@ -73,6 +73,25 @@ const uploadImage = multer({
   }
 });
 
+// Функція для генерування слайдів з масиву зображень
+function generateSlides(images = []) {
+  if (!Array.isArray(images) || images.length === 0) {
+    return '';
+  }
+
+  return images.map(imagePath => {
+    // Convert JPG to mobile format (replace .jpg with _m.webp)
+    const mobilePath = imagePath.replace(/\.jpg$/, '_m.webp');
+
+    return `          <div class="swiper-slide products-slide">
+           <picture>
+            <source srcset="${imagePath}" media="(min-width: 800px)">
+            <img src="${mobilePath}" alt="img">
+           </picture>
+          </div>`;
+  }).join('\n');
+}
+
 // Функція для генерування HTML з даних
 function generateHTML(dataObj, options = {}) {
   try {
@@ -171,6 +190,7 @@ function generateHTML(dataObj, options = {}) {
       const productMaterial = options[`product${i}Material`] || '';
       const productPriceOld = options[`product${i}PriceOld`] || '';
       const productPrice = options[`product${i}Price`] || '';
+      const productImages = options[`product${i}Images`] || [];
 
       html = html.replace(`{{product${i}Name}}`, productName);
       html = html.replace(`{{product${i}Color}}`, productColor);
@@ -179,6 +199,10 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(`{{product${i}Material}}`, productMaterial);
       html = html.replace(`{{product${i}PriceOld}}`, productPriceOld);
       html = html.replace(`{{product${i}Price}}`, productPrice);
+
+      // Генерувати слайди з масиву зображень
+      const slides = generateSlides(productImages);
+      html = html.replace(`{{product${i}Slides}}`, slides);
 
       // Видалити продукт блок якщо вимкнено
       if (options[`enableProduct${i}`] !== 'on' && options[`enableProduct${i}`] !== true) {
@@ -240,6 +264,7 @@ app.get('/api/original-form-data', (req, res) => {
       product1Material: data.product1Material || '',
       product1PriceOld: data.product1PriceOld || '',
       product1Price: data.product1Price || '',
+      product1Images: data.product1Images || [],
       enableProduct1: data.enableProduct1 || true,
       product2Name: data.product2Name || '',
       product2Color: data.product2Color || '',
@@ -248,6 +273,7 @@ app.get('/api/original-form-data', (req, res) => {
       product2Material: data.product2Material || '',
       product2PriceOld: data.product2PriceOld || '',
       product2Price: data.product2Price || '',
+      product2Images: data.product2Images || [],
       enableProduct2: data.enableProduct2 || true,
       product3Name: data.product3Name || '',
       product3Color: data.product3Color || '',
@@ -256,6 +282,7 @@ app.get('/api/original-form-data', (req, res) => {
       product3Material: data.product3Material || '',
       product3PriceOld: data.product3PriceOld || '',
       product3Price: data.product3Price || '',
+      product3Images: data.product3Images || [],
       enableProduct3: data.enableProduct3 || true,
       product4Name: data.product4Name || '',
       product4Color: data.product4Color || '',
@@ -264,6 +291,7 @@ app.get('/api/original-form-data', (req, res) => {
       product4Material: data.product4Material || '',
       product4PriceOld: data.product4PriceOld || '',
       product4Price: data.product4Price || '',
+      product4Images: data.product4Images || [],
       enableProduct4: data.enableProduct4 || true,
       product5Name: data.product5Name || '',
       product5Color: data.product5Color || '',
@@ -272,6 +300,7 @@ app.get('/api/original-form-data', (req, res) => {
       product5Material: data.product5Material || '',
       product5PriceOld: data.product5PriceOld || '',
       product5Price: data.product5Price || '',
+      product5Images: data.product5Images || [],
       enableProduct5: data.enableProduct5 || true
     };
 
