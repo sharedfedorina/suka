@@ -182,6 +182,16 @@
         <input type="text" id="product1Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
       </div>
 
+      <!-- Product 1 - Управління фото -->
+      <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 1</h4>
+        <div id="product1ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="product1NewImage" placeholder="Шлях до фото (напр.: img/products/product_1.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+          <button type="button" onclick="addProductImage(1)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+        </div>
+      </div>
+
       <!-- Product 2 -->
       <div class="form-group">
         <div class="checkbox-group">
@@ -206,6 +216,16 @@
         <input type="text" id="product2PriceOld" placeholder="585 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
         <label for="product2Price">Нова ціна:</label>
         <input type="text" id="product2Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+      </div>
+
+      <!-- Product 2 - Управління фото -->
+      <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 2</h4>
+        <div id="product2ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="product2NewImage" placeholder="Шлях до фото (напр.: img/products/product_2.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+          <button type="button" onclick="addProductImage(2)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+        </div>
       </div>
 
       <!-- Product 3 -->
@@ -234,6 +254,16 @@
         <input type="text" id="product3Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
       </div>
 
+      <!-- Product 3 - Управління фото -->
+      <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 3</h4>
+        <div id="product3ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="product3NewImage" placeholder="Шлях до фото (напр.: img/products/product_3.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+          <button type="button" onclick="addProductImage(3)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+        </div>
+      </div>
+
       <!-- Product 4 -->
       <div class="form-group">
         <div class="checkbox-group">
@@ -260,6 +290,16 @@
         <input type="text" id="product4Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
       </div>
 
+      <!-- Product 4 - Управління фото -->
+      <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 4</h4>
+        <div id="product4ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="product4NewImage" placeholder="Шлях до фото (напр.: img/products/product_4.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+          <button type="button" onclick="addProductImage(4)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+        </div>
+      </div>
+
       <!-- Product 5 -->
       <div class="form-group">
         <div class="checkbox-group">
@@ -284,6 +324,16 @@
         <input type="text" id="product5PriceOld" placeholder="585 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
         <label for="product5Price">Нова ціна:</label>
         <input type="text" id="product5Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+      </div>
+
+      <!-- Product 5 - Управління фото -->
+      <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 5</h4>
+        <div id="product5ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="product5NewImage" placeholder="Шлях до фото (напр.: img/products/product_5.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+          <button type="button" onclick="addProductImage(5)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+        </div>
       </div>
 
       <div class="buttons">

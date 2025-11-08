@@ -78,5 +78,54 @@
   "product5Material": "95% бавовна, 5% еластан",
   "product5PriceOld": "585 грн",
   "product5Price": "390 грн",
-  "enableProduct5": true
+  "enableProduct5": true,
+  "product1Images": [
+    "img/products/product_1.jpg",
+    "img/products/product_1_1.jpg",
+    "img/products/product_1_2.jpg",
+    "img/products/product_1_3.jpg",
+    "img/products/product_1_4.jpg",
+    "img/products/product_1_5.jpg",
+    "img/products/product_1_6.jpg",
+    "img/products/product_1_7.jpg"
+  ],
+  "product2Images": [
+    "img/products/product_3.jpg",
+    "img/products/product_3_1.jpg",
+    "img/products/product_3_2.jpg",
+    "img/products/product_3_3.jpg",
+    "img/products/product_3_4.jpg",
+    "img/products/product_3_5.jpg",
+    "img/products/product_3_6.jpg",
+    "img/products/product_3_7.jpg",
+    "img/products/product_3_8.jpg"
+  ],
+  "product3Images": [
+    "img/products/product_4.jpg",
+    "img/products/product_4_1.jpg",
+    "img/products/product_4_2.jpg",
+    "img/products/product_4_3.jpg",
+    "img/products/product_4_4.jpg",
+    "img/products/product_4_5.jpg",
+    "img/products/product_4_6.jpg",
+    "img/products/product_4_7.jpg"
+  ],
+  "product4Images": [
+    "img/products/product_5.jpg",
+    "img/products/product_5_1.jpg",
+    "img/products/product_5_2.jpg",
+    "img/products/product_5_3.jpg",
+    "img/products/product_5_4.jpg",
+    "img/products/product_5_5.jpg",
+    "img/products/product_5_6.jpg",
+    "img/products/product_5_7.jpg"
+  ],
+  "product5Images": [
+    "img/products/product_6.jpg",
+    "img/products/product_6_1.jpg",
+    "img/products/product_6_2.jpg",
+    "img/products/product_6_3.jpg",
+    "img/products/product_6_4.jpg",
+    "img/products/product_6_5.jpg"
+  ]
 }

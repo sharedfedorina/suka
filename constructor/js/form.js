@@ -8,6 +8,72 @@ let product3Data = { name: '', color: '', colorHex: '', size: '', material: '', 
 let product4Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
 let product5Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
 
+// Product images tracking
+let product1Images = [];
+let product2Images = [];
+let product3Images = [];
+let product4Images = [];
+let product5Images = [];
+
+// ========== ФУНКЦІЇ ДЛЯ УПРАВЛІННЯ ФОТО ПРОДУКТІВ ==========
+
+function addProductImage(productNum) {
+  const inputId = `product${productNum}NewImage`;
+  const inputEl = document.getElementById(inputId);
+  const imagePath = inputEl.value.trim();
+
+  if (!imagePath) {
+    alert('Будь ласка, введіть шлях до фото');
+    return;
+  }
+
+  const arrayName = `product${productNum}Images`;
+  const arr = window[arrayName];
+
+  if (!arr.includes(imagePath)) {
+    arr.push(imagePath);
+    renderProductImages(productNum);
+    inputEl.value = '';
+    console.log(`✅ Фото додано до продукту ${productNum}:`, imagePath);
+  } else {
+    alert('Це фото вже додано');
+  }
+}
+
+function removeProductImage(productNum, index) {
+  const arrayName = `product${productNum}Images`;
+  const arr = window[arrayName];
+  arr.splice(index, 1);
+  renderProductImages(productNum);
+  console.log(`❌ Фото видалено з продукту ${productNum} на індексі ${index}`);
+}
+
+function renderProductImages(productNum) {
+  const arrayName = `product${productNum}Images`;
+  const arr = window[arrayName];
+  const containerId = `product${productNum}ImagesList`;
+  const container = document.getElementById(containerId);
+
+  if (!container) return;
+
+  if (arr.length === 0) {
+    container.innerHTML = '<div style="color: #7f8c8d; font-style: italic;">Немає фото</div>';
+    return;
+  }
+
+  container.innerHTML = arr.map((imagePath, index) => `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #ecf0f1; margin-bottom: 6px; border-radius: 4px;">
+      <span style="font-size: 13px; word-break: break-all; flex: 1;">${imagePath}</span>
+      <button
+        type="button"
+        onclick="removeProductImage(${productNum}, ${index})"
+        style="padding: 4px 10px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; margin-left: 8px; flex-shrink: 0;">
+        Видалити
+      </button>
+    </div>
+  `).join('');
+}
+
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
 
 function initBenefitsForm(benefits) {
@@ -80,6 +146,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data[`product${i}Material`]) document.getElementById(`product${i}Material`).value = data[`product${i}Material`];
         if (data[`product${i}PriceOld`]) document.getElementById(`product${i}PriceOld`).value = data[`product${i}PriceOld`];
         if (data[`product${i}Price`]) document.getElementById(`product${i}Price`).value = data[`product${i}Price`];
+
+        // Завантажити фото продукту
+        if (data[`product${i}Images`] && Array.isArray(data[`product${i}Images`])) {
+          window[`product${i}Images`] = data[`product${i}Images`];
+          renderProductImages(i);
+        }
       }
 
       // Ініціалізувати форму переваг
@@ -164,7 +236,13 @@ async function saveFormToServer() {
     product5Material: document.getElementById('product5Material').value,
     product5PriceOld: document.getElementById('product5PriceOld').value,
     product5Price: document.getElementById('product5Price').value,
-    enableProduct5: document.getElementById('enableProduct5').checked
+    enableProduct5: document.getElementById('enableProduct5').checked,
+    // Product images
+    product1Images: product1Images,
+    product2Images: product2Images,
+    product3Images: product3Images,
+    product4Images: product4Images,
+    product5Images: product5Images
   };
 
   try {
@@ -198,6 +276,24 @@ async function loadOriginalValues() {
     document.getElementById('enableStock').checked = formData.enableStock;
     uploadedHeroImageFilename = formData.heroImage;
     showImagePreview(formData.heroImage);
+
+    // Завантажити дані 5 продуктів
+    for (let i = 1; i <= 5; i++) {
+      if (formData[`enableProduct${i}`] !== undefined) document.getElementById(`enableProduct${i}`).checked = formData[`enableProduct${i}`];
+      if (formData[`product${i}Name`]) document.getElementById(`product${i}Name`).value = formData[`product${i}Name`];
+      if (formData[`product${i}Color`]) document.getElementById(`product${i}Color`).value = formData[`product${i}Color`];
+      if (formData[`product${i}ColorHex`]) document.getElementById(`product${i}ColorHex`).value = formData[`product${i}ColorHex`];
+      if (formData[`product${i}Size`]) document.getElementById(`product${i}Size`).value = formData[`product${i}Size`];
+      if (formData[`product${i}Material`]) document.getElementById(`product${i}Material`).value = formData[`product${i}Material`];
+      if (formData[`product${i}PriceOld`]) document.getElementById(`product${i}PriceOld`).value = formData[`product${i}PriceOld`];
+      if (formData[`product${i}Price`]) document.getElementById(`product${i}Price`).value = formData[`product${i}Price`];
+
+      // Завантажити фото продукту
+      if (formData[`product${i}Images`] && Array.isArray(formData[`product${i}Images`])) {
+        window[`product${i}Images`] = formData[`product${i}Images`];
+        renderProductImages(i);
+      }
+    }
 
     // Завантажити переваги
     if (formData.benefits) {
@@ -249,6 +345,12 @@ async function loadSavedValues() {
       document.getElementById(`product${i}Material`).value = formData[`product${i}Material`] || '';
       document.getElementById(`product${i}PriceOld`).value = formData[`product${i}PriceOld`] || '';
       document.getElementById(`product${i}Price`).value = formData[`product${i}Price`] || '';
+
+      // Завантажити фото продукту
+      if (formData[`product${i}Images`] && Array.isArray(formData[`product${i}Images`])) {
+        window[`product${i}Images`] = formData[`product${i}Images`];
+        renderProductImages(i);
+      }
     }
 
     // Завантажити переваги
@@ -414,7 +516,13 @@ function getFormParams() {
     product5Material: document.getElementById('product5Material').value,
     product5PriceOld: document.getElementById('product5PriceOld').value,
     product5Price: document.getElementById('product5Price').value,
-    enableProduct5: document.getElementById('enableProduct5').checked ? 'on' : 'off'
+    enableProduct5: document.getElementById('enableProduct5').checked ? 'on' : 'off',
+    // Product images
+    product1Images: JSON.stringify(product1Images),
+    product2Images: JSON.stringify(product2Images),
+    product3Images: JSON.stringify(product3Images),
+    product4Images: JSON.stringify(product4Images),
+    product5Images: JSON.stringify(product5Images)
   });
 
   return params.toString();
