@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const archiver = require('archiver');
 const multer = require('multer');
+const sharp = require('sharp');
 
 const app = express();
 const PORT = 6614;
@@ -104,14 +105,15 @@ function generateHTML(dataObj, options = {}) {
 
     // Замінити hero фото якщо користувач завантажив нове
     if (options.heroImage) {
-      // Замінити путь до фото в srcset та src
+      // Замінити путь до фото в srcset (десктоп версія - .jpg)
       html = html.replace(
         /img\/start\/start-1\.png/g,
-        `public/img/hero/${options.heroImage}`
+        `public/img/hero/${options.heroImage}.jpg`
       );
+      // Замінити путь до фото в src (мобільна версія - _m.webp)
       html = html.replace(
         /img\/start\/start-1_m\.webp/g,
-        `public/img/hero/${options.heroImage}`
+        `public/img/hero/${options.heroImage}_m.webp`
       );
     }
 
@@ -414,24 +416,62 @@ app.get('/api/data', (req, res) => {
 });
 
 // POST /upload-hero-image - Завантажити нове фото для hero блоку
-app.post('/upload-hero-image', upload.single('heroImage'), (req, res) => {
+app.post('/upload-hero-image', upload.single('heroImage'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'Файл не завантажений' });
     }
 
-    const filename = req.file.filename;
     console.log(`\n🖼️ ФОТО ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${filename}`);
-    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB\n`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `hero-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити та оптимізувати для десктопу (1200x600 - cover)
+    const desktopPath = path.join(heroImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1200, 600, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (1200x600, 85% quality)`);
+
+    // Пересохранити та оптимізувати для мобільного (600x400 - cover)
+    const mobilePath = path.join(heroImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(600, 400, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (600x400, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filename,
-      message: 'Фото успішно завантажено'
+      filename: basename,
+      message: 'Фото успішно оптимізовано та завантажено'
     });
   } catch (err) {
     console.error('❌ Помилка при завантаженні:', err.message);
+    // Спробуємо видалити файл якщо сталася помилка
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
     res.status(500).json({ error: err.message });
   }
 });
@@ -541,10 +581,18 @@ app.get('/export', (req, res) => {
 
     // Додати завантажене фото якщо існує
     if (options.heroImage) {
-      const heroImagePath = path.join(heroImageDir, options.heroImage);
-      if (fs.existsSync(heroImagePath)) {
-        archive.file(heroImagePath, { name: `img/hero/${options.heroImage}` });
-        console.log(`✅ Додано завантажене фото: img/hero/${options.heroImage}`);
+      // Додати десктоп версію (jpg)
+      const heroDesktopPath = path.join(heroImageDir, `${options.heroImage}.jpg`);
+      if (fs.existsSync(heroDesktopPath)) {
+        archive.file(heroDesktopPath, { name: `img/hero/${options.heroImage}.jpg` });
+        console.log(`✅ Додано десктоп фото: img/hero/${options.heroImage}.jpg`);
+      }
+
+      // Додати мобільну версію (webp)
+      const heroMobilePath = path.join(heroImageDir, `${options.heroImage}_m.webp`);
+      if (fs.existsSync(heroMobilePath)) {
+        archive.file(heroMobilePath, { name: `img/hero/${options.heroImage}_m.webp` });
+        console.log(`✅ Додано мобільне фото: img/hero/${options.heroImage}_m.webp`);
       }
     }
 
