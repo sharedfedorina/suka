@@ -45,9 +45,25 @@ document.addEventListener('DOMContentLoaded', function() {
   fetch('/api/original-form-data')
     .then(res => res.json())
     .then(data => {
-      initBenefitsForm(data.benefits || []);
+      console.log('📥 Отримані оригінальні дані:', data);
+
+      // Заповнити всі поля форми
+      if (data.headerText) document.getElementById('headerText').value = data.headerText;
+      if (data.heroTitle) document.getElementById('heroTitle').value = data.heroTitle;
+      if (data.heroPrice) document.getElementById('heroPrice').value = data.heroPrice;
+      if (data.enableTimer !== undefined) document.getElementById('enableTimer').checked = data.enableTimer;
+      if (data.enableStock !== undefined) document.getElementById('enableStock').checked = data.enableStock;
+      if (data.heroImage) {
+        uploadedHeroImageFilename = data.heroImage;
+        showImagePreview(data.heroImage);
+      }
+
+      // Ініціалізувати форму переваг
+      if (data.benefits && Array.isArray(data.benefits) && data.benefits.length > 0) {
+        initBenefitsForm(data.benefits);
+      }
     })
-    .catch(err => console.error('Помилка при завантаженні оригіналу:', err));
+    .catch(err => console.error('❌ Помилка при завантаженні оригіналу:', err));
 });
 
 // ========== ФУНКЦІЇ ДЛЯ ТРЬОХ КНОПОК ==========
@@ -57,12 +73,22 @@ async function saveFormToServer() {
   // Зібрати дані переваг
   const benefits = [];
   document.querySelectorAll('.benefit-enabled').forEach(checkbox => {
-    const id = checkbox.dataset.id;
+    const id = String(checkbox.dataset.id);
     const enabled = checkbox.checked;
-    const title = document.querySelector(`.benefit-title[data-id="${id}"]`).value;
-    const description = document.querySelector(`.benefit-description[data-id="${id}"]`).value;
-    benefits.push({ id: parseInt(id), enabled, title, description });
+    const titleEl = document.querySelector(`.benefit-title[data-id="${id}"]`);
+    const descEl = document.querySelector(`.benefit-description[data-id="${id}"]`);
+
+    if (titleEl && descEl) {
+      benefits.push({
+        id: parseInt(id),
+        enabled,
+        title: titleEl.value,
+        description: descEl.value
+      });
+    }
   });
+
+  console.log('💾 Дані для збереження:', benefits);
 
   const formData = {
     headerText: document.getElementById('headerText').value,
@@ -210,11 +236,19 @@ function getFormParams() {
   // Зібрати дані переваг
   const benefits = [];
   document.querySelectorAll('.benefit-enabled').forEach(checkbox => {
-    const id = checkbox.dataset.id;
+    const id = String(checkbox.dataset.id);
     const enabled = checkbox.checked ? 'on' : 'off';
-    const title = document.querySelector(`.benefit-title[data-id="${id}"]`).value;
-    const description = document.querySelector(`.benefit-description[data-id="${id}"]`).value;
-    benefits.push({ id, enabled, title, description });
+    const titleEl = document.querySelector(`.benefit-title[data-id="${id}"]`);
+    const descEl = document.querySelector(`.benefit-description[data-id="${id}"]`);
+
+    if (titleEl && descEl) {
+      benefits.push({
+        id: parseInt(id),
+        enabled,
+        title: titleEl.value,
+        description: descEl.value
+      });
+    }
   });
 
   const params = new URLSearchParams({
