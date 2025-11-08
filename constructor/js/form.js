@@ -1,4 +1,5 @@
 let uploadedHeroImageFilename = '';
+let imageUrlValue = '';
 
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
 
@@ -57,6 +58,10 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadedHeroImageFilename = data.heroImage;
         showImagePreview(data.heroImage);
       }
+      if (data.enableImage !== undefined) document.getElementById('enableImage').checked = data.enableImage;
+      if (data.imageUrl) {
+        imageUrlValue = data.imageUrl;
+      }
 
       // Ініціалізувати форму переваг
       if (data.benefits && Array.isArray(data.benefits) && data.benefits.length > 0) {
@@ -97,6 +102,8 @@ async function saveFormToServer() {
     enableTimer: document.getElementById('enableTimer').checked,
     enableStock: document.getElementById('enableStock').checked,
     heroImage: uploadedHeroImageFilename,
+    enableImage: document.getElementById('enableImage').checked,
+    imageUrl: imageUrlValue,
     benefits: benefits
   };
 
@@ -165,6 +172,8 @@ async function loadSavedValues() {
     document.getElementById('enableStock').checked = formData.enableStock;
     uploadedHeroImageFilename = formData.heroImage;
     showImagePreview(formData.heroImage);
+    document.getElementById('enableImage').checked = formData.enableImage;
+    imageUrlValue = formData.imageUrl;
 
     // Завантажити переваги
     if (formData.benefits) {
@@ -225,6 +234,32 @@ document.getElementById('heroImage').addEventListener('change', async function(e
   }
 });
 
+// Обробка завантаження фото для plus-logo блоку
+document.getElementById('imageUpload').addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('imageUpload', file);
+
+  try {
+    const response = await fetch('/upload-image', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) throw new Error('Помилка при завантаженні');
+
+    const result = await response.json();
+    imageUrlValue = result.filename;
+    console.log('✅ Фото для plus-logo завантажено:', imageUrlValue);
+  } catch (error) {
+    alert('❌ Помилка при завантаженні фото: ' + error.message);
+    document.getElementById('imageUpload').value = '';
+    imageUrlValue = '';
+  }
+});
+
 function getFormParams() {
   const headerText = document.getElementById('headerText').value;
   const heroTitle = document.getElementById('heroTitle').value;
@@ -232,6 +267,8 @@ function getFormParams() {
   const enableTimer = document.getElementById('enableTimer').checked ? 'on' : 'off';
   const enableStock = document.getElementById('enableStock').checked ? 'on' : 'off';
   const heroImage = uploadedHeroImageFilename;
+  const enableImage = document.getElementById('enableImage').checked ? 'on' : 'off';
+  const imageUrl = imageUrlValue;
 
   // Зібрати дані переваг
   const benefits = [];
@@ -258,6 +295,8 @@ function getFormParams() {
     enableTimer: enableTimer,
     enableStock: enableStock,
     heroImage: heroImage,
+    enableImage: enableImage,
+    imageUrl: imageUrl,
     benefits: JSON.stringify(benefits)
   });
 
