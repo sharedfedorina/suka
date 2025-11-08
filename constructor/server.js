@@ -126,18 +126,12 @@ function generateHTML(dataObj, options = {}) {
       );
     }
 
-    // Замінити переваги (якщо передано)
+    // Замінити переваги (простій текстовий заміни плейсхолдерів)
     if (options.benefits && Array.isArray(options.benefits)) {
       options.benefits.forEach((benefit) => {
-        if (!benefit.enabled || benefit.enabled === 'off') return; // Пропустити вимкнені
-
-        // Знайти та замінити кожну перевагу по ID
-        const benRegex = new RegExp(
-          `<b>[^<]*?${dataObj.benefits[benefit.id - 1]?.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^<]*?<\\/b>\\s*<br>\\s*[^<]*?${dataObj.benefits[benefit.id - 1]?.description.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^<]*?`,
-          'g'
-        );
-
-        html = html.replace(benRegex, `<b>${benefit.title}</b> <br>${benefit.description}`);
+        const num = benefit.id;
+        html = html.replace(`{{benefit${num}Title}}`, benefit.title);
+        html = html.replace(`{{benefit${num}Description}}`, benefit.description);
       });
     }
 
