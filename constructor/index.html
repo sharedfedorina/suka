@@ -207,10 +207,12 @@
                         <h2 class="title-x">Краще один раз побачити</h2>
                     </div>
                     <a href="{{videoUrl}}" data-fancybox class="promo-video">
+                        <!--videoThumbnail-->
                         <picture>
-                            <source srcset="img/promo/promo-1.jpg" media="(min-width: 800px)">
-                            <img src="img/promo/promo-1_m.webp" alt="img">
+                            <source srcset="{{videoThumbnailDesktop}}" media="(min-width: 800px)">
+                            <img src="{{videoThumbnailMobile}}" alt="img">
                         </picture>
+                        <!--/videoThumbnail-->
                         <span class="promo-btn">
         <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
          <path

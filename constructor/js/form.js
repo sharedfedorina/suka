@@ -4,7 +4,11 @@ let imageUrlValue = '';
 
 let videoUrlValue = '';
 
+const DEFAULT_VIDEO_THUMBNAIL_DESKTOP = 'img/promo/promo-1.jpg';
+const DEFAULT_VIDEO_THUMBNAIL_MOBILE = 'img/promo/promo-1_m.webp';
 
+let videoThumbnailDesktopValue = DEFAULT_VIDEO_THUMBNAIL_DESKTOP;
+let videoThumbnailMobileValue = DEFAULT_VIDEO_THUMBNAIL_MOBILE;
 
 // Product values tracking
 
@@ -445,12 +449,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (data.enableVideo !== undefined) document.getElementById('enableVideo').checked = data.enableVideo;
 
-      if (data.videoUrl) {
+      videoUrlValue = data.videoUrl || '';
+      showVideoPreview(videoUrlValue);
 
-        videoUrlValue = data.videoUrl;
-        showVideoPreview(data.videoUrl);
+      const videoThumbDefault = (typeof data.enableVideoThumbnail === 'boolean') ? data.enableVideoThumbnail : true;
+      document.getElementById('enableVideoThumbnail').checked = videoThumbDefault;
 
-      }
+      videoThumbnailDesktopValue = data.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP;
+      videoThumbnailMobileValue = data.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE;
+      showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
 
 
 
@@ -599,6 +606,11 @@ async function saveFormToServer() {
 
     videoUrl: videoUrlValue,
 
+    enableVideoThumbnail: document.getElementById('enableVideoThumbnail').checked,
+
+    videoThumbnailDesktop: videoThumbnailDesktopValue,
+
+    videoThumbnailMobile: videoThumbnailMobileValue,
 
     benefits: benefits,
 
@@ -777,8 +789,14 @@ async function loadOriginalValues() {
     document.getElementById('enableVideo').checked = formData.enableVideo;
 
     videoUrlValue = formData.videoUrl || '';
+    showVideoPreview(videoUrlValue);
 
-    showVideoPreview(formData.videoUrl || '');
+    const videoThumbToggle = (typeof formData.enableVideoThumbnail === 'boolean') ? formData.enableVideoThumbnail : true;
+    document.getElementById('enableVideoThumbnail').checked = videoThumbToggle;
+
+    videoThumbnailDesktopValue = formData.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP;
+    videoThumbnailMobileValue = formData.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE;
+    showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
 
     // Завантажити дані 5 продуктів
 
@@ -910,8 +928,14 @@ async function loadSavedValues() {
     document.getElementById('enableVideo').checked = formData.enableVideo;
 
     videoUrlValue = formData.videoUrl || '';
+    showVideoPreview(videoUrlValue);
 
-    showVideoPreview(formData.videoUrl || '');
+    const videoThumbToggle = (typeof formData.enableVideoThumbnail === 'boolean') ? formData.enableVideoThumbnail : true;
+    document.getElementById('enableVideoThumbnail').checked = videoThumbToggle;
+
+    videoThumbnailDesktopValue = formData.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP;
+    videoThumbnailMobileValue = formData.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE;
+    showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
 
 
 
@@ -1046,6 +1070,28 @@ function showVideoPreview(videoPath) {
   videoEl.src = videoPath;
   videoEl.load();
   statusEl.textContent = videoPath;
+}
+
+function showVideoThumbnailPreview(imagePath) {
+  const previewDiv = document.getElementById('videoThumbnailPreview');
+  const imageEl = document.getElementById('previewVideoThumbnail');
+  const statusEl = document.getElementById('videoThumbnailStatus');
+
+  if (!previewDiv || !imageEl || !statusEl) return;
+
+  if (!imagePath) {
+    previewDiv.style.display = 'none';
+    if (imageEl.getAttribute('src')) {
+      imageEl.removeAttribute('src');
+    }
+    statusEl.textContent = '';
+    return;
+  }
+
+  previewDiv.style.display = 'block';
+  imageEl.src = imagePath;
+  imageEl.alt = "Прев'ю відео";
+  statusEl.textContent = imagePath;
 }
 
 
@@ -1189,6 +1235,41 @@ if (videoUploadInput) {
 
 
 
+const videoThumbnailUploadInput = document.getElementById('videoThumbnailUpload');
+if (videoThumbnailUploadInput) {
+  videoThumbnailUploadInput.addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('videoThumbnailUpload', file);
+
+    try {
+      const response = await fetch('/upload-video-thumbnail', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) throw new Error('Не вдалося завантажити прев\'ю');
+
+      const result = await response.json();
+      videoThumbnailDesktopValue = result.desktop || '';
+      videoThumbnailMobileValue = result.mobile || result.desktop || '';
+      document.getElementById('enableVideoThumbnail').checked = true;
+      showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
+      console.log('Прев\'ю відео завантажено:', videoThumbnailDesktopValue || videoThumbnailMobileValue);
+    } catch (error) {
+      alert('Не вдалося завантажити прев\'ю: ' + error.message);
+      e.target.value = '';
+      videoThumbnailDesktopValue = '';
+      videoThumbnailMobileValue = '';
+      showVideoThumbnailPreview('');
+    }
+  });
+}
+
+
+
 
 function getFormParams() {
 
@@ -1209,6 +1290,9 @@ function getFormParams() {
   const imageUrl = imageUrlValue;
   const enableVideo = document.getElementById('enableVideo').checked ? 'on' : 'off';
   const videoUrl = videoUrlValue;
+  const enableVideoThumbnail = document.getElementById('enableVideoThumbnail').checked ? 'on' : 'off';
+  const videoThumbnailDesktop = videoThumbnailDesktopValue;
+  const videoThumbnailMobile = videoThumbnailMobileValue;
 
 
 
@@ -1267,6 +1351,9 @@ function getFormParams() {
     imageUrl: imageUrl,
     enableVideo: enableVideo,
     videoUrl: videoUrl,
+    enableVideoThumbnail: enableVideoThumbnail,
+    videoThumbnailDesktop: videoThumbnailDesktop,
+    videoThumbnailMobile: videoThumbnailMobile,
 
 
     benefits: JSON.stringify(benefits),

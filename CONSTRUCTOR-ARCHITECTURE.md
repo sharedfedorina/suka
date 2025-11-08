@@ -299,3 +299,19 @@ Form.js: `let videoUrlValue = ''` + весь решта логіка як у plu
 Server: заміна `{{videoUrl}}`, регекс `<!--video-->...<!--/video-->`
 
 **NOTHING ELSE!**架構однакова для всіх блоків.
+
+Додаткові параметри прев'ю для video-блоку:
+
+`json
+{
+  "enableVideoThumbnail": true,
+  "videoThumbnailDesktop": "/public/img/video/promo-cover.jpg",
+  "videoThumbnailMobile": "/public/img/video/promo-cover_m.webp"
+}
+`
+
+- Прев'ю загортаємо у <!--videoThumbnail-->...<!--/videoThumbnail-->.
+- У form.html: checkbox enableVideoThumbnail, інпут ideoThumbnailUpload, блок ideoThumbnailPreview.
+- form.js: ideoThumbnailDesktopValue, ideoThumbnailMobileValue, showVideoThumbnailPreview, POST /upload-video-thumbnail.
+- Сервер зберігає у /public/img/video і видаляє блок, якщо enableVideoThumbnail вимкнено.
+
