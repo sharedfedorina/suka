@@ -118,6 +118,29 @@ function generateHTML(dataObj, options = {}) {
       );
     }
 
+    // Замінити ціну (якщо передано)
+    if (options.heroPrice) {
+      html = html.replace(
+        /від 330 грн/g,
+        options.heroPrice
+      );
+    }
+
+    // Замінити переваги (якщо передано)
+    if (options.benefits && Array.isArray(options.benefits)) {
+      options.benefits.forEach((benefit) => {
+        if (!benefit.enabled || benefit.enabled === 'off') return; // Пропустити вимкнені
+
+        // Знайти та замінити кожну перевагу по ID
+        const benRegex = new RegExp(
+          `<b>[^<]*?${dataObj.benefits[benefit.id - 1]?.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^<]*?<\\/b>\\s*<br>\\s*[^<]*?${dataObj.benefits[benefit.id - 1]?.description.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^<]*?`,
+          'g'
+        );
+
+        html = html.replace(benRegex, `<b>${benefit.title}</b> <br>${benefit.description}`);
+      });
+    }
+
     console.log(`✅ HTML успішно згенерований (${html.length} байт)`);
     return html;
   } catch (err) {
@@ -148,9 +171,11 @@ app.get('/api/original-form-data', (req, res) => {
     const formData = {
       headerText: data.headerText,
       heroTitle: data.heroTitle,
+      heroPrice: data.hero.price,
       enableTimer: data.enableTimer,
       enableStock: data.enableStock,
-      heroImage: data.heroImage
+      heroImage: data.heroImage,
+      benefits: data.benefits || []
     };
 
     console.log(`✅ Оригінальні дані форми отримані`);
@@ -171,9 +196,11 @@ app.get('/api/get-user-config', (req, res) => {
       return res.json({
         headerText: '',
         heroTitle: '',
+        heroPrice: 'від 330 грн',
         enableTimer: true,
         enableStock: true,
-        heroImage: ''
+        heroImage: '',
+        benefits: []
       });
     }
 
@@ -276,10 +303,20 @@ app.get('/generate', (req, res) => {
     const options = {
       headerText: req.query.headerText,
       heroTitle: req.query.heroTitle,
+      heroPrice: req.query.heroPrice,
       enableTimer: req.query.enableTimer,
       enableStock: req.query.enableStock,
       heroImage: req.query.heroImage
     };
+
+    // Парсити benefits якщо передано як JSON string
+    if (req.query.benefits) {
+      try {
+        options.benefits = JSON.parse(decodeURIComponent(req.query.benefits));
+      } catch (e) {
+        console.error('❌ Помилка при парсингу benefits:', e.message);
+      }
+    }
 
     console.log(`\n🎨 ГЕНЕРУВАННЯ САЙТУ...`);
     console.log(`📝 Параметри:`, options);
@@ -330,10 +367,20 @@ app.get('/export', (req, res) => {
     const options = {
       headerText: req.query.headerText,
       heroTitle: req.query.heroTitle,
+      heroPrice: req.query.heroPrice,
       enableTimer: req.query.enableTimer,
       enableStock: req.query.enableStock,
       heroImage: req.query.heroImage
     };
+
+    // Парсити benefits якщо передано як JSON string
+    if (req.query.benefits) {
+      try {
+        options.benefits = JSON.parse(decodeURIComponent(req.query.benefits));
+      } catch (e) {
+        console.error('❌ Помилка при парсингу benefits:', e.message);
+      }
+    }
 
     console.log(`\n📦 ЕКСПОРТ - СТВОРЕННЯ ZIP АРХІВУ...`);
     console.log(`📝 Параметри:`, options);

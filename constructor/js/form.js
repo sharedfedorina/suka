@@ -1,15 +1,77 @@
 let uploadedHeroImageFilename = '';
 
+// ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
+
+function initBenefitsForm(benefits) {
+  const container = document.getElementById('benefitsContainer');
+  if (!container) return;
+
+  container.innerHTML = benefits.map((benefit, index) => `
+    <div style="border: 1px solid #ddd; padding: 12px; margin-bottom: 12px; border-radius: 6px; background: #f9f9f9;">
+      <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <input
+          type="checkbox"
+          id="benefit-enabled-${benefit.id}"
+          class="benefit-enabled"
+          data-id="${benefit.id}"
+          ${benefit.enabled ? 'checked' : ''}
+          style="width: 20px; height: 20px; cursor: pointer; margin-right: 10px;"
+        />
+        <label for="benefit-enabled-${benefit.id}" style="cursor: pointer; flex: 1; margin: 0;">Показувати перевагу ${benefit.id}</label>
+      </div>
+      <div style="margin-left: 30px;">
+        <input
+          type="text"
+          class="benefit-title"
+          data-id="${benefit.id}"
+          placeholder="Назва переваги"
+          value="${benefit.title}"
+          style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold;"
+        />
+        <textarea
+          class="benefit-description"
+          data-id="${benefit.id}"
+          placeholder="Опис переваги"
+          style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Segoe UI', Arial, sans-serif; min-height: 60px;"
+        >${benefit.description}</textarea>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Ініціалізуємо форму при завантаженні сторінки
+document.addEventListener('DOMContentLoaded', function() {
+  // Спочатку завантажуємо оригінальні значення
+  fetch('/api/original-form-data')
+    .then(res => res.json())
+    .then(data => {
+      initBenefitsForm(data.benefits || []);
+    })
+    .catch(err => console.error('Помилка при завантаженні оригіналу:', err));
+});
+
 // ========== ФУНКЦІЇ ДЛЯ ТРЬОХ КНОПОК ==========
 
 // Функція для збереження конфігурації на сервер
 async function saveFormToServer() {
+  // Зібрати дані переваг
+  const benefits = [];
+  document.querySelectorAll('.benefit-enabled').forEach(checkbox => {
+    const id = checkbox.dataset.id;
+    const enabled = checkbox.checked;
+    const title = document.querySelector(`.benefit-title[data-id="${id}"]`).value;
+    const description = document.querySelector(`.benefit-description[data-id="${id}"]`).value;
+    benefits.push({ id: parseInt(id), enabled, title, description });
+  });
+
   const formData = {
     headerText: document.getElementById('headerText').value,
     heroTitle: document.getElementById('heroTitle').value,
+    heroPrice: document.getElementById('heroPrice').value,
     enableTimer: document.getElementById('enableTimer').checked,
     enableStock: document.getElementById('enableStock').checked,
-    heroImage: uploadedHeroImageFilename
+    heroImage: uploadedHeroImageFilename,
+    benefits: benefits
   };
 
   try {
@@ -38,10 +100,16 @@ async function loadOriginalValues() {
     const formData = await response.json();
     document.getElementById('headerText').value = formData.headerText;
     document.getElementById('heroTitle').value = formData.heroTitle;
+    document.getElementById('heroPrice').value = formData.heroPrice || 'від 330 грн';
     document.getElementById('enableTimer').checked = formData.enableTimer;
     document.getElementById('enableStock').checked = formData.enableStock;
     uploadedHeroImageFilename = formData.heroImage;
     showImagePreview(formData.heroImage);
+
+    // Завантажити переваги
+    if (formData.benefits) {
+      initBenefitsForm(formData.benefits);
+    }
 
     console.log('🔄 Завантажені оригінальні значення');
     alert('✅ Завантажені оригінальні дані!');
@@ -66,10 +134,16 @@ async function loadSavedValues() {
 
     document.getElementById('headerText').value = formData.headerText;
     document.getElementById('heroTitle').value = formData.heroTitle;
+    document.getElementById('heroPrice').value = formData.heroPrice || 'від 330 грн';
     document.getElementById('enableTimer').checked = formData.enableTimer;
     document.getElementById('enableStock').checked = formData.enableStock;
     uploadedHeroImageFilename = formData.heroImage;
     showImagePreview(formData.heroImage);
+
+    // Завантажити переваги
+    if (formData.benefits) {
+      initBenefitsForm(formData.benefits);
+    }
 
     console.log('📂 Завантажені збережені значення:', formData);
     alert('✅ Завантажені ваші останні зміни!');
@@ -128,17 +202,32 @@ document.getElementById('heroImage').addEventListener('change', async function(e
 function getFormParams() {
   const headerText = document.getElementById('headerText').value;
   const heroTitle = document.getElementById('heroTitle').value;
+  const heroPrice = document.getElementById('heroPrice').value;
   const enableTimer = document.getElementById('enableTimer').checked ? 'on' : 'off';
   const enableStock = document.getElementById('enableStock').checked ? 'on' : 'off';
   const heroImage = uploadedHeroImageFilename;
 
-  return new URLSearchParams({
+  // Зібрати дані переваг
+  const benefits = [];
+  document.querySelectorAll('.benefit-enabled').forEach(checkbox => {
+    const id = checkbox.dataset.id;
+    const enabled = checkbox.checked ? 'on' : 'off';
+    const title = document.querySelector(`.benefit-title[data-id="${id}"]`).value;
+    const description = document.querySelector(`.benefit-description[data-id="${id}"]`).value;
+    benefits.push({ id, enabled, title, description });
+  });
+
+  const params = new URLSearchParams({
     headerText: headerText,
     heroTitle: heroTitle,
+    heroPrice: heroPrice,
     enableTimer: enableTimer,
     enableStock: enableStock,
-    heroImage: heroImage
-  }).toString();
+    heroImage: heroImage,
+    benefits: JSON.stringify(benefits)
+  });
+
+  return params.toString();
 }
 
 function previewSite() {
