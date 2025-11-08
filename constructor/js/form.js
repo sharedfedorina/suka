@@ -1,6 +1,13 @@
 let uploadedHeroImageFilename = '';
 let imageUrlValue = '';
 
+// Product values tracking
+let product1Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
+let product2Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
+let product3Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
+let product4Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
+let product5Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
+
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
 
 function initBenefitsForm(benefits) {
@@ -63,6 +70,18 @@ document.addEventListener('DOMContentLoaded', function() {
         imageUrlValue = data.imageUrl;
       }
 
+      // Завантажити дані 5 продуктів
+      for (let i = 1; i <= 5; i++) {
+        if (data[`enableProduct${i}`] !== undefined) document.getElementById(`enableProduct${i}`).checked = data[`enableProduct${i}`];
+        if (data[`product${i}Name`]) document.getElementById(`product${i}Name`).value = data[`product${i}Name`];
+        if (data[`product${i}Color`]) document.getElementById(`product${i}Color`).value = data[`product${i}Color`];
+        if (data[`product${i}ColorHex`]) document.getElementById(`product${i}ColorHex`).value = data[`product${i}ColorHex`];
+        if (data[`product${i}Size`]) document.getElementById(`product${i}Size`).value = data[`product${i}Size`];
+        if (data[`product${i}Material`]) document.getElementById(`product${i}Material`).value = data[`product${i}Material`];
+        if (data[`product${i}PriceOld`]) document.getElementById(`product${i}PriceOld`).value = data[`product${i}PriceOld`];
+        if (data[`product${i}Price`]) document.getElementById(`product${i}Price`).value = data[`product${i}Price`];
+      }
+
       // Ініціалізувати форму переваг
       if (data.benefits && Array.isArray(data.benefits) && data.benefits.length > 0) {
         initBenefitsForm(data.benefits);
@@ -104,7 +123,48 @@ async function saveFormToServer() {
     heroImage: uploadedHeroImageFilename,
     enableImage: document.getElementById('enableImage').checked,
     imageUrl: imageUrlValue,
-    benefits: benefits
+    benefits: benefits,
+    // Product data
+    product1Name: document.getElementById('product1Name').value,
+    product1Color: document.getElementById('product1Color').value,
+    product1ColorHex: document.getElementById('product1ColorHex').value,
+    product1Size: document.getElementById('product1Size').value,
+    product1Material: document.getElementById('product1Material').value,
+    product1PriceOld: document.getElementById('product1PriceOld').value,
+    product1Price: document.getElementById('product1Price').value,
+    enableProduct1: document.getElementById('enableProduct1').checked,
+    product2Name: document.getElementById('product2Name').value,
+    product2Color: document.getElementById('product2Color').value,
+    product2ColorHex: document.getElementById('product2ColorHex').value,
+    product2Size: document.getElementById('product2Size').value,
+    product2Material: document.getElementById('product2Material').value,
+    product2PriceOld: document.getElementById('product2PriceOld').value,
+    product2Price: document.getElementById('product2Price').value,
+    enableProduct2: document.getElementById('enableProduct2').checked,
+    product3Name: document.getElementById('product3Name').value,
+    product3Color: document.getElementById('product3Color').value,
+    product3ColorHex: document.getElementById('product3ColorHex').value,
+    product3Size: document.getElementById('product3Size').value,
+    product3Material: document.getElementById('product3Material').value,
+    product3PriceOld: document.getElementById('product3PriceOld').value,
+    product3Price: document.getElementById('product3Price').value,
+    enableProduct3: document.getElementById('enableProduct3').checked,
+    product4Name: document.getElementById('product4Name').value,
+    product4Color: document.getElementById('product4Color').value,
+    product4ColorHex: document.getElementById('product4ColorHex').value,
+    product4Size: document.getElementById('product4Size').value,
+    product4Material: document.getElementById('product4Material').value,
+    product4PriceOld: document.getElementById('product4PriceOld').value,
+    product4Price: document.getElementById('product4Price').value,
+    enableProduct4: document.getElementById('enableProduct4').checked,
+    product5Name: document.getElementById('product5Name').value,
+    product5Color: document.getElementById('product5Color').value,
+    product5ColorHex: document.getElementById('product5ColorHex').value,
+    product5Size: document.getElementById('product5Size').value,
+    product5Material: document.getElementById('product5Material').value,
+    product5PriceOld: document.getElementById('product5PriceOld').value,
+    product5Price: document.getElementById('product5Price').value,
+    enableProduct5: document.getElementById('enableProduct5').checked
   };
 
   try {
@@ -177,6 +237,18 @@ async function loadSavedValues() {
     if (formData.imageUrl) {
       document.getElementById('previewImageUpload').src = formData.imageUrl;
       document.getElementById('imageUploadPreview').style.display = 'block';
+    }
+
+    // Завантажити дані 5 продуктів
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById(`enableProduct${i}`).checked = formData[`enableProduct${i}`];
+      document.getElementById(`product${i}Name`).value = formData[`product${i}Name`] || '';
+      document.getElementById(`product${i}Color`).value = formData[`product${i}Color`] || '';
+      document.getElementById(`product${i}ColorHex`).value = formData[`product${i}ColorHex`] || '';
+      document.getElementById(`product${i}Size`).value = formData[`product${i}Size`] || '';
+      document.getElementById(`product${i}Material`).value = formData[`product${i}Material`] || '';
+      document.getElementById(`product${i}PriceOld`).value = formData[`product${i}PriceOld`] || '';
+      document.getElementById(`product${i}Price`).value = formData[`product${i}Price`] || '';
     }
 
     // Завантажити переваги
@@ -301,7 +373,48 @@ function getFormParams() {
     heroImage: heroImage,
     enableImage: enableImage,
     imageUrl: imageUrl,
-    benefits: JSON.stringify(benefits)
+    benefits: JSON.stringify(benefits),
+    // Product data
+    product1Name: document.getElementById('product1Name').value,
+    product1Color: document.getElementById('product1Color').value,
+    product1ColorHex: document.getElementById('product1ColorHex').value,
+    product1Size: document.getElementById('product1Size').value,
+    product1Material: document.getElementById('product1Material').value,
+    product1PriceOld: document.getElementById('product1PriceOld').value,
+    product1Price: document.getElementById('product1Price').value,
+    enableProduct1: document.getElementById('enableProduct1').checked ? 'on' : 'off',
+    product2Name: document.getElementById('product2Name').value,
+    product2Color: document.getElementById('product2Color').value,
+    product2ColorHex: document.getElementById('product2ColorHex').value,
+    product2Size: document.getElementById('product2Size').value,
+    product2Material: document.getElementById('product2Material').value,
+    product2PriceOld: document.getElementById('product2PriceOld').value,
+    product2Price: document.getElementById('product2Price').value,
+    enableProduct2: document.getElementById('enableProduct2').checked ? 'on' : 'off',
+    product3Name: document.getElementById('product3Name').value,
+    product3Color: document.getElementById('product3Color').value,
+    product3ColorHex: document.getElementById('product3ColorHex').value,
+    product3Size: document.getElementById('product3Size').value,
+    product3Material: document.getElementById('product3Material').value,
+    product3PriceOld: document.getElementById('product3PriceOld').value,
+    product3Price: document.getElementById('product3Price').value,
+    enableProduct3: document.getElementById('enableProduct3').checked ? 'on' : 'off',
+    product4Name: document.getElementById('product4Name').value,
+    product4Color: document.getElementById('product4Color').value,
+    product4ColorHex: document.getElementById('product4ColorHex').value,
+    product4Size: document.getElementById('product4Size').value,
+    product4Material: document.getElementById('product4Material').value,
+    product4PriceOld: document.getElementById('product4PriceOld').value,
+    product4Price: document.getElementById('product4Price').value,
+    enableProduct4: document.getElementById('enableProduct4').checked ? 'on' : 'off',
+    product5Name: document.getElementById('product5Name').value,
+    product5Color: document.getElementById('product5Color').value,
+    product5ColorHex: document.getElementById('product5ColorHex').value,
+    product5Size: document.getElementById('product5Size').value,
+    product5Material: document.getElementById('product5Material').value,
+    product5PriceOld: document.getElementById('product5PriceOld').value,
+    product5Price: document.getElementById('product5Price').value,
+    enableProduct5: document.getElementById('enableProduct5').checked ? 'on' : 'off'
   });
 
   return params.toString();

@@ -162,6 +162,30 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(/\s*<!--\s*image\s*-->[\s\S]*?<!--\s*\/image\s*-->\s*/g, '');
     }
 
+    // Замінити плейсхолдери для 5 продуктів
+    for (let i = 1; i <= 5; i++) {
+      const productName = options[`product${i}Name`] || '';
+      const productColor = options[`product${i}Color`] || '';
+      const productColorHex = options[`product${i}ColorHex`] || '';
+      const productSize = options[`product${i}Size`] || '';
+      const productMaterial = options[`product${i}Material`] || '';
+      const productPriceOld = options[`product${i}PriceOld`] || '';
+      const productPrice = options[`product${i}Price`] || '';
+
+      html = html.replace(`{{product${i}Name}}`, productName);
+      html = html.replace(`{{product${i}Color}}`, productColor);
+      html = html.replace(`{{product${i}ColorHex}}`, productColorHex);
+      html = html.replace(`{{product${i}Size}}`, productSize);
+      html = html.replace(`{{product${i}Material}}`, productMaterial);
+      html = html.replace(`{{product${i}PriceOld}}`, productPriceOld);
+      html = html.replace(`{{product${i}Price}}`, productPrice);
+
+      // Видалити продукт блок якщо вимкнено
+      if (options[`enableProduct${i}`] !== 'on' && options[`enableProduct${i}`] !== true) {
+        html = html.replace(new RegExp(`<!--product${i}-->\\s*[\\s\\S]*?<!--\\/product${i}-->\\s*`, 'g'), '');
+      }
+    }
+
     // Замінити переваги (простій текстовий заміни плейсхолдерів)
     if (options.benefits && Array.isArray(options.benefits)) {
       options.benefits.forEach((benefit) => {
@@ -207,7 +231,48 @@ app.get('/api/original-form-data', (req, res) => {
       heroImage: data.heroImage,
       enableImage: data.enableImage,
       imageUrl: data.imageUrl,
-      benefits: data.benefits || []
+      benefits: data.benefits || [],
+      // Product data
+      product1Name: data.product1Name || '',
+      product1Color: data.product1Color || '',
+      product1ColorHex: data.product1ColorHex || '',
+      product1Size: data.product1Size || '',
+      product1Material: data.product1Material || '',
+      product1PriceOld: data.product1PriceOld || '',
+      product1Price: data.product1Price || '',
+      enableProduct1: data.enableProduct1 || true,
+      product2Name: data.product2Name || '',
+      product2Color: data.product2Color || '',
+      product2ColorHex: data.product2ColorHex || '',
+      product2Size: data.product2Size || '',
+      product2Material: data.product2Material || '',
+      product2PriceOld: data.product2PriceOld || '',
+      product2Price: data.product2Price || '',
+      enableProduct2: data.enableProduct2 || true,
+      product3Name: data.product3Name || '',
+      product3Color: data.product3Color || '',
+      product3ColorHex: data.product3ColorHex || '',
+      product3Size: data.product3Size || '',
+      product3Material: data.product3Material || '',
+      product3PriceOld: data.product3PriceOld || '',
+      product3Price: data.product3Price || '',
+      enableProduct3: data.enableProduct3 || true,
+      product4Name: data.product4Name || '',
+      product4Color: data.product4Color || '',
+      product4ColorHex: data.product4ColorHex || '',
+      product4Size: data.product4Size || '',
+      product4Material: data.product4Material || '',
+      product4PriceOld: data.product4PriceOld || '',
+      product4Price: data.product4Price || '',
+      enableProduct4: data.enableProduct4 || true,
+      product5Name: data.product5Name || '',
+      product5Color: data.product5Color || '',
+      product5ColorHex: data.product5ColorHex || '',
+      product5Size: data.product5Size || '',
+      product5Material: data.product5Material || '',
+      product5PriceOld: data.product5PriceOld || '',
+      product5Price: data.product5Price || '',
+      enableProduct5: data.enableProduct5 || true
     };
 
     console.log(`✅ Оригінальні дані форми отримані`);
@@ -234,7 +299,13 @@ app.get('/api/get-user-config', (req, res) => {
         heroImage: '',
         enableImage: true,
         imageUrl: '',
-        benefits: []
+        benefits: [],
+        // Product data defaults
+        product1Name: '', product1Color: '', product1ColorHex: '', product1Size: '', product1Material: '', product1PriceOld: '', product1Price: '', enableProduct1: true,
+        product2Name: '', product2Color: '', product2ColorHex: '', product2Size: '', product2Material: '', product2PriceOld: '', product2Price: '', enableProduct2: true,
+        product3Name: '', product3Color: '', product3ColorHex: '', product3Size: '', product3Material: '', product3PriceOld: '', product3Price: '', enableProduct3: true,
+        product4Name: '', product4Color: '', product4ColorHex: '', product4Size: '', product4Material: '', product4PriceOld: '', product4Price: '', enableProduct4: true,
+        product5Name: '', product5Color: '', product5ColorHex: '', product5Size: '', product5Material: '', product5PriceOld: '', product5Price: '', enableProduct5: true
       });
     }
 

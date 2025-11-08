@@ -6,7 +6,6 @@
   "enableImage": true,
   "heroImage": "img/start/start-1_m.webp",
   "imageUrl": "img/plus/plus-1.png",
-
   "page": {
     "title": "Жіночі футболки оверсайз від українскського бренду Kopo",
     "brand": "Kopo™ (Україна)"
@@ -182,13 +181,27 @@
       "name": "Набір із 2-х футболок",
       "color": "Кольори на вибір",
       "colors": [
-        {"hex": "#131215"},
-        {"hex": "#f0f1f4"},
-        {"hex": "#f8dfc8"},
-        {"hex": "#fc678f"},
-        {"hex": "#f91029"},
-        {"hex": "#e7c0cd"},
-        {"hex": "#fc325a"}
+        {
+          "hex": "#131215"
+        },
+        {
+          "hex": "#f0f1f4"
+        },
+        {
+          "hex": "#f8dfc8"
+        },
+        {
+          "hex": "#fc678f"
+        },
+        {
+          "hex": "#f91029"
+        },
+        {
+          "hex": "#e7c0cd"
+        },
+        {
+          "hex": "#fc325a"
+        }
       ],
       "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
       "material": "95% бавовна, 5% еластан",
@@ -209,13 +222,27 @@
       "name": "Набір із 3-х футболок",
       "color": "Кольори на вибір",
       "colors": [
-        {"hex": "#131215"},
-        {"hex": "#f0f1f4"},
-        {"hex": "#f8dfc8"},
-        {"hex": "#fc678f"},
-        {"hex": "#f91029"},
-        {"hex": "#e7c0cd"},
-        {"hex": "#fc325a"}
+        {
+          "hex": "#131215"
+        },
+        {
+          "hex": "#f0f1f4"
+        },
+        {
+          "hex": "#f8dfc8"
+        },
+        {
+          "hex": "#fc678f"
+        },
+        {
+          "hex": "#f91029"
+        },
+        {
+          "hex": "#e7c0cd"
+        },
+        {
+          "hex": "#fc325a"
+        }
       ],
       "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
       "material": "95% бавовна, 5% еластан",
@@ -325,9 +352,58 @@
   "footer": {
     "copyright": "© 2022 «KOPO»",
     "links": [
-      {"text": "Обмін та повернення", "href": "exchange.html"},
-      {"text": "Політика конфіденційності", "href": "politics.html"},
-      {"text": "Угода користувача", "href": "agrement.html"}
+      {
+        "text": "Обмін та повернення",
+        "href": "exchange.html"
+      },
+      {
+        "text": "Політика конфіденційності",
+        "href": "politics.html"
+      },
+      {
+        "text": "Угода користувача",
+        "href": "agrement.html"
+      }
     ]
-  }
+  },
+  "product1Name": "Жіноча футболка оверсайз",
+  "product1Color": "Чорний",
+  "product1ColorHex": "#19161a",
+  "product1Size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+  "product1Material": "95% бавовна, 5% еластан",
+  "product1PriceOld": "585 грн",
+  "product1Price": "390 грн",
+  "enableProduct1": true,
+  "product2Name": "Жіноча футболка оверсайз",
+  "product2Color": "Рожевий",
+  "product2ColorHex": "#fc5f88",
+  "product2Size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+  "product2Material": "95% бавовна, 5% еластан",
+  "product2PriceOld": "585 грн",
+  "product2Price": "390 грн",
+  "enableProduct2": true,
+  "product3Name": "Жіноча футболка оверсайз",
+  "product3Color": "Пудра",
+  "product3ColorHex": "#e2bcc9",
+  "product3Size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+  "product3Material": "95% бавовна, 5% еластан",
+  "product3PriceOld": "585 грн",
+  "product3Price": "390 грн",
+  "enableProduct3": true,
+  "product4Name": "Жіноча футболка оверсайз",
+  "product4Color": "Бежевий",
+  "product4ColorHex": "#d9cfc1",
+  "product4Size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+  "product4Material": "95% бавовна, 5% еластан",
+  "product4PriceOld": "585 грн",
+  "product4Price": "390 грн",
+  "enableProduct4": true,
+  "product5Name": "Жіноча футболка оверсайз",
+  "product5Color": "Хакі",
+  "product5ColorHex": "#9b9c7c",
+  "product5Size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+  "product5Material": "95% бавовна, 5% еластан",
+  "product5PriceOld": "585 грн",
+  "product5Price": "390 грн",
+  "enableProduct5": true
 }
