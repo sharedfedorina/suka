@@ -43,7 +43,7 @@ function initBenefitsForm(benefits) {
 // Ініціалізуємо форму при завантаженні сторінки
 document.addEventListener('DOMContentLoaded', function() {
   // Спочатку завантажуємо оригінальні значення
-  fetch('/api/get-user-config')
+  fetch('/api/original-form-data')
     .then(res => res.json())
     .then(data => {
       console.log('📥 Отримані оригінальні дані:', data);
