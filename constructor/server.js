@@ -33,6 +33,14 @@ if (!fs.existsSync(videoDir)) {
   fs.mkdirSync(videoDir, { recursive: true });
 }
 
+const videoThumbnailDir = path.join(__dirname, 'public', 'img', 'video');
+if (!fs.existsSync(videoThumbnailDir)) {
+  fs.mkdirSync(videoThumbnailDir, { recursive: true });
+}
+
+const DEFAULT_VIDEO_THUMBNAIL_DESKTOP = 'img/promo/promo-1.jpg';
+const DEFAULT_VIDEO_THUMBNAIL_MOBILE = 'img/promo/promo-1_m.webp';
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, heroImageDir);
@@ -97,6 +105,30 @@ const uploadVideo = multer({
       cb(null, true);
     } else {
       cb(new Error('????????? ???? ??????????'));
+    }
+  }
+});
+
+
+const videoThumbnailStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, videoThumbnailDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'custom-video-thumb-' + timestamp + ext);
+  }
+});
+
+const uploadVideoThumbnail = multer({
+  storage: videoThumbnailStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Неприпустимий формат прев\'ю'));
     }
   }
 });
