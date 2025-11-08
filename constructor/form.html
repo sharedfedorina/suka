@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Конструктор - Генерування Лендінгу</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Конструктор Лендінгів</h1>
+    <p class="subtitle">Налаштуй текст и функції твого сайту</p>
+
+    <!-- Кнопки керування збереженням (закріплені при скролінгу) -->
+    <div class="buttons-management">
+      <button type="button" class="button button-secondary" onclick="saveFormToServer()" style="flex: 1;">
+        💾 Зберегти
+      </button>
+      <button type="button" class="button button-secondary" onclick="loadOriginalValues()" style="flex: 1;">
+        🔄 Оригінал
+      </button>
+      <button type="button" class="button button-secondary" onclick="loadSavedValues()" style="flex: 1;">
+        📂 Збережене
+      </button>
+    </div>
+
+    <form id="constructorForm">
+      <div class="form-group">
+        <label for="headerText">Текст у хедері (анонс)</label>
+        <input
+          type="text"
+          id="headerText"
+          name="headerText"
+          value="РОЗПРОДАЖ футболок!"
+          placeholder="Напр.: РОЗПРОДАЖ футболок!"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="heroTitle">Заголовок сайту (назва товару)</label>
+        <input
+          type="text"
+          id="heroTitle"
+          name="heroTitle"
+          value="Жіночі футболки оверсайз"
+          placeholder="Напр.: Жіночі футболки оверсайз"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="heroImage">🖼️ Завантажити фото для hero блоку:</label>
+        <input
+          type="file"
+          id="heroImage"
+          name="heroImage"
+          accept="image/*"
+          style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 100%; cursor: pointer;"
+        />
+        <small style="color: #666; display: block; margin-top: 5px;">JPG, PNG або WebP (максимум 5MB)</small>
+
+        <!-- Прев'ю завантаженого фото -->
+        <div id="imagePreview" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e0e0e0;">
+          <div style="text-align: center; margin-bottom: 10px;">
+            <img id="previewImg" src="" alt="Прев'ю фото" style="max-width: 100%; max-height: 200px; border-radius: 6px;">
+          </div>
+          <div style="font-size: 0.9em; color: #333;">
+            <p id="fileName" style="margin: 5px 0; font-weight: 500;"></p>
+            <p id="fileSize" style="margin: 5px 0; color: #666;"></p>
+            <p id="uploadStatus" style="margin: 5px 0; color: #27ae60; font-weight: 500;"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox-group">
+          <label for="enableTimer">
+            <input
+              type="checkbox"
+              id="enableTimer"
+              name="enableTimer"
+              checked
+            />
+            ⏱️ Включити таймер відліку акції
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox-group">
+          <label for="enableStock">
+            <input
+              type="checkbox"
+              id="enableStock"
+              name="enableStock"
+              checked
+            />
+            📦 Показувати "Залишилось 19 футболок по акції"
+          </label>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button type="button" class="button button-secondary" onclick="previewSite()">
+          👁️ ПЕРЕГЛЯД
+        </button>
+        <button type="submit" class="button button-primary">
+          📦 ГЕНЕРУВАТИ ZIP
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/js/form.js"></script>
+</body>
+</html>

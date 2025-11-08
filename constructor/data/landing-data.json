@@ -1,4 +1,10 @@
 {
+  "headerText": "РОЗПРОДАЖ футболок!",
+  "heroTitle": "Жіночі футболки оверсайз",
+  "enableTimer": true,
+  "enableStock": true,
+  "heroImage": "img/start/start-1_m.webp",
+
   "page": {
     "title": "Жіночі футболки оверсайз від українскського бренду Kopo",
     "brand": "Kopo™ (Україна)"

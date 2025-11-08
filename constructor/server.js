@@ -10,6 +10,13 @@ const PORT = 6614;
 
 app.use(express.json());
 
+// GET / - Сервірування конструктора з окремих файлів
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'form.html'));
+});
+
+app.use(express.static(__dirname, { index: false }));
+
 // Налаштування multer для завантаження фото
 const heroImageDir = path.join(__dirname, 'public', 'img', 'hero');
 if (!fs.existsSync(heroImageDir)) {
@@ -103,17 +110,11 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(/<span class="popup-numbers">[\s\S]*?<\/span>/g, '');
     }
 
-    // Замінити hero фото якщо користувач завантажив нове
+    // Замінити hero фото
     if (options.heroImage) {
-      // Замінити путь до фото в srcset (десктоп версія - .jpg)
-      html = html.replace(
-        /img\/start\/start-1\.png/g,
-        `public/img/hero/${options.heroImage}.jpg`
-      );
-      // Замінити путь до фото в src (мобільна версія - _m.webp)
       html = html.replace(
         /img\/start\/start-1_m\.webp/g,
-        `public/img/hero/${options.heroImage}_m.webp`
+        options.heroImage
       );
     }
 
@@ -125,283 +126,6 @@ function generateHTML(dataObj, options = {}) {
   }
 }
 
-// GET / - Головна сторінка з формою редагування
-app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>Конструктор - Генерування Лендінгу</title>
-      <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-          font-family: 'Segoe UI', Arial, sans-serif;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          min-height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 20px;
-        }
-        .container {
-          background: white;
-          padding: 40px;
-          border-radius: 15px;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-          max-width: 700px;
-          width: 100%;
-        }
-        h1 {
-          color: #333;
-          margin-bottom: 10px;
-          font-size: 2em;
-          text-align: center;
-        }
-        .subtitle {
-          color: #666;
-          text-align: center;
-          margin-bottom: 30px;
-          font-size: 0.95em;
-        }
-        .form-group {
-          margin-bottom: 25px;
-        }
-        label {
-          display: block;
-          color: #333;
-          font-weight: 600;
-          margin-bottom: 8px;
-          font-size: 0.95em;
-        }
-        input[type="text"],
-        textarea {
-          width: 100%;
-          padding: 12px;
-          border: 2px solid #ddd;
-          border-radius: 6px;
-          font-family: 'Segoe UI', Arial, sans-serif;
-          font-size: 1em;
-          transition: border-color 0.3s;
-        }
-        input[type="text"]:focus,
-        textarea:focus {
-          outline: none;
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        textarea {
-          resize: vertical;
-          min-height: 60px;
-        }
-        .checkbox-group {
-          background: #f8f9fa;
-          padding: 20px;
-          border-radius: 8px;
-          border: 2px solid #e0e0e0;
-        }
-        .checkbox-group label {
-          display: flex;
-          align-items: center;
-          margin: 0;
-          cursor: pointer;
-          font-weight: 500;
-        }
-        input[type="checkbox"] {
-          width: 20px;
-          height: 20px;
-          margin-right: 12px;
-          cursor: pointer;
-          accent-color: #667eea;
-        }
-        .buttons {
-          display: flex;
-          gap: 15px;
-          margin-top: 35px;
-        }
-        .button {
-          flex: 1;
-          padding: 14px 20px;
-          font-size: 1em;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-weight: 600;
-          text-decoration: none;
-        }
-        .button-primary {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-        }
-        .button-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-        .button-secondary {
-          background: white;
-          color: #667eea;
-          border: 2px solid #667eea;
-        }
-        .button-secondary:hover {
-          background: #f0f0f0;
-          transform: translateY(-2px);
-        }
-        .info {
-          margin-top: 25px;
-          padding-top: 25px;
-          border-top: 1px solid #eee;
-          color: #999;
-          font-size: 0.85em;
-          text-align: center;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>🎨 Конструктор Лендінгів</h1>
-        <p class="subtitle">Налаштуй текст и функції твого сайту</p>
-
-        <form id="constructorForm">
-          <div class="form-group">
-            <label for="headerText">Текст у хедері (анонс)</label>
-            <input
-              type="text"
-              id="headerText"
-              name="headerText"
-              value="РОЗПРОДАЖ футболок!"
-              placeholder="Напр.: РОЗПРОДАЖ футболок!"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="heroTitle">Заголовок сайту (назва товару)</label>
-            <input
-              type="text"
-              id="heroTitle"
-              name="heroTitle"
-              value="Жіночі футболки оверсайз"
-              placeholder="Напр.: Жіночі футболки оверсайз"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="heroImage">🖼️ Завантажити фото для hero блоку:</label>
-            <input
-              type="file"
-              id="heroImage"
-              name="heroImage"
-              accept="image/*"
-              style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 100%; cursor: pointer;"
-            />
-            <small style="color: #666; display: block; margin-top: 5px;">JPG, PNG або WebP (максимум 5MB)</small>
-          </div>
-
-          <div class="form-group">
-            <div class="checkbox-group">
-              <label for="enableTimer">
-                <input
-                  type="checkbox"
-                  id="enableTimer"
-                  name="enableTimer"
-                  checked
-                />
-                ⏱️ Включити таймер відліку акції
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <div class="checkbox-group">
-              <label for="enableStock">
-                <input
-                  type="checkbox"
-                  id="enableStock"
-                  name="enableStock"
-                  checked
-                />
-                📦 Показувати "Залишилось 19 футболок по акції"
-              </label>
-            </div>
-          </div>
-
-          <div class="buttons">
-            <button type="button" class="button button-secondary" onclick="previewSite()">
-              👁️ ПЕРЕГЛЯД
-            </button>
-            <button type="submit" class="button button-primary">
-              📦 ГЕНЕРУВАТИ ZIP
-            </button>
-          </div>
-
-          <div class="info">
-            <p>ZIP містить усі файли: HTML, CSS, JS, зображення, шрифти</p>
-            <p>Можеш одразу залити на хостинг!</p>
-          </div>
-        </form>
-
-        <script>
-          let uploadedHeroImageFilename = '';
-
-          // Обробка завантаження фото
-          document.getElementById('heroImage').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append('heroImage', file);
-
-            try {
-              const response = await fetch('/upload-hero-image', {
-                method: 'POST',
-                body: formData
-              });
-
-              if (!response.ok) throw new Error('Помилка при завантаженні');
-
-              const result = await response.json();
-              uploadedHeroImageFilename = result.filename;
-              console.log('✅ Фото завантажено:', uploadedHeroImageFilename);
-            } catch (error) {
-              alert('❌ Помилка при завантаженні фото: ' + error.message);
-              document.getElementById('heroImage').value = '';
-              uploadedHeroImageFilename = '';
-            }
-          });
-
-          function getFormParams() {
-            const headerText = document.getElementById('headerText').value;
-            const heroTitle = document.getElementById('heroTitle').value;
-            const enableTimer = document.getElementById('enableTimer').checked ? 'on' : 'off';
-            const enableStock = document.getElementById('enableStock').checked ? 'on' : 'off';
-            const heroImage = uploadedHeroImageFilename;
-
-            return new URLSearchParams({
-              headerText: headerText,
-              heroTitle: heroTitle,
-              enableTimer: enableTimer,
-              enableStock: enableStock,
-              heroImage: heroImage
-            }).toString();
-          }
-
-          function previewSite() {
-            const params = getFormParams();
-            window.open('/generate?' + params, '_blank');
-          }
-
-          document.getElementById('constructorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const params = getFormParams();
-            window.location.href = '/export?' + params;
-          });
-        </script>
-      </div>
-    </body>
-    </html>
-  `);
-});
-
 // GET /api/data - Повернути JSON дані
 app.get('/api/data', (req, res) => {
   try {
@@ -412,6 +136,72 @@ app.get('/api/data', (req, res) => {
   } catch (err) {
     console.error('❌ Помилка при читанні JSON:', err.message);
     res.status(500).json({ error: 'Помилка при читанні даних' });
+  }
+});
+
+// GET /api/original-form-data - Отримати оригінальні дані з landing-data.json
+app.get('/api/original-form-data', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    const formData = {
+      headerText: data.headerText,
+      heroTitle: data.heroTitle,
+      enableTimer: data.enableTimer,
+      enableStock: data.enableStock,
+      heroImage: data.heroImage
+    };
+
+    console.log(`✅ Оригінальні дані форми отримані`);
+    res.json(formData);
+  } catch (err) {
+    console.error('❌ Помилка при читанні оригінальних даних:', err.message);
+    res.status(500).json({ error: 'Помилка при читанні даних' });
+  }
+});
+
+// GET /api/get-user-config - Отримати збережену конфігурацію користувача
+app.get('/api/get-user-config', (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+
+    // Якщо файл не існує, повертаємо порожні дані
+    if (!fs.existsSync(configPath)) {
+      return res.json({
+        headerText: '',
+        heroTitle: '',
+        enableTimer: true,
+        enableStock: true,
+        heroImage: ''
+      });
+    }
+
+    // Читати з явним UTF-8 кодуванням
+    const fileContent = fs.readFileSync(configPath, { encoding: 'utf8' });
+    const config = JSON.parse(fileContent);
+    console.log(`✅ Збережена конфігурація отримана:`, config);
+    res.json(config);
+  } catch (err) {
+    console.error('❌ Помилка при читанні конфігурації:', err.message);
+    res.status(500).json({ error: 'Помилка при читанні даних' });
+  }
+});
+
+// POST /api/save-config - Зберегти конфігурацію користувача
+app.post('/api/save-config', express.json(), (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    const configData = req.body;
+
+    // Записати з явним UTF-8 кодуванням
+    const jsonContent = JSON.stringify(configData, null, 2);
+    fs.writeFileSync(configPath, jsonContent, { encoding: 'utf8' });
+    console.log(`✅ Конфігурація збережена на сервері:`, configData);
+    res.json({ success: true, message: 'Конфігурація збережена' });
+  } catch (err) {
+    console.error('❌ Помилка при збереженні конфігурації:', err.message);
+    res.status(500).json({ error: 'Помилка при збереженні даних' });
   }
 });
 
@@ -459,7 +249,7 @@ app.post('/upload-hero-image', upload.single('heroImage'), async (req, res) => {
 
     res.json({
       success: true,
-      filename: basename,
+      filename: `/public/img/hero/${basename}_m.webp`,
       message: 'Фото успішно оптимізовано та завантажено'
     });
   } catch (err) {
@@ -581,18 +371,21 @@ app.get('/export', (req, res) => {
 
     // Додати завантажене фото якщо існує
     if (options.heroImage) {
+      // Витягти ім'я файлу без розширення (hero-123456_m -> hero-123456)
+      const filename = path.basename(options.heroImage, '.webp').replace('_m', '');
+
       // Додати десктоп версію (jpg)
-      const heroDesktopPath = path.join(heroImageDir, `${options.heroImage}.jpg`);
+      const heroDesktopPath = path.join(heroImageDir, `${filename}.jpg`);
       if (fs.existsSync(heroDesktopPath)) {
-        archive.file(heroDesktopPath, { name: `img/hero/${options.heroImage}.jpg` });
-        console.log(`✅ Додано десктоп фото: img/hero/${options.heroImage}.jpg`);
+        archive.file(heroDesktopPath, { name: `img/hero/${filename}.jpg` });
+        console.log(`✅ Додано десктоп фото: img/hero/${filename}.jpg`);
       }
 
       // Додати мобільну версію (webp)
-      const heroMobilePath = path.join(heroImageDir, `${options.heroImage}_m.webp`);
+      const heroMobilePath = path.join(heroImageDir, `${filename}_m.webp`);
       if (fs.existsSync(heroMobilePath)) {
-        archive.file(heroMobilePath, { name: `img/hero/${options.heroImage}_m.webp` });
-        console.log(`✅ Додано мобільне фото: img/hero/${options.heroImage}_m.webp`);
+        archive.file(heroMobilePath, { name: `img/hero/${filename}_m.webp` });
+        console.log(`✅ Додано мобільне фото: img/hero/${filename}_m.webp`);
       }
     }
 
