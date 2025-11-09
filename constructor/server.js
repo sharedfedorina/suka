@@ -160,6 +160,27 @@ const uploadProductImage = multer({
     }
   }
 });
+function parseArrayParam(value, fallback = []) {
+  if (!value) {
+    return fallback;
+  }
+
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch (err) {
+    try {
+      return JSON.parse(decodeURIComponent(value));
+    } catch (parseErr) {
+      console.error('Failed to parse array param:', parseErr.message);
+      return fallback;
+    }
+  }
+}
+
 
 // Функція для генерування слайдів з масиву зображень
 function generateSlides(images = []) {
@@ -168,13 +189,14 @@ function generateSlides(images = []) {
   }
 
   return images.map(imagePath => {
-    // Convert JPG to mobile format (replace .jpg with _m.webp)
-    const mobilePath = imagePath.replace(/\.jpg$/, '_m.webp');
+    // Remove leading slash for relative paths in generated HTML
+    const relativePath = imagePath.replace(/^\//, '');
 
+    // Use same image for both desktop and mobile (no webp conversion for now)
     return `          <div class="swiper-slide products-slide">
            <picture>
-            <source srcset="${imagePath}" media="(min-width: 800px)">
-            <img src="${mobilePath}" alt="img">
+            <source srcset="${relativePath}" media="(min-width: 800px)">
+            <img src="${relativePath}" alt="img">
            </picture>
           </div>`;
   }).join('\n');
@@ -814,7 +836,18 @@ app.post('/upload-product5-image', uploadProductImage.single('product5Image'), a
 app.get('/generate', (req, res) => {
   try {
     const dataPath = path.join(__dirname, 'data', 'landing-data.json');
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    if (fs.existsSync(configPath)) {
+      try {
+        const userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        data = { ...data, ...userConfig };
+      } catch (configErr) {
+        console.error('Failed to read user config:', configErr.message);
+      }
+    }
+
 
     // Отримати параметри з query string
     const options = {
@@ -830,7 +863,12 @@ app.get('/generate', (req, res) => {
       videoUrl: req.query.videoUrl,
       enableVideoThumbnail: req.query.enableVideoThumbnail,
       videoThumbnailDesktop: req.query.videoThumbnailDesktop,
-      videoThumbnailMobile: req.query.videoThumbnailMobile
+      videoThumbnailMobile: req.query.videoThumbnailMobile,
+      product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
+      product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
+      product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
+      product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || [])
     };
 
     // Парсити benefits якщо передано як JSON string
@@ -885,7 +923,18 @@ app.post('/generate', (req, res) => {
 app.get('/export', (req, res) => {
   try {
     const dataPath = path.join(__dirname, 'data', 'landing-data.json');
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    if (fs.existsSync(configPath)) {
+      try {
+        const userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        data = { ...data, ...userConfig };
+      } catch (configErr) {
+        console.error('Failed to read user config:', configErr.message);
+      }
+    }
+
 
     // Отримати параметри з query string
     const options = {
@@ -901,7 +950,12 @@ app.get('/export', (req, res) => {
       videoUrl: req.query.videoUrl,
       enableVideoThumbnail: req.query.enableVideoThumbnail,
       videoThumbnailDesktop: req.query.videoThumbnailDesktop,
-      videoThumbnailMobile: req.query.videoThumbnailMobile
+      videoThumbnailMobile: req.query.videoThumbnailMobile,
+      product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
+      product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
+      product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
+      product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || [])
     };
 
     // Парсити benefits якщо передано як JSON string
