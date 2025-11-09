@@ -38,6 +38,11 @@ if (!fs.existsSync(videoThumbnailDir)) {
   fs.mkdirSync(videoThumbnailDir, { recursive: true });
 }
 
+const productsImageDir = path.join(__dirname, 'public', 'img', 'products');
+if (!fs.existsSync(productsImageDir)) {
+  fs.mkdirSync(productsImageDir, { recursive: true });
+}
+
 const DEFAULT_VIDEO_THUMBNAIL_DESKTOP = 'img/promo/promo-1.jpg';
 const DEFAULT_VIDEO_THUMBNAIL_MOBILE = 'img/promo/promo-1_m.webp';
 

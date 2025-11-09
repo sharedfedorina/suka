@@ -298,38 +298,22 @@ function renderProduct1Images() {
   }
 
   container.innerHTML = product1Images.map((imageData, index) => {
-    // Если це Data URL від file picker, показуємо preview
-    if (imageData.startsWith('data:')) {
-      return `
-        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: #ecf0f1; margin-bottom: 8px; border-radius: 4px;">
-          <img src="${imageData}" alt="preview" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />
-          <div style="flex: 1; min-width: 0;">
-            <div style="font-size: 12px; color: #333; word-break: break-all;">Новое фото</div>
-          </div>
-          <button
-            type="button"
-            onclick="removeProduct1Image(${index})"
-            style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; flex-shrink: 0;">
-            Видалити
-          </button>
+    // Завжди показуємо preview (для data URL та для серверних шляхів)
+    const fileName = imageData.includes('/') ? imageData.split('/').pop() : 'Нове фото';
+    return `
+      <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: #ecf0f1; margin-bottom: 8px; border-radius: 4px;">
+        <img src="${imageData}" alt="preview" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-size: 12px; color: #333; word-break: break-all;">${fileName}</div>
         </div>
-      `;
-    } else {
-      // Це шлях з конфіга, показуємо як текст
-      return `
-        <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: #ecf0f1; margin-bottom: 8px; border-radius: 4px;">
-          <div style="flex: 1; min-width: 0;">
-            <div style="font-size: 12px; color: #333; word-break: break-all;">${imageData}</div>
-          </div>
-          <button
-            type="button"
-            onclick="removeProduct1Image(${index})"
-            style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; flex-shrink: 0;">
-            Видалити
-          </button>
-        </div>
-      `;
-    }
+        <button
+          type="button"
+          onclick="removeProduct1Image(${index})"
+          style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; flex-shrink: 0;">
+          Видалити
+        </button>
+      </div>
+    `;
   }).join('');
 }
 
@@ -981,16 +965,32 @@ async function loadSavedValues() {
 
       // Завантажити фото продукту
 
+      console.log(`🔍 Product ${i} Images з конфігу:`, formData[`product${i}Images`]);
+
       if (formData[`product${i}Images`] && Array.isArray(formData[`product${i}Images`])) {
 
-        window[`product${i}Images`] = formData[`product${i}Images`];
+        console.log(`📸 Завантаження фото для Product ${i}, кількість: ${formData[`product${i}Images`].length}`);
 
         if (i === 1) {
+          product1Images = formData[`product1Images`];
+          console.log(`🔄 Викликається renderProduct1Images, масив:`, product1Images);
           renderProduct1Images();
-        } else {
+        } else if (i === 2) {
+          product2Images = formData[`product2Images`];
+          renderProductImages(i);
+        } else if (i === 3) {
+          product3Images = formData[`product3Images`];
+          renderProductImages(i);
+        } else if (i === 4) {
+          product4Images = formData[`product4Images`];
+          renderProductImages(i);
+        } else if (i === 5) {
+          product5Images = formData[`product5Images`];
           renderProductImages(i);
         }
 
+      } else {
+        console.log(`⚠️ Product ${i}: фото відсутні або некоректний формат`);
       }
 
     }
