@@ -118,6 +118,6 @@
   "product9Material": "50% бавовна, 50% поліестер",
   "product9PriceOld": "2397 грн",
   "product9Price": "1530 грн",
-  "enableProduct9": true,
+  "enableProduct9": false,
   "product9Images": []
 }
