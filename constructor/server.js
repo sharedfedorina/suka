@@ -868,7 +868,12 @@ app.get('/generate', (req, res) => {
       product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
       product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
       product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
-      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || [])
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || []),
+      enableProduct1: req.query.enableProduct1,
+      enableProduct2: req.query.enableProduct2,
+      enableProduct3: req.query.enableProduct3,
+      enableProduct4: req.query.enableProduct4,
+      enableProduct5: req.query.enableProduct5
     };
 
     // Парсити benefits якщо передано як JSON string
@@ -955,7 +960,12 @@ app.get('/export', (req, res) => {
       product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
       product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
       product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
-      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || [])
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || []),
+      enableProduct1: req.query.enableProduct1,
+      enableProduct2: req.query.enableProduct2,
+      enableProduct3: req.query.enableProduct3,
+      enableProduct4: req.query.enableProduct4,
+      enableProduct5: req.query.enableProduct5
     };
 
     // Парсити benefits якщо передано як JSON string
