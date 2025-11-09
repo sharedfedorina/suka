@@ -277,14 +277,14 @@ function generateHTML(dataObj, options = {}) {
 
     // Замінити плейсхолдери для 5 продуктів
     for (let i = 1; i <= 5; i++) {
-      const productName = options[`product${i}Name`] || '';
-      const productColor = options[`product${i}Color`] || '';
-      const productColorHex = options[`product${i}ColorHex`] || '';
-      const productSize = options[`product${i}Size`] || '';
-      const productMaterial = options[`product${i}Material`] || '';
-      const productPriceOld = options[`product${i}PriceOld`] || '';
-      const productPrice = options[`product${i}Price`] || '';
-      const productImages = options[`product${i}Images`] || [];
+      const productName = (options[`product${i}Name`] && options[`product${i}Name`].trim()) ? options[`product${i}Name`] : (dataObj[`product${i}Name`] || '');
+      const productColor = (options[`product${i}Color`] && options[`product${i}Color`].trim()) ? options[`product${i}Color`] : (dataObj[`product${i}Color`] || '');
+      const productColorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+      const productSize = (options[`product${i}Size`] && options[`product${i}Size`].trim()) ? options[`product${i}Size`] : (dataObj[`product${i}Size`] || '');
+      const productMaterial = (options[`product${i}Material`] && options[`product${i}Material`].trim()) ? options[`product${i}Material`] : (dataObj[`product${i}Material`] || '');
+      const productPriceOld = (options[`product${i}PriceOld`] && options[`product${i}PriceOld`].trim()) ? options[`product${i}PriceOld`] : (dataObj[`product${i}PriceOld`] || '');
+      const productPrice = (options[`product${i}Price`] && options[`product${i}Price`].trim()) ? options[`product${i}Price`] : (dataObj[`product${i}Price`] || '');
+      const productImages = options[`product${i}Images`] || dataObj[`product${i}Images`] || [];
 
       html = html.replace(`{{product${i}Name}}`, productName);
       html = html.replace(`{{product${i}Color}}`, productColor);
