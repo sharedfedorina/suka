@@ -219,13 +219,16 @@ function generateSlides(images = []) {
 
   return images.map(imagePath => {
     // Remove leading slash for relative paths in generated HTML
-    const relativePath = imagePath.replace(/^\//, '');
+    const desktopPath = imagePath.replace(/^\//, '');
 
-    // Use same image for both desktop and mobile (no webp conversion for now)
+    // Generate mobile path: replace .jpg with _m.webp
+    const mobilePath = desktopPath.replace(/\.jpg$/, '_m.webp');
+
+    // Desktop gets JPG, mobile gets WebP
     return `          <div class="swiper-slide products-slide">
            <picture>
-            <source srcset="${relativePath}" media="(min-width: 800px)">
-            <img src="${relativePath}" alt="img">
+            <source srcset="${desktopPath}" media="(min-width: 800px)">
+            <img src="${mobilePath}" alt="img">
            </picture>
           </div>`;
   }).join('\n');
@@ -266,16 +269,30 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(/\s*<!--\s*stock\s*-->[\s\S]*?<!--\s*\/stock\s*-->\s*/g, '');
     }
 
-    // Замінити hero фото
+    // Замінити hero фото (desktop + mobile)
     if (options.heroImage) {
+      // Видалити тільки початковий слеш: /public/img/hero/hero-123.jpg -> public/img/hero/hero-123.jpg
+      const desktopPath = options.heroImage.replace(/^\//, '');
+
+      // Згенерувати mobile шлях: public/img/hero/hero-123.jpg -> public/img/hero/hero-123_m.webp
+      const mobilePath = desktopPath.replace(/\.jpg$/, '_m.webp');
+
+      // Замінити desktop версію
+      html = html.replace(
+        /img\/start\/start-1\.png/g,
+        desktopPath
+      );
+
+      // Замінити mobile версію
       html = html.replace(
         /img\/start\/start-1_m\.webp/g,
-        options.heroImage
+        mobilePath
       );
     }
 
     // Замінити imageUrl у plus-logo блоці
-    const finalImageUrl = (options.imageUrl && options.imageUrl.trim()) ? options.imageUrl : (dataObj.imageUrl || '');
+    const rawImageUrl = (options.imageUrl && options.imageUrl.trim()) ? options.imageUrl : (dataObj.imageUrl || '');
+    const finalImageUrl = rawImageUrl.replace(/^\//, '');
     html = html.replace(`{{imageUrl}}`, finalImageUrl);
 
     const imageToggle = (options.enableImage !== undefined) ? options.enableImage : dataObj.enableImage;
@@ -286,7 +303,8 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(/\s*<!--\s*image\s*-->[\s\S]*?<!--\s*\/image\s*-->\s*/g, '');
     }
 
-    const finalVideoUrl = (options.videoUrl && options.videoUrl.trim()) ? options.videoUrl : (dataObj.videoUrl || '');
+    const rawVideoUrl = (options.videoUrl && options.videoUrl.trim()) ? options.videoUrl : (dataObj.videoUrl || '');
+    const finalVideoUrl = rawVideoUrl.replace(/^\//, '');
     html = html.replace('{{videoUrl}}', finalVideoUrl);
     const videoToggle = (options.enableVideo !== undefined) ? options.enableVideo : dataObj.enableVideo;
 
@@ -295,8 +313,10 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(/\s*<!--\s*video\s*-->[\s\S]*?<!--\s*\/video\s*-->\s*/g, '');
     }
 
-    const finalVideoThumbnailDesktop = (options.videoThumbnailDesktop && options.videoThumbnailDesktop.trim()) ? options.videoThumbnailDesktop : (dataObj.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP);
-    const finalVideoThumbnailMobile = (options.videoThumbnailMobile && options.videoThumbnailMobile.trim()) ? options.videoThumbnailMobile : (dataObj.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE);
+    const rawVideoThumbnailDesktop = (options.videoThumbnailDesktop && options.videoThumbnailDesktop.trim()) ? options.videoThumbnailDesktop : (dataObj.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP);
+    const rawVideoThumbnailMobile = (options.videoThumbnailMobile && options.videoThumbnailMobile.trim()) ? options.videoThumbnailMobile : (dataObj.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE);
+    const finalVideoThumbnailDesktop = rawVideoThumbnailDesktop.replace(/^\//, '');
+    const finalVideoThumbnailMobile = rawVideoThumbnailMobile.replace(/^\//, '');
     html = html.replace('{{videoThumbnailDesktop}}', finalVideoThumbnailDesktop);
     html = html.replace('{{videoThumbnailMobile}}', finalVideoThumbnailMobile);
     const videoThumbnailToggle = (options.enableVideoThumbnail !== undefined) ? options.enableVideoThumbnail : (dataObj.enableVideoThumbnail !== undefined ? dataObj.enableVideoThumbnail : true);
@@ -305,7 +325,8 @@ function generateHTML(dataObj, options = {}) {
     }
 
     // Замінити фото розмірної сітки
-    const finalSizeChartImage = (options.sizeChartImage && options.sizeChartImage.trim()) ? options.sizeChartImage : (dataObj.sizeChartImage || 'img/info/info-1.webp');
+    const rawSizeChartImage = (options.sizeChartImage && options.sizeChartImage.trim()) ? options.sizeChartImage : (dataObj.sizeChartImage || 'img/info/info-1.webp');
+    const finalSizeChartImage = rawSizeChartImage.replace(/^\//, '');
     html = html.replace('{{sizeChartImage}}', finalSizeChartImage);
 
     // Генерація інформаційного блоку (список характеристик)
@@ -880,15 +901,36 @@ app.post('/upload-product1-image', uploadProductImage.single('product1Image'), a
     }
 
     console.log(`\n📸 ФОТО ПРОДУКТУ 1 ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/products/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/products/${basename}.jpg`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
@@ -912,15 +954,36 @@ app.post('/upload-product2-image', uploadProductImage.single('product2Image'), a
     }
 
     console.log(`\n📸 ФОТО ПРОДУКТУ 2 ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/products/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/products/${basename}.jpg`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
@@ -944,15 +1007,36 @@ app.post('/upload-product3-image', uploadProductImage.single('product3Image'), a
     }
 
     console.log(`\n📸 ФОТО ПРОДУКТУ 3 ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/products/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/products/${basename}.jpg`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
@@ -976,15 +1060,36 @@ app.post('/upload-product4-image', uploadProductImage.single('product4Image'), a
     }
 
     console.log(`\n📸 ФОТО ПРОДУКТУ 4 ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/products/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/products/${basename}.jpg`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
@@ -1008,15 +1113,36 @@ app.post('/upload-product5-image', uploadProductImage.single('product5Image'), a
     }
 
     console.log(`\n📸 ФОТО ПРОДУКТУ 5 ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/products/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/products/${basename}.jpg`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
@@ -1040,15 +1166,36 @@ app.post('/upload-product8-image', uploadProductImage.single('product8Image'), a
     }
 
     console.log(`\n📸 ФОТО ПРОДУКТУ 8 ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/products/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/products/${basename}.jpg`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
@@ -1072,15 +1219,36 @@ app.post('/upload-product9-image', uploadProductImage.single('product9Image'), a
     }
 
     console.log(`\n📸 ФОТО ПРОДУКТУ 9 ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/products/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/products/${basename}.jpg`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
@@ -1363,7 +1531,10 @@ app.get('/export', (req, res) => {
     console.log(`📝 Параметри:`, options);
 
     // Генерувати HTML
-    const html = generateHTML(data, options);
+    let html = generateHTML(data, options);
+
+    // Видалити "public/" з усіх шляхів для експорту (бо в ZIP немає папки public/)
+    html = html.replace(/public\//g, '');
 
     // Створити ZIP архів
     const archive = archiver('zip', {
@@ -1410,6 +1581,32 @@ app.get('/export', (req, res) => {
       if (fs.existsSync(heroMobilePath)) {
         archive.file(heroMobilePath, { name: `img/hero/${filename}_m.webp` });
         console.log(`✅ Додано мобільне фото: img/hero/${filename}_m.webp`);
+      }
+    }
+
+    // Додати product images (products 1-5, 8-9)
+    const productKeys = ['product1Images', 'product2Images', 'product3Images', 'product4Images', 'product5Images', 'product8Images', 'product9Images'];
+    for (const key of productKeys) {
+      const images = options[key] || data[key] || [];
+      if (Array.isArray(images) && images.length > 0) {
+        for (const imagePath of images) {
+          // Отримати базове ім'я без розширення (product-123456.jpg -> product-123456)
+          const filename = path.basename(imagePath, '.jpg');
+
+          // Додати десктоп версію (jpg)
+          const desktopPath = path.join(productImageDir, `${filename}.jpg`);
+          if (fs.existsSync(desktopPath)) {
+            archive.file(desktopPath, { name: `img/products/${filename}.jpg` });
+            console.log(`✅ Додано десктоп product: img/products/${filename}.jpg`);
+          }
+
+          // Додати мобільну версію (webp)
+          const mobilePath = path.join(productImageDir, `${filename}_m.webp`);
+          if (fs.existsSync(mobilePath)) {
+            archive.file(mobilePath, { name: `img/products/${filename}_m.webp` });
+            console.log(`✅ Додано мобільний product: img/products/${filename}_m.webp`);
+          }
+        }
       }
     }
 
