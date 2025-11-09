@@ -304,6 +304,56 @@ function generateHTML(dataObj, options = {}) {
       }
     }
 
+    // Замінити дані для продуктів 8 та 9 (те ж саме як продукти 1-5)
+    const product8Name = (options.product8Name && options.product8Name.trim()) ? options.product8Name : (dataObj.product8Name || '');
+    const product8Color = (options.product8Color && options.product8Color.trim()) ? options.product8Color : (dataObj.product8Color || '');
+    const product8ColorHex = (options.product8ColorHex && options.product8ColorHex.trim()) ? options.product8ColorHex : (dataObj.product8ColorHex || '');
+    const product8Size = (options.product8Size && options.product8Size.trim()) ? options.product8Size : (dataObj.product8Size || '');
+    const product8Material = (options.product8Material && options.product8Material.trim()) ? options.product8Material : (dataObj.product8Material || '');
+    const product8PriceOld = (options.product8PriceOld && options.product8PriceOld.trim()) ? options.product8PriceOld : (dataObj.product8PriceOld || '');
+    const product8Price = (options.product8Price && options.product8Price.trim()) ? options.product8Price : (dataObj.product8Price || '');
+
+    html = html.replace('{{product8Name}}', product8Name);
+    html = html.replace('{{product8Color}}', product8Color);
+    html = html.replace('{{product8ColorHex}}', product8ColorHex);
+    html = html.replace('{{product8Size}}', product8Size);
+    html = html.replace('{{product8Material}}', product8Material);
+    html = html.replace('{{product8PriceOld}}', product8PriceOld);
+    html = html.replace('{{product8Price}}', product8Price);
+
+    const product9Name = (options.product9Name && options.product9Name.trim()) ? options.product9Name : (dataObj.product9Name || '');
+    const product9Color = (options.product9Color && options.product9Color.trim()) ? options.product9Color : (dataObj.product9Color || '');
+    const product9ColorHex = (options.product9ColorHex && options.product9ColorHex.trim()) ? options.product9ColorHex : (dataObj.product9ColorHex || '');
+    const product9Size = (options.product9Size && options.product9Size.trim()) ? options.product9Size : (dataObj.product9Size || '');
+    const product9Material = (options.product9Material && options.product9Material.trim()) ? options.product9Material : (dataObj.product9Material || '');
+    const product9PriceOld = (options.product9PriceOld && options.product9PriceOld.trim()) ? options.product9PriceOld : (dataObj.product9PriceOld || '');
+    const product9Price = (options.product9Price && options.product9Price.trim()) ? options.product9Price : (dataObj.product9Price || '');
+
+    html = html.replace('{{product9Name}}', product9Name);
+    html = html.replace('{{product9Color}}', product9Color);
+    html = html.replace('{{product9ColorHex}}', product9ColorHex);
+    html = html.replace('{{product9Size}}', product9Size);
+    html = html.replace('{{product9Material}}', product9Material);
+    html = html.replace('{{product9PriceOld}}', product9PriceOld);
+    html = html.replace('{{product9Price}}', product9Price);
+
+    // Генерувати слайди для product8 та product9
+    const product8Images = options.product8Images || dataObj.product8Images || [];
+    const slides8 = generateSlides(product8Images);
+    html = html.replace('{{product8Slides}}', slides8);
+
+    const product9Images = options.product9Images || dataObj.product9Images || [];
+    const slides9 = generateSlides(product9Images);
+    html = html.replace('{{product9Slides}}', slides9);
+
+    // Видалити продукт блоки якщо вимкнено (product8, product9)
+    if (options.enableProduct8 !== 'on' && options.enableProduct8 !== true) {
+      html = html.replace(new RegExp(`<!--product8-->\\s*[\\s\\S]*?<!--\\/product8-->\\s*`, 'g'), '');
+    }
+    if (options.enableProduct9 !== 'on' && options.enableProduct9 !== true) {
+      html = html.replace(new RegExp(`<!--product9-->\\s*[\\s\\S]*?<!--\\/product9-->\\s*`, 'g'), '');
+    }
+
     // Замінити переваги (простій текстовий заміни плейсхолдерів)
     if (options.benefits && Array.isArray(options.benefits)) {
       options.benefits.forEach((benefit) => {
@@ -400,7 +450,26 @@ app.get('/api/original-form-data', (req, res) => {
       product5PriceOld: data.product5PriceOld || '',
       product5Price: data.product5Price || '',
       product5Images: data.product5Images || [],
-      enableProduct5: data.enableProduct5 || true
+      enableProduct5: data.enableProduct5 || true,
+      // Product 8 & 9 data
+      product8Name: data.product8Name || '',
+      product8Color: data.product8Color || '',
+      product8ColorHex: data.product8ColorHex || '',
+      product8Size: data.product8Size || '',
+      product8Material: data.product8Material || '',
+      product8PriceOld: data.product8PriceOld || '',
+      product8Price: data.product8Price || '',
+      product8Images: data.product8Images || [],
+      enableProduct8: data.enableProduct8 || false,
+      product9Name: data.product9Name || '',
+      product9Color: data.product9Color || '',
+      product9ColorHex: data.product9ColorHex || '',
+      product9Size: data.product9Size || '',
+      product9Material: data.product9Material || '',
+      product9PriceOld: data.product9PriceOld || '',
+      product9Price: data.product9Price || '',
+      product9Images: data.product9Images || [],
+      enableProduct9: data.enableProduct9 || false
     };
 
     console.log(`✅ Оригінальні дані форми отримані`);
@@ -435,7 +504,9 @@ app.get('/api/get-user-config', (req, res) => {
         product2Name: '', product2Color: '', product2ColorHex: '', product2Size: '', product2Material: '', product2PriceOld: '', product2Price: '', enableProduct2: true,
         product3Name: '', product3Color: '', product3ColorHex: '', product3Size: '', product3Material: '', product3PriceOld: '', product3Price: '', enableProduct3: true,
         product4Name: '', product4Color: '', product4ColorHex: '', product4Size: '', product4Material: '', product4PriceOld: '', product4Price: '', enableProduct4: true,
-        product5Name: '', product5Color: '', product5ColorHex: '', product5Size: '', product5Material: '', product5PriceOld: '', product5Price: '', enableProduct5: true
+        product5Name: '', product5Color: '', product5ColorHex: '', product5Size: '', product5Material: '', product5PriceOld: '', product5Price: '', enableProduct5: true,
+        product8Name: '', product8Color: '', product8ColorHex: '', product8Size: '', product8Material: '', product8PriceOld: '', product8Price: '', enableProduct8: false,
+        product9Name: '', product9Color: '', product9ColorHex: '', product9Size: '', product9Material: '', product9PriceOld: '', product9Price: '', enableProduct9: false
       });
     }
 
@@ -832,6 +903,70 @@ app.post('/upload-product5-image', uploadProductImage.single('product5Image'), a
   }
 });
 
+// POST /upload-product8-image - Завантажити фото для продукту 8
+app.post('/upload-product8-image', uploadProductImage.single('product8Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 8 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/products/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product9-image - Завантажити фото для продукту 9
+app.post('/upload-product9-image', uploadProductImage.single('product9Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 9 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/products/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /generate - Генерувати та відправити HTML з параметрами
 app.get('/generate', (req, res) => {
   try {
@@ -873,7 +1008,28 @@ app.get('/generate', (req, res) => {
       enableProduct2: req.query.enableProduct2,
       enableProduct3: req.query.enableProduct3,
       enableProduct4: req.query.enableProduct4,
-      enableProduct5: req.query.enableProduct5
+      enableProduct5: req.query.enableProduct5,
+
+      // Product 8 & 9 params
+      product8Name: req.query.product8Name,
+      product8Color: req.query.product8Color,
+      product8ColorHex: req.query.product8ColorHex,
+      product8Size: req.query.product8Size,
+      product8Material: req.query.product8Material,
+      product8PriceOld: req.query.product8PriceOld,
+      product8Price: req.query.product8Price,
+      enableProduct8: req.query.enableProduct8,
+      product8Images: parseArrayParam(req.query.product8Images, data.product8Images || []),
+
+      product9Name: req.query.product9Name,
+      product9Color: req.query.product9Color,
+      product9ColorHex: req.query.product9ColorHex,
+      product9Size: req.query.product9Size,
+      product9Material: req.query.product9Material,
+      product9PriceOld: req.query.product9PriceOld,
+      product9Price: req.query.product9Price,
+      enableProduct9: req.query.enableProduct9,
+      product9Images: parseArrayParam(req.query.product9Images, data.product9Images || [])
     };
 
     // Парсити benefits якщо передано як JSON string
@@ -965,7 +1121,28 @@ app.get('/export', (req, res) => {
       enableProduct2: req.query.enableProduct2,
       enableProduct3: req.query.enableProduct3,
       enableProduct4: req.query.enableProduct4,
-      enableProduct5: req.query.enableProduct5
+      enableProduct5: req.query.enableProduct5,
+
+      // Product 8 & 9 params
+      product8Name: req.query.product8Name,
+      product8Color: req.query.product8Color,
+      product8ColorHex: req.query.product8ColorHex,
+      product8Size: req.query.product8Size,
+      product8Material: req.query.product8Material,
+      product8PriceOld: req.query.product8PriceOld,
+      product8Price: req.query.product8Price,
+      enableProduct8: req.query.enableProduct8,
+      product8Images: parseArrayParam(req.query.product8Images, data.product8Images || []),
+
+      product9Name: req.query.product9Name,
+      product9Color: req.query.product9Color,
+      product9ColorHex: req.query.product9ColorHex,
+      product9Size: req.query.product9Size,
+      product9Material: req.query.product9Material,
+      product9PriceOld: req.query.product9PriceOld,
+      product9Price: req.query.product9Price,
+      enableProduct9: req.query.enableProduct9,
+      product9Images: parseArrayParam(req.query.product9Images, data.product9Images || [])
     };
 
     // Парсити benefits якщо передано як JSON string

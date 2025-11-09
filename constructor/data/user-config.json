@@ -98,5 +98,26 @@
   ],
   "product3Images": [],
   "product4Images": [],
-  "product5Images": []
+  "product5Images": [],
+  "product8Name": "2 товари разом!",
+  "product8Color": "Бежевий, Лаванда",
+  "product8ColorHex": "#30611f",
+  "product8Size": "",
+  "product8Material": "50% бавовна, 50% поліестер",
+  "product8PriceOld": "1598 грн",
+  "product8Price": "1100 грн",
+  "enableProduct8": true,
+  "product8Images": [
+    "/public/img/products/product-1762695532979.jpg",
+    "/public/img/products/product-1762695532996.jpg"
+  ],
+  "product9Name": "3 товари разом",
+  "product9Color": "",
+  "product9ColorHex": "#000000",
+  "product9Size": "",
+  "product9Material": "50% бавовна, 50% поліестер",
+  "product9PriceOld": "2397 грн",
+  "product9Price": "1530 грн",
+  "enableProduct9": true,
+  "product9Images": []
 }

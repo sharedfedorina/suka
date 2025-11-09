@@ -604,6 +604,140 @@
         </div>
       </div>
 
+      <!-- Product 8 (2 товари разом) - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible8" style="border: 2px solid #e74c3c; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(8)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #ffebeb; cursor: pointer; border-bottom: 2px solid #e74c3c; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron8" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">🎁 Продукт 8 (2 товари разом)</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent8" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct8">
+                <input type="checkbox" id="enableProduct8" name="enableProduct8" checked/>
+                Показувати Продукт 8
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product8Name">Назва:</label>
+            <input type="text" id="product8Name" placeholder="2 товари разом" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8Color">Колір:</label>
+            <input type="text" id="product8Color" placeholder="Чорний" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product8ColorHex" value="#000000" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product8ColorHexDisplay" value="#000000" placeholder="#000000" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product8SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product8Material">Матеріал:</label>
+            <input type="text" id="product8Material" placeholder="50% бавовна, 50% поліестер" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8PriceOld">Стара ціна:</label>
+            <input type="text" id="product8PriceOld" placeholder="1598 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8Price">Нова ціна:</label>
+            <input type="text" id="product8Price" placeholder="1120 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 8 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #e74c3c;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 8</h4>
+            <div id="product8ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product8ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct8ImageUpload()" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 9 (3 товари разом) - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible9" style="border: 2px solid #e67e22; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(9)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #fff5e6; cursor: pointer; border-bottom: 2px solid #e67e22; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron9" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">🎁 Продукт 9 (3 товари разом)</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent9" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct9">
+                <input type="checkbox" id="enableProduct9" name="enableProduct9" checked/>
+                Показувати Продукт 9
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product9Name">Назва:</label>
+            <input type="text" id="product9Name" placeholder="3 товари разом" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9Color">Колір:</label>
+            <input type="text" id="product9Color" placeholder="Чорний" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product9ColorHex" value="#000000" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product9ColorHexDisplay" value="#000000" placeholder="#000000" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product9SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product9Material">Матеріал:</label>
+            <input type="text" id="product9Material" placeholder="50% бавовна, 50% поліестер" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9PriceOld">Стара ціна:</label>
+            <input type="text" id="product9PriceOld" placeholder="2397 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9Price">Нова ціна:</label>
+            <input type="text" id="product9Price" placeholder="1530 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 9 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #e67e22;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 9</h4>
+            <div id="product9ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product9ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct9ImageUpload()" style="padding: 8px 16px; background: #e67e22; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
       <div class="buttons">
         <button type="button" class="button button-secondary" onclick="previewSite()">
           👁️ ПЕРЕГЛЯД

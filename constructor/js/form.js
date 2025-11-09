@@ -36,6 +36,10 @@ let product4Images = [];
 
 let product5Images = [];
 
+let product8Images = [];
+
+let product9Images = [];
+
 
 
 // ========== ФУНКЦІЇ ДЛЯ COLLAPSIBLE ПРОДУКТІВ ==========
@@ -150,6 +154,8 @@ function addProductImage(productNum) {
   else if (productNum === 3) arr = product3Images;
   else if (productNum === 4) arr = product4Images;
   else if (productNum === 5) arr = product5Images;
+  else if (productNum === 8) arr = product8Images;
+  else if (productNum === 9) arr = product9Images;
 
   if (!arr.includes(imagePath)) {
 
@@ -183,6 +189,10 @@ function removeProductImage(productNum, index) {
     product4Images.splice(index, 1);
   } else if (productNum === 5) {
     product5Images.splice(index, 1);
+  } else if (productNum === 8) {
+    product8Images.splice(index, 1);
+  } else if (productNum === 9) {
+    product9Images.splice(index, 1);
   }
 
   renderProductImages(productNum);
@@ -204,6 +214,8 @@ function renderProductImages(productNum) {
   else if (productNum === 3) arr = product3Images;
   else if (productNum === 4) arr = product4Images;
   else if (productNum === 5) arr = product5Images;
+  else if (productNum === 8) arr = product8Images;
+  else if (productNum === 9) arr = product9Images;
 
   if (!arr || arr.length === 0) {
     container.innerHTML = '<div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>';
@@ -473,6 +485,88 @@ async function handleProduct5ImageUpload() {
   fileInput.value = '';
 }
 
+// ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 8 З FILE PICKER ==========
+
+async function handleProduct8ImageUpload() {
+  const fileInput = document.getElementById('product8ImageInput');
+  const files = fileInput.files;
+
+  if (files.length === 0) {
+    alert('Будь ласка, виберіть файли');
+    return;
+  }
+
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('product8Image', file);
+
+    try {
+      const response = await fetch('/upload-product8-image', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (!product8Images.includes(data.filename)) {
+          product8Images.push(data.filename);
+          renderProductImages(8);
+          console.log(`✅ Фото додано до Product 8: ${data.filename}`);
+        }
+      } else {
+        alert(`Помилка: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Помилка при завантаженні: ${err.message}`);
+      console.error(err);
+    }
+  }
+
+  fileInput.value = '';
+}
+
+// ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 9 З FILE PICKER ==========
+
+async function handleProduct9ImageUpload() {
+  const fileInput = document.getElementById('product9ImageInput');
+  const files = fileInput.files;
+
+  if (files.length === 0) {
+    alert('Будь ласка, виберіть файли');
+    return;
+  }
+
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('product9Image', file);
+
+    try {
+      const response = await fetch('/upload-product9-image', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (!product9Images.includes(data.filename)) {
+          product9Images.push(data.filename);
+          renderProductImages(9);
+          console.log(`✅ Фото додано до Product 9: ${data.filename}`);
+        }
+      } else {
+        alert(`Помилка: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Помилка при завантаженні: ${err.message}`);
+      console.error(err);
+    }
+  }
+
+  fileInput.value = '';
+}
+
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
 
 
@@ -676,6 +770,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
 
+      // Встановити слухачі для product8 та product9
+      [8, 9].forEach(i => {
+        const colorInput = document.getElementById(`product${i}ColorHex`);
+        if (colorInput) {
+          colorInput.addEventListener('input', function() {
+            syncColorPickerDisplay(i);
+          });
+        }
+      });
+
     })
 
     .catch(err => console.error('❌ Помилка при завантаженні оригіналу:', err));
@@ -854,7 +958,28 @@ async function saveFormToServer() {
 
     product4Images: product4Images,
 
-    product5Images: product5Images
+    product5Images: product5Images,
+
+    // Marketing products (bundles)
+    product8Name: document.getElementById('product8Name').value,
+    product8Color: document.getElementById('product8Color').value,
+    product8ColorHex: document.getElementById('product8ColorHex').value,
+    product8Size: getSelectedSizesAsString(8),
+    product8Material: document.getElementById('product8Material').value,
+    product8PriceOld: document.getElementById('product8PriceOld').value,
+    product8Price: document.getElementById('product8Price').value,
+    enableProduct8: document.getElementById('enableProduct8').checked,
+    product8Images: product8Images,
+
+    product9Name: document.getElementById('product9Name').value,
+    product9Color: document.getElementById('product9Color').value,
+    product9ColorHex: document.getElementById('product9ColorHex').value,
+    product9Size: getSelectedSizesAsString(9),
+    product9Material: document.getElementById('product9Material').value,
+    product9PriceOld: document.getElementById('product9PriceOld').value,
+    product9Price: document.getElementById('product9Price').value,
+    enableProduct9: document.getElementById('enableProduct9').checked,
+    product9Images: product9Images
 
   };
 
@@ -1151,7 +1276,50 @@ async function loadSavedValues() {
 
     }
 
+    // Завантажити дані для маркетингових продуктів (product8, product9)
+    document.getElementById('enableProduct8').checked = formData.enableProduct8;
+    document.getElementById('product8Name').value = formData.product8Name || '';
+    document.getElementById('product8Color').value = formData.product8Color || '';
 
+    const colorHex8 = formData.product8ColorHex || '#000000';
+    document.getElementById('product8ColorHex').value = colorHex8;
+    const displayEl8 = document.getElementById('product8ColorHexDisplay');
+    if (displayEl8) {
+      displayEl8.value = colorHex8;
+    }
+
+    const sizes8 = formData.product8Size || '';
+    setSelectedSizes(8, sizes8);
+    document.getElementById('product8Material').value = formData.product8Material || '';
+    document.getElementById('product8PriceOld').value = formData.product8PriceOld || '';
+    document.getElementById('product8Price').value = formData.product8Price || '';
+
+    if (formData.product8Images && Array.isArray(formData.product8Images)) {
+      product8Images = formData.product8Images;
+      renderProductImages(8);
+    }
+
+    document.getElementById('enableProduct9').checked = formData.enableProduct9;
+    document.getElementById('product9Name').value = formData.product9Name || '';
+    document.getElementById('product9Color').value = formData.product9Color || '';
+
+    const colorHex9 = formData.product9ColorHex || '#000000';
+    document.getElementById('product9ColorHex').value = colorHex9;
+    const displayEl9 = document.getElementById('product9ColorHexDisplay');
+    if (displayEl9) {
+      displayEl9.value = colorHex9;
+    }
+
+    const sizes9 = formData.product9Size || '';
+    setSelectedSizes(9, sizes9);
+    document.getElementById('product9Material').value = formData.product9Material || '';
+    document.getElementById('product9PriceOld').value = formData.product9PriceOld || '';
+    document.getElementById('product9Price').value = formData.product9Price || '';
+
+    if (formData.product9Images && Array.isArray(formData.product9Images)) {
+      product9Images = formData.product9Images;
+      renderProductImages(9);
+    }
 
     // Завантажити переваги
 
@@ -1614,7 +1782,28 @@ function getFormParams() {
 
     product4Images: JSON.stringify(product4Images),
 
-    product5Images: JSON.stringify(product5Images)
+    product5Images: JSON.stringify(product5Images),
+
+    // Marketing products (bundles)
+    product8Name: document.getElementById('product8Name').value,
+    product8Color: document.getElementById('product8Color').value,
+    product8ColorHex: document.getElementById('product8ColorHex').value,
+    product8Size: getSelectedSizesAsString(8),
+    product8Material: document.getElementById('product8Material').value,
+    product8PriceOld: document.getElementById('product8PriceOld').value,
+    product8Price: document.getElementById('product8Price').value,
+    enableProduct8: document.getElementById('enableProduct8').checked ? 'on' : 'off',
+    product8Images: JSON.stringify(product8Images),
+
+    product9Name: document.getElementById('product9Name').value,
+    product9Color: document.getElementById('product9Color').value,
+    product9ColorHex: document.getElementById('product9ColorHex').value,
+    product9Size: getSelectedSizesAsString(9),
+    product9Material: document.getElementById('product9Material').value,
+    product9PriceOld: document.getElementById('product9PriceOld').value,
+    product9Price: document.getElementById('product9Price').value,
+    enableProduct9: document.getElementById('enableProduct9').checked ? 'on' : 'off',
+    product9Images: JSON.stringify(product9Images)
 
   });
 
