@@ -10,6 +10,8 @@ const DEFAULT_VIDEO_THUMBNAIL_MOBILE = 'img/promo/promo-1_m.webp';
 let videoThumbnailDesktopValue = DEFAULT_VIDEO_THUMBNAIL_DESKTOP;
 let videoThumbnailMobileValue = DEFAULT_VIDEO_THUMBNAIL_MOBILE;
 
+let sizeChartImageValue = 'img/info/info-1.webp'; // Default size chart image
+
 // Product values tracking
 
 let product1Data = { name: '', color: '', colorHex: '', size: '', material: '', priceOld: '', price: '' };
@@ -567,6 +569,53 @@ async function handleProduct9ImageUpload() {
   fileInput.value = '';
 }
 
+// ========== ЗАВАНТАЖЕННЯ ФОТО РОЗМІРНОЇ СІТКИ ==========
+
+async function handleSizeChartImageUpload() {
+  const fileInput = document.getElementById('sizeChartImageInput');
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert('Будь ласка, виберіть файл');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('sizeChartImage', file);
+
+  try {
+    const response = await fetch('/upload-size-chart-image', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      sizeChartImageValue = data.filename;
+
+      // Показати preview
+      const previewContainer = document.getElementById('sizeChartImagePreview');
+      const previewImg = document.getElementById('previewSizeChartImage');
+      const statusText = document.getElementById('sizeChartUploadStatus');
+
+      previewImg.src = data.filename;
+      previewContainer.style.display = 'block';
+      statusText.textContent = '✅ Фото успішно завантажено';
+      statusText.style.color = '#27ae60';
+
+      console.log(`✅ Розмірна сітка завантажена: ${data.filename}`);
+    } else {
+      alert(`Помилка: ${data.error}`);
+    }
+  } catch (err) {
+    alert(`Помилка при завантаженні: ${err.message}`);
+    console.error(err);
+  }
+
+  fileInput.value = '';
+}
+
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
 
 
@@ -863,6 +912,8 @@ async function saveFormToServer() {
     videoThumbnailDesktop: videoThumbnailDesktopValue,
 
     videoThumbnailMobile: videoThumbnailMobileValue,
+
+    sizeChartImage: sizeChartImageValue,
 
     benefits: benefits,
 
@@ -1210,8 +1261,18 @@ async function loadSavedValues() {
     videoThumbnailMobileValue = formData.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE;
     showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
 
+    // Завантажити фото розмірної сітки
+    sizeChartImageValue = formData.sizeChartImage || 'img/info/info-1.webp';
+    if (formData.sizeChartImage) {
+      const previewContainer = document.getElementById('sizeChartImagePreview');
+      const previewImg = document.getElementById('previewSizeChartImage');
+      const statusText = document.getElementById('sizeChartUploadStatus');
 
-
+      previewImg.src = formData.sizeChartImage;
+      previewContainer.style.display = 'block';
+      statusText.textContent = '✅ Завантажено з конфігурації';
+      statusText.style.color = '#27ae60';
+    }
 
     // Завантажити дані 5 продуктів
 
@@ -1686,7 +1747,7 @@ function getFormParams() {
     enableVideoThumbnail: enableVideoThumbnail,
     videoThumbnailDesktop: videoThumbnailDesktop,
     videoThumbnailMobile: videoThumbnailMobile,
-
+    sizeChartImage: sizeChartImageValue,
 
     benefits: JSON.stringify(benefits),
 

@@ -43,6 +43,11 @@ if (!fs.existsSync(productsImageDir)) {
   fs.mkdirSync(productsImageDir, { recursive: true });
 }
 
+const sizeChartImageDir = path.join(__dirname, 'public', 'img', 'info');
+if (!fs.existsSync(sizeChartImageDir)) {
+  fs.mkdirSync(sizeChartImageDir, { recursive: true });
+}
+
 const DEFAULT_VIDEO_THUMBNAIL_DESKTOP = 'img/promo/promo-1.jpg';
 const DEFAULT_VIDEO_THUMBNAIL_MOBILE = 'img/promo/promo-1_m.webp';
 
@@ -160,6 +165,30 @@ const uploadProductImage = multer({
     }
   }
 });
+
+const sizeChartImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, sizeChartImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'size-chart-' + timestamp + ext);
+  }
+});
+
+const uploadSizeChartImage = multer({
+  storage: sizeChartImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
 function parseArrayParam(value, fallback = []) {
   if (!value) {
     return fallback;
@@ -274,6 +303,10 @@ function generateHTML(dataObj, options = {}) {
     if (videoThumbnailToggle !== 'on' && videoThumbnailToggle !== true) {
       html = html.replace(/\s*<!--\s*videoThumbnail\s*-->[\s\S]*?<!--\s*\/videoThumbnail\s*-->\s*/g, '');
     }
+
+    // Замінити фото розмірної сітки
+    const finalSizeChartImage = (options.sizeChartImage && options.sizeChartImage.trim()) ? options.sizeChartImage : (dataObj.sizeChartImage || 'img/info/info-1.webp');
+    html = html.replace('{{sizeChartImage}}', finalSizeChartImage);
 
     // Замінити плейсхолдери для 5 продуктів
     for (let i = 1; i <= 5; i++) {
@@ -967,6 +1000,38 @@ app.post('/upload-product9-image', uploadProductImage.single('product9Image'), a
   }
 });
 
+// POST /upload-size-chart-image - Завантажити фото розмірної сітки
+app.post('/upload-size-chart-image', uploadSizeChartImage.single('sizeChartImage'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📏 ФОТО РОЗМІРНОЇ СІТКИ ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/info/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /generate - Генерувати та відправити HTML з параметрами
 app.get('/generate', (req, res) => {
   try {
@@ -999,6 +1064,7 @@ app.get('/generate', (req, res) => {
       enableVideoThumbnail: req.query.enableVideoThumbnail,
       videoThumbnailDesktop: req.query.videoThumbnailDesktop,
       videoThumbnailMobile: req.query.videoThumbnailMobile,
+      sizeChartImage: req.query.sizeChartImage,
       product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
       product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
       product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
@@ -1112,6 +1178,7 @@ app.get('/export', (req, res) => {
       enableVideoThumbnail: req.query.enableVideoThumbnail,
       videoThumbnailDesktop: req.query.videoThumbnailDesktop,
       videoThumbnailMobile: req.query.videoThumbnailMobile,
+      sizeChartImage: req.query.sizeChartImage,
       product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
       product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
       product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),

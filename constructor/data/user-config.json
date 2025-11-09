@@ -12,6 +12,7 @@
   "enableVideoThumbnail": true,
   "videoThumbnailDesktop": "/public/img/video/video-thumb-1762647684230.jpg",
   "videoThumbnailMobile": "/public/img/video/video-thumb-1762647684230_m.webp",
+  "sizeChartImage": "/public/img/info/size-chart-1762697684268.png",
   "benefits": [
     {
       "id": 1,
