@@ -90,7 +90,12 @@
     "/public/img/products/product-1762647828784.jpg",
     "/public/img/products/product-1762647828809.jpg"
   ],
-  "product2Images": [],
+  "product2Images": [
+    "/public/img/products/product-1762649141721.jpg",
+    "/public/img/products/product-1762649141735.jpg",
+    "/public/img/products/product-1762649141781.jpg",
+    "/public/img/products/product-1762649141790.jpg"
+  ],
   "product3Images": [],
   "product4Images": [],
   "product5Images": []

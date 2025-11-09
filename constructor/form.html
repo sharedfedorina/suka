@@ -389,11 +389,16 @@
           <!-- Product 2 - Управління фото -->
           <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
             <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 2</h4>
-            <div id="product2ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
-            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="product2NewImage" placeholder="Шлях до фото (напр.: img/products/product_2.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-              <button type="button" onclick="addProductImage(2)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+            <div id="product2ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
             </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product2ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct2ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
           </div>
         </div>
       </div>
@@ -451,11 +456,16 @@
           <!-- Product 3 - Управління фото -->
           <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
             <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 3</h4>
-            <div id="product3ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
-            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="product3NewImage" placeholder="Шлях до фото (напр.: img/products/product_3.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-              <button type="button" onclick="addProductImage(3)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+            <div id="product3ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
             </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product3ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct3ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
           </div>
         </div>
       </div>
@@ -513,11 +523,16 @@
           <!-- Product 4 - Управління фото -->
           <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
             <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 4</h4>
-            <div id="product4ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
-            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="product4NewImage" placeholder="Шлях до фото (напр.: img/products/product_4.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-              <button type="button" onclick="addProductImage(4)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+            <div id="product4ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
             </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product4ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct4ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
           </div>
         </div>
       </div>
@@ -575,11 +590,16 @@
           <!-- Product 5 - Управління фото -->
           <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
             <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 5</h4>
-            <div id="product5ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;"></div>
-            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-              <input type="text" id="product5NewImage" placeholder="Шлях до фото (напр.: img/products/product_5.jpg)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-              <button type="button" onclick="addProductImage(5)" style="padding: 8px 16px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Додати</button>
+            <div id="product5ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
             </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product5ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct5ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
           </div>
         </div>
       </div>

@@ -144,13 +144,12 @@ function addProductImage(productNum) {
 
   }
 
-
-
-  const arrayName = `product${productNum}Images`;
-
-  const arr = window[arrayName];
-
-
+  let arr;
+  if (productNum === 1) arr = product1Images;
+  else if (productNum === 2) arr = product2Images;
+  else if (productNum === 3) arr = product3Images;
+  else if (productNum === 4) arr = product4Images;
+  else if (productNum === 5) arr = product5Images;
 
   if (!arr.includes(imagePath)) {
 
@@ -174,11 +173,17 @@ function addProductImage(productNum) {
 
 function removeProductImage(productNum, index) {
 
-  const arrayName = `product${productNum}Images`;
-
-  const arr = window[arrayName];
-
-  arr.splice(index, 1);
+  if (productNum === 1) {
+    product1Images.splice(index, 1);
+  } else if (productNum === 2) {
+    product2Images.splice(index, 1);
+  } else if (productNum === 3) {
+    product3Images.splice(index, 1);
+  } else if (productNum === 4) {
+    product4Images.splice(index, 1);
+  } else if (productNum === 5) {
+    product5Images.splice(index, 1);
+  }
 
   renderProductImages(productNum);
 
@@ -190,51 +195,38 @@ function removeProductImage(productNum, index) {
 
 function renderProductImages(productNum) {
 
-  const arrayName = `product${productNum}Images`;
-
-  const arr = window[arrayName];
-
-  const containerId = `product${productNum}ImagesList`;
-
-  const container = document.getElementById(containerId);
-
-
-
+  const container = document.getElementById(`product${productNum}ImagesList`);
   if (!container) return;
 
+  let arr;
+  if (productNum === 1) arr = product1Images;
+  else if (productNum === 2) arr = product2Images;
+  else if (productNum === 3) arr = product3Images;
+  else if (productNum === 4) arr = product4Images;
+  else if (productNum === 5) arr = product5Images;
 
-
-  if (arr.length === 0) {
-
-    container.innerHTML = '<div style="color: #7f8c8d; font-style: italic;">Немає фото</div>';
-
+  if (!arr || arr.length === 0) {
+    container.innerHTML = '<div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>';
     return;
-
   }
 
-
-
-  container.innerHTML = arr.map((imagePath, index) => `
-
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; background: #ecf0f1; margin-bottom: 6px; border-radius: 4px;">
-
-      <span style="font-size: 13px; word-break: break-all; flex: 1;">${imagePath}</span>
-
-      <button
-
-        type="button"
-
-        onclick="removeProductImage(${productNum}, ${index})"
-
-        style="padding: 4px 10px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; margin-left: 8px; flex-shrink: 0;">
-
-        Видалити
-
-      </button>
-
-    </div>
-
-  `).join('');
+  container.innerHTML = arr.map((imageData, index) => {
+    const fileName = imageData.includes('/') ? imageData.split('/').pop() : 'Нове фото';
+    return `
+      <div style="display: flex; gap: 10px; align-items: center; padding: 10px; background: #ecf0f1; margin-bottom: 8px; border-radius: 4px;">
+        <img src="${imageData}" alt="preview" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-size: 12px; color: #333; word-break: break-all;">${fileName}</div>
+        </div>
+        <button
+          type="button"
+          onclick="removeProductImage(${productNum}, ${index})"
+          style="padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 12px; flex-shrink: 0;">
+          Видалити
+        </button>
+      </div>
+    `;
+  }).join('');
 
 }
 
@@ -315,6 +307,170 @@ function renderProduct1Images() {
       </div>
     `;
   }).join('');
+}
+
+// ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 2 З FILE PICKER ==========
+
+async function handleProduct2ImageUpload() {
+  const fileInput = document.getElementById('product2ImageInput');
+  const files = fileInput.files;
+
+  if (files.length === 0) {
+    alert('Будь ласка, виберіть файли');
+    return;
+  }
+
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('product2Image', file);
+
+    try {
+      const response = await fetch('/upload-product2-image', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (!product2Images.includes(data.filename)) {
+          product2Images.push(data.filename);
+          renderProductImages(2);
+          console.log(`✅ Фото додано до Product 2: ${data.filename}`);
+        }
+      } else {
+        alert(`Помилка: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Помилка при завантаженні: ${err.message}`);
+      console.error(err);
+    }
+  }
+
+  fileInput.value = '';
+}
+
+// ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 3 З FILE PICKER ==========
+
+async function handleProduct3ImageUpload() {
+  const fileInput = document.getElementById('product3ImageInput');
+  const files = fileInput.files;
+
+  if (files.length === 0) {
+    alert('Будь ласка, виберіть файли');
+    return;
+  }
+
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('product3Image', file);
+
+    try {
+      const response = await fetch('/upload-product3-image', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (!product3Images.includes(data.filename)) {
+          product3Images.push(data.filename);
+          renderProductImages(3);
+          console.log(`✅ Фото додано до Product 3: ${data.filename}`);
+        }
+      } else {
+        alert(`Помилка: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Помилка при завантаженні: ${err.message}`);
+      console.error(err);
+    }
+  }
+
+  fileInput.value = '';
+}
+
+// ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 4 З FILE PICKER ==========
+
+async function handleProduct4ImageUpload() {
+  const fileInput = document.getElementById('product4ImageInput');
+  const files = fileInput.files;
+
+  if (files.length === 0) {
+    alert('Будь ласка, виберіть файли');
+    return;
+  }
+
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('product4Image', file);
+
+    try {
+      const response = await fetch('/upload-product4-image', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (!product4Images.includes(data.filename)) {
+          product4Images.push(data.filename);
+          renderProductImages(4);
+          console.log(`✅ Фото додано до Product 4: ${data.filename}`);
+        }
+      } else {
+        alert(`Помилка: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Помилка при завантаженні: ${err.message}`);
+      console.error(err);
+    }
+  }
+
+  fileInput.value = '';
+}
+
+// ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 5 З FILE PICKER ==========
+
+async function handleProduct5ImageUpload() {
+  const fileInput = document.getElementById('product5ImageInput');
+  const files = fileInput.files;
+
+  if (files.length === 0) {
+    alert('Будь ласка, виберіть файли');
+    return;
+  }
+
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('product5Image', file);
+
+    try {
+      const response = await fetch('/upload-product5-image', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        if (!product5Images.includes(data.filename)) {
+          product5Images.push(data.filename);
+          renderProductImages(5);
+          console.log(`✅ Фото додано до Product 5: ${data.filename}`);
+        }
+      } else {
+        alert(`Помилка: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Помилка при завантаженні: ${err.message}`);
+      console.error(err);
+    }
+  }
+
+  fileInput.value = '';
 }
 
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========

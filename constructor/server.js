@@ -682,6 +682,134 @@ app.post('/upload-product1-image', uploadProductImage.single('product1Image'), a
   }
 });
 
+// POST /upload-product2-image - Завантажити фото для продукту 2
+app.post('/upload-product2-image', uploadProductImage.single('product2Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 2 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/products/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product3-image - Завантажити фото для продукту 3
+app.post('/upload-product3-image', uploadProductImage.single('product3Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 3 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/products/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product4-image - Завантажити фото для продукту 4
+app.post('/upload-product4-image', uploadProductImage.single('product4Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 4 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/products/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product5-image - Завантажити фото для продукту 5
+app.post('/upload-product5-image', uploadProductImage.single('product5Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 5 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/products/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /generate - Генерувати та відправити HTML з параметрами
 app.get('/generate', (req, res) => {
   try {
