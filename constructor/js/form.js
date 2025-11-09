@@ -240,7 +240,7 @@ function renderProductImages(productNum) {
 
 // ========== ФУНКЦІЇ ДЛЯ ФОТО PRODUCT 1 З FILE PICKER ==========
 
-function handleProduct1ImageUpload() {
+async function handleProduct1ImageUpload() {
   const fileInput = document.getElementById('product1ImageInput');
   const files = fileInput.files;
 
@@ -250,24 +250,32 @@ function handleProduct1ImageUpload() {
   }
 
   // Добавляємо файли з обираних фото Product 1
-  Array.from(files).forEach(file => {
-    // Використовуємо ім'я файлу як identifier для фото
-    const fileName = `Product 1 - ${file.name} (${new Date().toLocaleTimeString()})`;
+  for (let file of files) {
+    const formData = new FormData();
+    formData.append('product1Image', file);
 
-    // Читаємо файл як Data URL для preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      // Зберігаємо Data URL як шлях фото
-      const dataUrl = e.target.result;
+    try {
+      const response = await fetch('/upload-product1-image', {
+        method: 'POST',
+        body: formData
+      });
 
-      if (!product1Images.includes(dataUrl)) {
-        product1Images.push(dataUrl);
-        renderProduct1Images();
-        console.log(`✅ Фото додано до Product 1`);
+      const data = await response.json();
+
+      if (data.success) {
+        if (!product1Images.includes(data.filename)) {
+          product1Images.push(data.filename);
+          renderProduct1Images();
+          console.log(`✅ Фото додано до Product 1: ${data.filename}`);
+        }
+      } else {
+        alert(`Помилка: ${data.error}`);
       }
-    };
-    reader.readAsDataURL(file);
-  });
+    } catch (err) {
+      alert(`Помилка при завантаженні: ${err.message}`);
+      console.error(err);
+    }
+  }
 
   // Очищаємо file input
   fileInput.value = '';

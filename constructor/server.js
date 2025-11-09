@@ -133,6 +133,29 @@ const uploadVideoThumbnail = multer({
   }
 });
 
+const productImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, productsImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'product-' + timestamp + ext);
+  }
+});
+
+const uploadProductImage = multer({
+  storage: productImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
 // Функція для генерування слайдів з масиву зображень
 function generateSlides(images = []) {
   if (!Array.isArray(images) || images.length === 0) {
@@ -511,6 +534,56 @@ app.post('/upload-video', uploadVideo.single('videoUpload'), async (req, res) =>
   }
 });
 
+// POST /upload-video-thumbnail - Завантажити прев'ю для відео блоку
+app.post('/upload-video-thumbnail', uploadVideoThumbnail.single('videoThumbnailUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажено' });
+    }
+
+    const timestamp = Date.now();
+    const basename = `video-thumb-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    const desktopPath = path.join(videoThumbnailDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1280, 720, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+
+    const mobilePath = path.join(videoThumbnailDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, 360, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+
+    fs.unlinkSync(uploadedPath);
+
+    res.json({
+      success: true,
+      desktop: `/public/img/video/${basename}.jpg`,
+      mobile: `/public/img/video/${basename}_m.webp`,
+      message: "Прев'ю відео збережено"
+    });
+  } catch (err) {
+    console.error("Помилка під час обробки прев'ю відео:", err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // ignore cleanup errors
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /upload-hero-image - Завантажити нове фото для hero блоку
 app.post('/upload-hero-image', upload.single('heroImage'), async (req, res) => {
   try {
@@ -572,6 +645,38 @@ app.post('/upload-hero-image', upload.single('heroImage'), async (req, res) => {
   }
 });
 
+// POST /upload-product1-image - Завантажити фото для продукту 1
+app.post('/upload-product1-image', uploadProductImage.single('product1Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 1 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const filename = req.file.filename;
+    const filepath = `/public/img/products/${filename}`;
+
+    res.json({
+      success: true,
+      filename: filepath,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /generate - Генерувати та відправити HTML з параметрами
 app.get('/generate', (req, res) => {
   try {
@@ -589,7 +694,10 @@ app.get('/generate', (req, res) => {
       enableImage: req.query.enableImage,
       imageUrl: req.query.imageUrl,
       enableVideo: req.query.enableVideo,
-      videoUrl: req.query.videoUrl
+      videoUrl: req.query.videoUrl,
+      enableVideoThumbnail: req.query.enableVideoThumbnail,
+      videoThumbnailDesktop: req.query.videoThumbnailDesktop,
+      videoThumbnailMobile: req.query.videoThumbnailMobile
     };
 
     // Парсити benefits якщо передано як JSON string
@@ -657,7 +765,10 @@ app.get('/export', (req, res) => {
       enableImage: req.query.enableImage,
       imageUrl: req.query.imageUrl,
       enableVideo: req.query.enableVideo,
-      videoUrl: req.query.videoUrl
+      videoUrl: req.query.videoUrl,
+      enableVideoThumbnail: req.query.enableVideoThumbnail,
+      videoThumbnailDesktop: req.query.videoThumbnailDesktop,
+      videoThumbnailMobile: req.query.videoThumbnailMobile
     };
 
     // Парсити benefits якщо передано як JSON string
