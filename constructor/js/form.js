@@ -915,6 +915,28 @@ async function saveFormToServer() {
 
     sizeChartImage: sizeChartImageValue,
 
+    // Info list (product characteristics)
+    infoEnableBrand: document.getElementById('infoEnableBrand').checked,
+    infoBrandLabel: document.getElementById('infoBrandLabel').value,
+    infoBrandValue: document.getElementById('infoBrandValue').value,
+    infoEnableModel: document.getElementById('infoEnableModel').checked,
+    infoModelLabel: document.getElementById('infoModelLabel').value,
+    infoModelValue: document.getElementById('infoModelValue').value,
+    infoEnableQuantity: document.getElementById('infoEnableQuantity').checked,
+    infoQuantityLabel: document.getElementById('infoQuantityLabel').value,
+    infoQuantityValue: document.getElementById('infoQuantityValue').value,
+    infoEnableColors: document.getElementById('infoEnableColors').checked,
+    infoColorsLabel: document.getElementById('infoColorsLabel').value,
+    infoEnableSizes: document.getElementById('infoEnableSizes').checked,
+    infoSizesLabel: document.getElementById('infoSizesLabel').value,
+    infoSizesValue: document.getElementById('infoSizesValue').value,
+    infoEnableMaterial: document.getElementById('infoEnableMaterial').checked,
+    infoMaterialLabel: document.getElementById('infoMaterialLabel').value,
+    infoMaterialValue: document.getElementById('infoMaterialValue').value,
+    infoEnablePackaging: document.getElementById('infoEnablePackaging').checked,
+    infoPackagingLabel: document.getElementById('infoPackagingLabel').value,
+    infoPackagingValue: document.getElementById('infoPackagingValue').value,
+
     benefits: benefits,
 
     // Product data
@@ -1273,6 +1295,34 @@ async function loadSavedValues() {
       statusText.textContent = '✅ Завантажено з конфігурації';
       statusText.style.color = '#27ae60';
     }
+
+    // Завантажити дані інформаційного блоку
+    document.getElementById('infoEnableBrand').checked = formData.infoEnableBrand !== false;
+    document.getElementById('infoBrandLabel').value = formData.infoBrandLabel || 'Бренд';
+    document.getElementById('infoBrandValue').value = formData.infoBrandValue || 'Kopo™ (Україна)';
+
+    document.getElementById('infoEnableModel').checked = formData.infoEnableModel !== false;
+    document.getElementById('infoModelLabel').value = formData.infoModelLabel || 'Модель';
+    document.getElementById('infoModelValue').value = formData.infoModelValue || 'Жіноча';
+
+    document.getElementById('infoEnableQuantity').checked = formData.infoEnableQuantity !== false;
+    document.getElementById('infoQuantityLabel').value = formData.infoQuantityLabel || 'Кількість';
+    document.getElementById('infoQuantityValue').value = formData.infoQuantityValue || 'Одна футболка або набір';
+
+    document.getElementById('infoEnableColors').checked = formData.infoEnableColors !== false;
+    document.getElementById('infoColorsLabel').value = formData.infoColorsLabel || 'Кольори';
+
+    document.getElementById('infoEnableSizes').checked = formData.infoEnableSizes !== false;
+    document.getElementById('infoSizesLabel').value = formData.infoSizesLabel || 'Розміри';
+    document.getElementById('infoSizesValue').value = formData.infoSizesValue || 'від S до 5XL';
+
+    document.getElementById('infoEnableMaterial').checked = formData.infoEnableMaterial !== false;
+    document.getElementById('infoMaterialLabel').value = formData.infoMaterialLabel || 'Матеріал';
+    document.getElementById('infoMaterialValue').value = formData.infoMaterialValue || 'Бавовна 95%, еластан 5%';
+
+    document.getElementById('infoEnablePackaging').checked = formData.infoEnablePackaging !== false;
+    document.getElementById('infoPackagingLabel').value = formData.infoPackagingLabel || 'Упаковка';
+    document.getElementById('infoPackagingValue').value = formData.infoPackagingValue || 'Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.';
 
     // Завантажити дані 5 продуктів
 
@@ -1748,6 +1798,28 @@ function getFormParams() {
     videoThumbnailDesktop: videoThumbnailDesktop,
     videoThumbnailMobile: videoThumbnailMobile,
     sizeChartImage: sizeChartImageValue,
+
+    // Info list (product characteristics)
+    infoEnableBrand: document.getElementById('infoEnableBrand').checked ? 'on' : 'off',
+    infoBrandLabel: document.getElementById('infoBrandLabel').value,
+    infoBrandValue: document.getElementById('infoBrandValue').value,
+    infoEnableModel: document.getElementById('infoEnableModel').checked ? 'on' : 'off',
+    infoModelLabel: document.getElementById('infoModelLabel').value,
+    infoModelValue: document.getElementById('infoModelValue').value,
+    infoEnableQuantity: document.getElementById('infoEnableQuantity').checked ? 'on' : 'off',
+    infoQuantityLabel: document.getElementById('infoQuantityLabel').value,
+    infoQuantityValue: document.getElementById('infoQuantityValue').value,
+    infoEnableColors: document.getElementById('infoEnableColors').checked ? 'on' : 'off',
+    infoColorsLabel: document.getElementById('infoColorsLabel').value,
+    infoEnableSizes: document.getElementById('infoEnableSizes').checked ? 'on' : 'off',
+    infoSizesLabel: document.getElementById('infoSizesLabel').value,
+    infoSizesValue: document.getElementById('infoSizesValue').value,
+    infoEnableMaterial: document.getElementById('infoEnableMaterial').checked ? 'on' : 'off',
+    infoMaterialLabel: document.getElementById('infoMaterialLabel').value,
+    infoMaterialValue: document.getElementById('infoMaterialValue').value,
+    infoEnablePackaging: document.getElementById('infoEnablePackaging').checked ? 'on' : 'off',
+    infoPackagingLabel: document.getElementById('infoPackagingLabel').value,
+    infoPackagingValue: document.getElementById('infoPackagingValue').value,
 
     benefits: JSON.stringify(benefits),
 

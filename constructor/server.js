@@ -308,6 +308,102 @@ function generateHTML(dataObj, options = {}) {
     const finalSizeChartImage = (options.sizeChartImage && options.sizeChartImage.trim()) ? options.sizeChartImage : (dataObj.sizeChartImage || 'img/info/info-1.webp');
     html = html.replace('{{sizeChartImage}}', finalSizeChartImage);
 
+    // Генерація інформаційного блоку (список характеристик)
+    // Збираємо ColorHex з увімкнених продуктів для автогенерації кольорів
+    const productColors = [];
+    for (let i = 1; i <= 5; i++) {
+      const enabledOpt = options[`enableProduct${i}`] === 'on' || options[`enableProduct${i}`] === true;
+      const enabledData = dataObj[`enableProduct${i}`] === true;
+      const enabled = enabledOpt || (options[`enableProduct${i}`] === undefined && enabledData);
+      if (enabled) {
+        const colorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+        if (colorHex) productColors.push(colorHex);
+      }
+    }
+    // Продукти 8 та 9
+    const enabled8Opt = options.enableProduct8 === 'on' || options.enableProduct8 === true;
+    const enabled8Data = dataObj.enableProduct8 === true;
+    const enabled8 = enabled8Opt || (options.enableProduct8 === undefined && enabled8Data);
+    if (enabled8) {
+      const colorHex8 = (options.product8ColorHex && options.product8ColorHex.trim()) ? options.product8ColorHex : (dataObj.product8ColorHex || '');
+      if (colorHex8) productColors.push(colorHex8);
+    }
+    const enabled9Opt = options.enableProduct9 === 'on' || options.enableProduct9 === true;
+    const enabled9Data = dataObj.enableProduct9 === true;
+    const enabled9 = enabled9Opt || (options.enableProduct9 === undefined && enabled9Data);
+    if (enabled9) {
+      const colorHex9 = (options.product9ColorHex && options.product9ColorHex.trim()) ? options.product9ColorHex : (dataObj.product9ColorHex || '');
+      if (colorHex9) productColors.push(colorHex9);
+    }
+
+    // Генеруємо SVG кружечки для кольорів
+    const colorCircles = productColors.map(color => {
+      return `<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="13" cy="13" r="13" fill="${color}" />
+          </svg>`;
+    }).join('\n           ');
+
+    // Обробка кожного поля інформаційного блоку
+    const infoBrandLabel = (options.infoBrandLabel && options.infoBrandLabel.trim()) ? options.infoBrandLabel : (dataObj.infoBrandLabel || 'Бренд');
+    const infoBrandValue = (options.infoBrandValue && options.infoBrandValue.trim()) ? options.infoBrandValue : (dataObj.infoBrandValue || 'Kopo™ (Україна)');
+    const infoModelLabel = (options.infoModelLabel && options.infoModelLabel.trim()) ? options.infoModelLabel : (dataObj.infoModelLabel || 'Модель');
+    const infoModelValue = (options.infoModelValue && options.infoModelValue.trim()) ? options.infoModelValue : (dataObj.infoModelValue || 'Жіноча');
+    const infoQuantityLabel = (options.infoQuantityLabel && options.infoQuantityLabel.trim()) ? options.infoQuantityLabel : (dataObj.infoQuantityLabel || 'Кількість');
+    const infoQuantityValue = (options.infoQuantityValue && options.infoQuantityValue.trim()) ? options.infoQuantityValue : (dataObj.infoQuantityValue || 'Одна футболка або набір');
+    const infoColorsLabel = (options.infoColorsLabel && options.infoColorsLabel.trim()) ? options.infoColorsLabel : (dataObj.infoColorsLabel || 'Кольори');
+    const infoSizesLabel = (options.infoSizesLabel && options.infoSizesLabel.trim()) ? options.infoSizesLabel : (dataObj.infoSizesLabel || 'Розміри');
+    const infoSizesValue = (options.infoSizesValue && options.infoSizesValue.trim()) ? options.infoSizesValue : (dataObj.infoSizesValue || 'від S до 5XL');
+    const infoMaterialLabel = (options.infoMaterialLabel && options.infoMaterialLabel.trim()) ? options.infoMaterialLabel : (dataObj.infoMaterialLabel || 'Матеріал');
+    const infoMaterialValue = (options.infoMaterialValue && options.infoMaterialValue.trim()) ? options.infoMaterialValue : (dataObj.infoMaterialValue || 'Бавовна 95%, еластан 5%');
+    const infoPackagingLabel = (options.infoPackagingLabel && options.infoPackagingLabel.trim()) ? options.infoPackagingLabel : (dataObj.infoPackagingLabel || 'Упаковка');
+    const infoPackagingValue = (options.infoPackagingValue && options.infoPackagingValue.trim()) ? options.infoPackagingValue : (dataObj.infoPackagingValue || 'Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.');
+
+    html = html.replace('{{infoBrandLabel}}', infoBrandLabel);
+    html = html.replace('{{infoBrandValue}}', infoBrandValue);
+    html = html.replace('{{infoModelLabel}}', infoModelLabel);
+    html = html.replace('{{infoModelValue}}', infoModelValue);
+    html = html.replace('{{infoQuantityLabel}}', infoQuantityLabel);
+    html = html.replace('{{infoQuantityValue}}', infoQuantityValue);
+    html = html.replace('{{infoColorsLabel}}', infoColorsLabel);
+    html = html.replace('{{infoColorCircles}}', colorCircles);
+    html = html.replace('{{infoSizesLabel}}', infoSizesLabel);
+    html = html.replace('{{infoSizesValue}}', infoSizesValue);
+    html = html.replace('{{infoMaterialLabel}}', infoMaterialLabel);
+    html = html.replace('{{infoMaterialValue}}', infoMaterialValue);
+    html = html.replace('{{infoPackagingLabel}}', infoPackagingLabel);
+    html = html.replace('{{infoPackagingValue}}', infoPackagingValue);
+
+    // Видалити поля якщо вимкнені (з fallback на dataObj)
+    const infoEnableBrand = (options.infoEnableBrand === 'on' || options.infoEnableBrand === true) || (options.infoEnableBrand === undefined && dataObj.infoEnableBrand === true);
+    const infoEnableModel = (options.infoEnableModel === 'on' || options.infoEnableModel === true) || (options.infoEnableModel === undefined && dataObj.infoEnableModel === true);
+    const infoEnableQuantity = (options.infoEnableQuantity === 'on' || options.infoEnableQuantity === true) || (options.infoEnableQuantity === undefined && dataObj.infoEnableQuantity === true);
+    const infoEnableColors = (options.infoEnableColors === 'on' || options.infoEnableColors === true) || (options.infoEnableColors === undefined && dataObj.infoEnableColors === true);
+    const infoEnableSizes = (options.infoEnableSizes === 'on' || options.infoEnableSizes === true) || (options.infoEnableSizes === undefined && dataObj.infoEnableSizes === true);
+    const infoEnableMaterial = (options.infoEnableMaterial === 'on' || options.infoEnableMaterial === true) || (options.infoEnableMaterial === undefined && dataObj.infoEnableMaterial === true);
+    const infoEnablePackaging = (options.infoEnablePackaging === 'on' || options.infoEnablePackaging === true) || (options.infoEnablePackaging === undefined && dataObj.infoEnablePackaging === true);
+
+    if (!infoEnableBrand) {
+      html = html.replace(/\s*<!--\s*infoBrand\s*-->[\s\S]*?<!--\s*\/infoBrand\s*-->\s*/g, '');
+    }
+    if (!infoEnableModel) {
+      html = html.replace(/\s*<!--\s*infoModel\s*-->[\s\S]*?<!--\s*\/infoModel\s*-->\s*/g, '');
+    }
+    if (!infoEnableQuantity) {
+      html = html.replace(/\s*<!--\s*infoQuantity\s*-->[\s\S]*?<!--\s*\/infoQuantity\s*-->\s*/g, '');
+    }
+    if (!infoEnableColors) {
+      html = html.replace(/\s*<!--\s*infoColors\s*-->[\s\S]*?<!--\s*\/infoColors\s*-->\s*/g, '');
+    }
+    if (!infoEnableSizes) {
+      html = html.replace(/\s*<!--\s*infoSizes\s*-->[\s\S]*?<!--\s*\/infoSizes\s*-->\s*/g, '');
+    }
+    if (!infoEnableMaterial) {
+      html = html.replace(/\s*<!--\s*infoMaterial\s*-->[\s\S]*?<!--\s*\/infoMaterial\s*-->\s*/g, '');
+    }
+    if (!infoEnablePackaging) {
+      html = html.replace(/\s*<!--\s*infoPackaging\s*-->[\s\S]*?<!--\s*\/infoPackaging\s*-->\s*/g, '');
+    }
+
     // Замінити плейсхолдери для 5 продуктів
     for (let i = 1; i <= 5; i++) {
       const productName = (options[`product${i}Name`] && options[`product${i}Name`].trim()) ? options[`product${i}Name`] : (dataObj[`product${i}Name`] || '');
@@ -1065,6 +1161,27 @@ app.get('/generate', (req, res) => {
       videoThumbnailDesktop: req.query.videoThumbnailDesktop,
       videoThumbnailMobile: req.query.videoThumbnailMobile,
       sizeChartImage: req.query.sizeChartImage,
+      // Info list params
+      infoEnableBrand: req.query.infoEnableBrand,
+      infoBrandLabel: req.query.infoBrandLabel,
+      infoBrandValue: req.query.infoBrandValue,
+      infoEnableModel: req.query.infoEnableModel,
+      infoModelLabel: req.query.infoModelLabel,
+      infoModelValue: req.query.infoModelValue,
+      infoEnableQuantity: req.query.infoEnableQuantity,
+      infoQuantityLabel: req.query.infoQuantityLabel,
+      infoQuantityValue: req.query.infoQuantityValue,
+      infoEnableColors: req.query.infoEnableColors,
+      infoColorsLabel: req.query.infoColorsLabel,
+      infoEnableSizes: req.query.infoEnableSizes,
+      infoSizesLabel: req.query.infoSizesLabel,
+      infoSizesValue: req.query.infoSizesValue,
+      infoEnableMaterial: req.query.infoEnableMaterial,
+      infoMaterialLabel: req.query.infoMaterialLabel,
+      infoMaterialValue: req.query.infoMaterialValue,
+      infoEnablePackaging: req.query.infoEnablePackaging,
+      infoPackagingLabel: req.query.infoPackagingLabel,
+      infoPackagingValue: req.query.infoPackagingValue,
       product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
       product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
       product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
@@ -1179,6 +1296,27 @@ app.get('/export', (req, res) => {
       videoThumbnailDesktop: req.query.videoThumbnailDesktop,
       videoThumbnailMobile: req.query.videoThumbnailMobile,
       sizeChartImage: req.query.sizeChartImage,
+      // Info list params
+      infoEnableBrand: req.query.infoEnableBrand,
+      infoBrandLabel: req.query.infoBrandLabel,
+      infoBrandValue: req.query.infoBrandValue,
+      infoEnableModel: req.query.infoEnableModel,
+      infoModelLabel: req.query.infoModelLabel,
+      infoModelValue: req.query.infoModelValue,
+      infoEnableQuantity: req.query.infoEnableQuantity,
+      infoQuantityLabel: req.query.infoQuantityLabel,
+      infoQuantityValue: req.query.infoQuantityValue,
+      infoEnableColors: req.query.infoEnableColors,
+      infoColorsLabel: req.query.infoColorsLabel,
+      infoEnableSizes: req.query.infoEnableSizes,
+      infoSizesLabel: req.query.infoSizesLabel,
+      infoSizesValue: req.query.infoSizesValue,
+      infoEnableMaterial: req.query.infoEnableMaterial,
+      infoMaterialLabel: req.query.infoMaterialLabel,
+      infoMaterialValue: req.query.infoMaterialValue,
+      infoEnablePackaging: req.query.infoEnablePackaging,
+      infoPackagingLabel: req.query.infoPackagingLabel,
+      infoPackagingValue: req.query.infoPackagingValue,
       product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
       product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
       product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),

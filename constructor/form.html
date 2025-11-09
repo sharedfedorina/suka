@@ -276,6 +276,92 @@
         </div>
       </div>
 
+      <!-- Інформація про товар (список характеристик) -->
+      <div class="form-group">
+        <h3 style="margin-top: 20px; margin-bottom: 15px;">📋 Інформація про товар</h3>
+        <p style="font-size: 0.9em; color: #7f8c8d; margin-bottom: 15px;">
+          ℹ️ <strong>Кольори</strong> генеруються автоматично з увімкнених продуктів
+        </p>
+
+        <!-- Бренд -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableBrand" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoBrandLabel" value="Бренд" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoBrandValue" value="Kopo™ (Україна)" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Модель -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableModel" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoModelLabel" value="Модель" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoModelValue" value="Жіноча" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Кількість -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableQuantity" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoQuantityLabel" value="Кількість" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoQuantityValue" value="Одна футболка або набір" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Кольори (автогенерація) -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; background: #f9f9f9;">
+          <input type="checkbox" id="infoEnableColors" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoColorsLabel" value="Кольори" style="width: 100%; margin-bottom: 8px;" />
+            <p style="font-size: 0.85em; color: #95a5a6; margin: 0;">
+              🎨 Автоматично: кружечки з ColorHex увімкнених продуктів
+            </p>
+          </div>
+        </div>
+
+        <!-- Розміри -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableSizes" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoSizesLabel" value="Розміри" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoSizesValue" value="від S до 5XL" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Матеріал -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableMaterial" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoMaterialLabel" value="Матеріал" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoMaterialValue" value="Бавовна 95%, еластан 5%" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Упаковка -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnablePackaging" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoPackagingLabel" value="Упаковка" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <textarea id="infoPackagingValue" style="width: 100%; min-height: 60px;">Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.</textarea>
+          </div>
+        </div>
+      </div>
+
       <!-- Блок для 5 продуктів -->
       <div class="form-group">
         <h3 style="margin-top: 20px; margin-bottom: 15px;">🛍️ 5 Продуктів (динамічні назва і ціна)</h3>
