@@ -128,7 +128,7 @@
                             <div class="swiper-slide start-slide">
                                 <picture>
                                     <source srcset="img/start/start-1.png" media="(min-width: 800px)">
-                                    <img src="img/start/start-1_m.webp" alt="img">
+                                    <img src="img/start/hero-1762710428290_m.webp" alt="img">
                                 </picture>
                             </div>
                         </div>
@@ -817,13 +817,13 @@
                     <div class="comments-wrap">
                         <div class="comments-text">
                             <div class="section-top two">
-                                <span class="section-label">Відгуки</span>
-                                <h2 class="title-x">Піклуємось про кожного.</h2>
+                                <span class="section-label">{{commentsLabel}}</span>
+                                <h2 class="title-x">{{commentsTitle}}</h2>
                             </div>
                             <ul class="comments-list">
-                                <li class="text-l"><b>> 3500</b> продажів</li>
-                                <li class="text-l"><b>98%</b> задоволених клієнтів</li>
-                                <li class="text-l"><b>48%</b> вже повторно зробили замовлення для себе або близьких</li>
+                                <li class="text-l"><b>{{commentsSalesStat}}</b> {{commentsSalesText}}</li>
+                                <li class="text-l"><b>{{commentsSatisfiedStat}}</b> {{commentsSatisfiedText}}</li>
+                                <li class="text-l"><b>{{commentsRepeatStat}}</b> {{commentsRepeatText}}</li>
                             </ul>
                             <div class="swiper comments-slider">
                                 <div class="swiper-wrapper">
@@ -868,7 +868,7 @@
           </span>
                                 </div>
                             </div>
-                            <button class="comments-btn btn-one">ЗАЛИШИТИ ВІДГУК<span></span></button>
+                            <button class="comments-btn btn-one">{{commentsButtonText}}<span></span></button>
                         </div>
                     </div>
                 </div>
@@ -880,8 +880,8 @@
                     <div class="faq-wrap">
                         <div class="faq-text">
                             <div class="section-top two">
-                                <span class="section-label">Доставка і оплата</span>
-                                <h2 class="title-l">Швидко, зручно, надійно.</h2>
+                                <span class="section-label">{{faqLabel}}</span>
+                                <h2 class="title-l">{{faqTitle}}</h2>
                             </div>
                             <div class="faq-img">
                                 <picture>
@@ -959,8 +959,8 @@
             <section class="section how">
                 <div class="container">
                     <div class="section-top">
-                        <span class="section-label">Як придбати футболки?</span>
-                        <h2 class="title-x">Лише декілька простих кроків</h2>
+                        <span class="section-label">{{howLabel}}</span>
+                        <h2 class="title-x">{{howTitle}}</h2>
                     </div>
                     <ol class="how-list">
                         <li class="text-l">Залиште заявку на обрані Вами футболки</li>
@@ -995,15 +995,15 @@
                     </div>
                     <div class="request-info" id="orderForm">
 
-                        <span class="request-info_title">Залиште заявку</span>
-                        <span class="request-info_descr">Якщо бажаєте замовити або потрібна наша допомога</span>
+                        <span class="request-info_title">{{requestInfoTitle}}</span>
+                        <span class="request-info_descr">{{requestInfoDescription}}</span>
                         <form id="form-popup1" class="request-form" action="../php/form-popup.php" method="post" autocomplete="off">
                             <input class="request-input input" type="text" pattern="^[A-Za-zА-Яа-яЁёІіЇїЄє\s]+$" name="name"
-                                   placeholder="Введіть Ваше ім`я" required>
+                                   placeholder="{{requestNamePlaceholder}}" required>
                             <span class="popup-format">Формат телефона: <b>380999999999</b></span>
-                            <input class="request-input input" type="tel" pattern="[0-9]{9,15}" maxlength="15" name="phone" placeholder="Введіть Ваш телефон" required>
+                            <input class="request-input input" type="tel" pattern="[0-9]{9,15}" maxlength="15" name="phone" placeholder="{{requestPhonePlaceholder}}" required>
                             <input class="popup-input input" type="hidden" maxlength="10" name="product" value="product" required>
-                            <button class="request-btn btn-one btn" type="submit">ЗАЛИШИТИ ЗАЯВКУ<span></span></button>
+                            <button class="request-btn btn-one btn" type="submit">{{requestButtonText}}<span></span></button>
                         </form>
                         <span class="request-numbers">Залишилось <b>19</b> футболок по акції</span>
                     </div>
@@ -1120,7 +1120,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-wrap">
-                <span class="footer-descr">© 2022 «KOPO»</span>
+                <span class="footer-descr">{{footerCopyright}}</span>
                 <svg class="footer-icon" width="149" height="19" viewBox="0 0 149 19" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.4331 13.8704H10.9219L12.4926 5.1582H15.0037L13.4331 13.8704Z" fill="#8E8E8E" />

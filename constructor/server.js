@@ -42,6 +42,7 @@ const productsImageDir = path.join(__dirname, 'public', 'img', 'products');
 if (!fs.existsSync(productsImageDir)) {
   fs.mkdirSync(productsImageDir, { recursive: true });
 }
+const productImageDir = productsImageDir; // Alias для сумісності
 
 const sizeChartImageDir = path.join(__dirname, 'public', 'img', 'info');
 if (!fs.existsSync(sizeChartImageDir)) {
@@ -504,6 +505,76 @@ function generateHTML(dataObj, options = {}) {
       html = html.replace(new RegExp(`<!--product9-->\\s*[\\s\\S]*?<!--\\/product9-->\\s*`, 'g'), '');
     }
 
+    // Замінити Comments секцію
+    const commentsLabel = (options.commentsLabel && options.commentsLabel.trim()) ? options.commentsLabel : (dataObj.comments?.label || 'Відгуки');
+    const commentsTitle = (options.commentsTitle && options.commentsTitle.trim()) ? options.commentsTitle : (dataObj.comments?.title || 'Піклуємось про кожного.');
+    const commentsSalesStat = (options.commentsSalesStat && options.commentsSalesStat.trim()) ? options.commentsSalesStat : (dataObj.comments?.stats?.sales || '> 3500');
+    const commentsSalesText = (options.commentsSalesText && options.commentsSalesText.trim()) ? options.commentsSalesText : (dataObj.comments?.text?.[0] || 'продажів');
+    const commentsSatisfiedStat = (options.commentsSatisfiedStat && options.commentsSatisfiedStat.trim()) ? options.commentsSatisfiedStat : (dataObj.comments?.stats?.satisfied || '98%');
+    const commentsSatisfiedText = (options.commentsSatisfiedText && options.commentsSatisfiedText.trim()) ? options.commentsSatisfiedText : (dataObj.comments?.text?.[1] || 'задоволених клієнтів');
+    const commentsRepeatStat = (options.commentsRepeatStat && options.commentsRepeatStat.trim()) ? options.commentsRepeatStat : (dataObj.comments?.stats?.repeat || '48%');
+    const commentsRepeatText = (options.commentsRepeatText && options.commentsRepeatText.trim()) ? options.commentsRepeatText : (dataObj.comments?.text?.[2] || 'вже повторно зробили замовлення для себе або близьких');
+    const commentsButtonText = (options.commentsButtonText && options.commentsButtonText.trim()) ? options.commentsButtonText : 'ЗАЛИШИТИ ВІДГУК';
+
+    html = html.replace('{{commentsLabel}}', commentsLabel);
+    html = html.replace('{{commentsTitle}}', commentsTitle);
+    html = html.replace('{{commentsSalesStat}}', commentsSalesStat);
+    html = html.replace('{{commentsSalesText}}', commentsSalesText);
+    html = html.replace('{{commentsSatisfiedStat}}', commentsSatisfiedStat);
+    html = html.replace('{{commentsSatisfiedText}}', commentsSatisfiedText);
+    html = html.replace('{{commentsRepeatStat}}', commentsRepeatStat);
+    html = html.replace('{{commentsRepeatText}}', commentsRepeatText);
+    html = html.replace('{{commentsButtonText}}', commentsButtonText);
+
+    // Видалити Comments секцію якщо вимкнено
+    const enableComments = (options.enableComments === 'on' || options.enableComments === true) || (options.enableComments === undefined && dataObj.enableComments !== false);
+    if (!enableComments) {
+      html = html.replace(/\s*<!--\s*comments\s*-->[\s\S]*?<!--\s*\/comments\s*-->\s*/g, '');
+    }
+
+    // Замінити FAQ секцію
+    const faqLabel = (options.faqLabel && options.faqLabel.trim()) ? options.faqLabel : (dataObj.faq?.label || 'Доставка і оплата');
+    const faqTitle = (options.faqTitle && options.faqTitle.trim()) ? options.faqTitle : (dataObj.faq?.title || 'Швидко, зручно, надійно.');
+
+    html = html.replace('{{faqLabel}}', faqLabel);
+    html = html.replace('{{faqTitle}}', faqTitle);
+
+    // Видалити FAQ секцію якщо вимкнено
+    const enableFaq = (options.enableFaq === 'on' || options.enableFaq === true) || (options.enableFaq === undefined && dataObj.enableFaq !== false);
+    if (!enableFaq) {
+      html = html.replace(/\s*<!--\s*faq\s*-->[\s\S]*?<!--\s*\/faq\s*-->\s*/g, '');
+    }
+
+    // Замінити How to Buy секцію
+    const howLabel = (options.howLabel && options.howLabel.trim()) ? options.howLabel : (dataObj.how_to_buy?.label || 'Як придбати футболки?');
+    const howTitle = (options.howTitle && options.howTitle.trim()) ? options.howTitle : (dataObj.how_to_buy?.title || 'Лише декілька простих кроків');
+
+    html = html.replace('{{howLabel}}', howLabel);
+    html = html.replace('{{howTitle}}', howTitle);
+
+    // Видалити How to Buy секцію якщо вимкнено
+    const enableHow = (options.enableHow === 'on' || options.enableHow === true) || (options.enableHow === undefined && dataObj.enableHow !== false);
+    if (!enableHow) {
+      html = html.replace(/\s*<!--\s*how\s*-->[\s\S]*?<!--\s*\/how\s*-->\s*/g, '');
+    }
+
+    // Замінити Request Form поля
+    const requestInfoTitle = (options.requestInfoTitle && options.requestInfoTitle.trim()) ? options.requestInfoTitle : (dataObj.request?.info_title || 'Залиште заявку');
+    const requestInfoDescription = (options.requestInfoDescription && options.requestInfoDescription.trim()) ? options.requestInfoDescription : (dataObj.request?.info_description || 'Якщо бажаєте замовити або потрібна наша допомога');
+    const requestButtonText = (options.requestButtonText && options.requestButtonText.trim()) ? options.requestButtonText : 'ЗАЛИШИТИ ЗАЯВКУ';
+    const requestNamePlaceholder = (options.requestNamePlaceholder && options.requestNamePlaceholder.trim()) ? options.requestNamePlaceholder : 'Введіть Ваше ім`я';
+    const requestPhonePlaceholder = (options.requestPhonePlaceholder && options.requestPhonePlaceholder.trim()) ? options.requestPhonePlaceholder : 'Введіть Ваш телефон';
+
+    html = html.replace('{{requestInfoTitle}}', requestInfoTitle);
+    html = html.replace('{{requestInfoDescription}}', requestInfoDescription);
+    html = html.replace('{{requestButtonText}}', requestButtonText);
+    html = html.replace('{{requestNamePlaceholder}}', requestNamePlaceholder);
+    html = html.replace('{{requestPhonePlaceholder}}', requestPhonePlaceholder);
+
+    // Замінити Footer copyright
+    const footerCopyright = (options.footerCopyright && options.footerCopyright.trim()) ? options.footerCopyright : (dataObj.footer?.copyright || '© 2022 «KOPO»');
+    html = html.replace('{{footerCopyright}}', footerCopyright);
+
     // Замінити переваги (простій текстовий заміни плейсхолдерів)
     if (options.benefits && Array.isArray(options.benefits)) {
       options.benefits.forEach((benefit) => {
@@ -732,7 +803,7 @@ app.post('/upload-image', uploadImage.single('imageUpload'), async (req, res) =>
 
     res.json({
       success: true,
-      filename: `/public/img/image/${basename}_m.webp`,
+      filename: `/public/img/image/${basename}.jpg`,
       message: 'Фото успішно оптимізовано та завантажено'
     });
   } catch (err) {
@@ -1272,15 +1343,36 @@ app.post('/upload-size-chart-image', uploadSizeChartImage.single('sizeChartImage
     }
 
     console.log(`\n📏 ФОТО РОЗМІРНОЇ СІТКИ ЗАВАНТАЖЕНО`);
-    console.log(`📁 Файл: ${req.file.filename}`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
     console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
 
-    const filename = req.file.filename;
-    const filepath = `/public/img/info/${filename}`;
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `size-chart-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, PNG)
+    const desktopPath = path.join(sizeChartImageDir, `${basename}.png`);
+    await sharp(uploadedPath)
+      .png({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.png (PNG 90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(sizeChartImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
 
     res.json({
       success: true,
-      filename: filepath,
+      filename: `/public/img/info/${basename}.png`,
       message: 'Фото успішно завантажено'
     });
   } catch (err) {
