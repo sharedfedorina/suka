@@ -798,7 +798,15 @@ async function saveFormToServer() {
 
     videoThumbnailMobile: videoThumbnailMobileValue,
 
+    videoSectionLabel: safeGetValue('videoSectionLabel'),
+
+    videoSectionTitle: safeGetValue('videoSectionTitle'),
+
     sizeChartImage: sizeChartImageValue,
+
+    sizeChartLabel: safeGetValue('sizeChartLabel'),
+
+    sizeChartTitle: safeGetValue('sizeChartTitle'),
 
     // Info list (product characteristics)
     infoEnableBrand: safeGetChecked('infoEnableBrand'),
@@ -823,6 +831,13 @@ async function saveFormToServer() {
     infoPackagingValue: safeGetValue('infoPackagingValue'),
 
     benefits: benefits,
+
+    // Products section settings
+    productsSectionLabel: safeGetValue('productsSectionLabel'),
+    productsSectionTitle: safeGetValue('productsSectionTitle'),
+    productOrderButtonText: safeGetValue('productOrderButtonText'),
+    actionChooseText: safeGetValue('actionChooseText'),
+    actionPromoText: safeGetValue('actionPromoText'),
 
     // Product data
 
@@ -971,7 +986,66 @@ async function saveFormToServer() {
     enableReviews: safeGetChecked('enableReviews'),
     enableFaq: safeGetChecked('enableFaq'),
     enableHow: safeGetChecked('enableHow'),
-    enableRequest: safeGetChecked('enableRequest')
+    enableRequest: safeGetChecked('enableRequest'),
+
+    // Comments section fields
+    commentsLabel: safeGetValue('commentsLabel'),
+    commentsTitle: safeGetValue('commentsTitle'),
+    commentsSalesStat: safeGetValue('commentsSalesStat'),
+    commentsSalesText: safeGetValue('commentsSalesText'),
+    commentsSatisfiedStat: safeGetValue('commentsSatisfiedStat'),
+    commentsSatisfiedText: safeGetValue('commentsSatisfiedText'),
+    commentsRepeatStat: safeGetValue('commentsRepeatStat'),
+    commentsRepeatText: safeGetValue('commentsRepeatText'),
+    commentsButtonText: safeGetValue('commentsButtonText'),
+
+    // Reviews section fields
+    reviewsLabel: safeGetValue('reviewsLabel'),
+    reviewsTitle: safeGetValue('reviewsTitle'),
+    review1Name: safeGetValue('review1Name'),
+    review1Text: safeGetValue('review1Text'),
+    review1Image: safeGetValue('review1Image'),
+    review2Name: safeGetValue('review2Name'),
+    review2Text: safeGetValue('review2Text'),
+    review2Image: safeGetValue('review2Image'),
+    review3Name: safeGetValue('review3Name'),
+    review3Text: safeGetValue('review3Text'),
+    review3Image: safeGetValue('review3Image'),
+    review4Name: safeGetValue('review4Name'),
+    review4Text: safeGetValue('review4Text'),
+    review4Image: safeGetValue('review4Image'),
+
+    // FAQ section fields
+    faqLabel: safeGetValue('faqLabel'),
+    faqTitle: safeGetValue('faqTitle'),
+    faq1Question: safeGetValue('faq1Question'),
+    faq1Answer: safeGetValue('faq1Answer'),
+    faq2Question: safeGetValue('faq2Question'),
+    faq2Answer: safeGetValue('faq2Answer'),
+    faq3Question: safeGetValue('faq3Question'),
+    faq3Answer: safeGetValue('faq3Answer'),
+    faq4Question: safeGetValue('faq4Question'),
+    faq4Answer: safeGetValue('faq4Answer'),
+
+    // How to buy section fields
+    howLabel: safeGetValue('howLabel'),
+    howTitle: safeGetValue('howTitle'),
+    howStep1: safeGetValue('howStep1'),
+    howStep2: safeGetValue('howStep2'),
+    howStep3: safeGetValue('howStep3'),
+    howStep4: safeGetValue('howStep4'),
+
+    // Request form section fields
+    requestTitle: safeGetValue('requestTitle'),
+    requestTimerText: safeGetValue('requestTimerText'),
+    requestInfoTitle: safeGetValue('requestInfoTitle'),
+    requestInfoDescription: safeGetValue('requestInfoDescription'),
+    requestNamePlaceholder: safeGetValue('requestNamePlaceholder'),
+    requestPhonePlaceholder: safeGetValue('requestPhonePlaceholder'),
+    requestPhoneFormat: safeGetValue('requestPhoneFormat'),
+    requestButtonText: safeGetValue('requestButtonText'),
+    requestStockPrefix: safeGetValue('requestStockPrefix'),
+    requestStockSuffix: safeGetValue('requestStockSuffix')
 
   };
 
@@ -1086,8 +1160,13 @@ async function loadSavedValues() {
     videoThumbnailMobileValue = formData.videoThumbnailMobile || '';
     showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
 
+    safeSetValue('videoSectionLabel', formData.videoSectionLabel || 'Відеоогляд');
+    safeSetValue('videoSectionTitle', formData.videoSectionTitle || 'Краще один раз побачити');
+
     // Завантажити фото розмірної сітки
     sizeChartImageValue = formData.sizeChartImage || '';
+    safeSetValue('sizeChartLabel', formData.sizeChartLabel || 'Розмірна сітка');
+    safeSetValue('sizeChartTitle', formData.sizeChartTitle || 'Вагаєтесь з розміром?<br> ');
     if (formData.sizeChartImage) {
       const previewContainer = document.getElementById('sizeChartImagePreview');
       const previewImg = document.getElementById('previewSizeChartImage');
@@ -1132,6 +1211,13 @@ async function loadSavedValues() {
     safeSetChecked('infoEnablePackaging', formData.infoEnablePackaging || false);
     safeSetValue('infoPackagingLabel', formData.infoPackagingLabel || '');
     safeSetValue('infoPackagingValue', formData.infoPackagingValue || '');
+
+    // Products section settings
+    safeSetValue('productsSectionLabel', formData.productsSectionLabel || 'Замовляйте зараз зі знижкою');
+    safeSetValue('productsSectionTitle', formData.productsSectionTitle || 'Обирайте колір або <br> Свій набір футболок');
+    safeSetValue('productOrderButtonText', formData.productOrderButtonText || 'ЗАМОВИТИ');
+    safeSetValue('actionChooseText', formData.actionChooseText || 'Обирайте колір або набір');
+    safeSetValue('actionPromoText', formData.actionPromoText || 'Діють акційні ціни!');
 
     // Завантажити дані 5 продуктів
 
@@ -1288,6 +1374,65 @@ async function loadSavedValues() {
     safeSetChecked('enableFaq', formData.enableFaq !== undefined ? formData.enableFaq : true);
     safeSetChecked('enableHow', formData.enableHow !== undefined ? formData.enableHow : true);
     safeSetChecked('enableRequest', formData.enableRequest !== undefined ? formData.enableRequest : true);
+
+    // Comments section fields
+    safeSetValue('commentsLabel', formData.commentsLabel || 'Відгуки');
+    safeSetValue('commentsTitle', formData.commentsTitle || 'Піклуємось про кожного.');
+    safeSetValue('commentsSalesStat', formData.commentsSalesStat || '> 3500');
+    safeSetValue('commentsSalesText', formData.commentsSalesText || 'продажів');
+    safeSetValue('commentsSatisfiedStat', formData.commentsSatisfiedStat || '98%');
+    safeSetValue('commentsSatisfiedText', formData.commentsSatisfiedText || 'задоволених клієнтів');
+    safeSetValue('commentsRepeatStat', formData.commentsRepeatStat || '48%');
+    safeSetValue('commentsRepeatText', formData.commentsRepeatText || 'вже повторно зробили замовлення для себе або близьких');
+    safeSetValue('commentsButtonText', formData.commentsButtonText || 'ЗАМОВИТИ');
+
+    // Reviews section fields
+    safeSetValue('reviewsLabel', formData.reviewsLabel || 'Відгуки клієнтів');
+    safeSetValue('reviewsTitle', formData.reviewsTitle || 'Що кажуть наші клієнти');
+    safeSetValue('review1Name', formData.review1Name || '');
+    safeSetValue('review1Text', formData.review1Text || '');
+    safeSetValue('review1Image', formData.review1Image || '');
+    safeSetValue('review2Name', formData.review2Name || '');
+    safeSetValue('review2Text', formData.review2Text || '');
+    safeSetValue('review2Image', formData.review2Image || '');
+    safeSetValue('review3Name', formData.review3Name || '');
+    safeSetValue('review3Text', formData.review3Text || '');
+    safeSetValue('review3Image', formData.review3Image || '');
+    safeSetValue('review4Name', formData.review4Name || '');
+    safeSetValue('review4Text', formData.review4Text || '');
+    safeSetValue('review4Image', formData.review4Image || '');
+
+    // FAQ section fields
+    safeSetValue('faqLabel', formData.faqLabel || 'Доставка і оплата');
+    safeSetValue('faqTitle', formData.faqTitle || 'Швидко, зручно, надійно.');
+    safeSetValue('faq1Question', formData.faq1Question || 'Доставка');
+    safeSetValue('faq1Answer', formData.faq1Answer || '');
+    safeSetValue('faq2Question', formData.faq2Question || 'Оплата');
+    safeSetValue('faq2Answer', formData.faq2Answer || '');
+    safeSetValue('faq3Question', formData.faq3Question || 'Надійність');
+    safeSetValue('faq3Answer', formData.faq3Answer || '');
+    safeSetValue('faq4Question', formData.faq4Question || 'Наші партнери');
+    safeSetValue('faq4Answer', formData.faq4Answer || '');
+
+    // How to buy section fields
+    safeSetValue('howLabel', formData.howLabel || 'Як придбати футболки?');
+    safeSetValue('howTitle', formData.howTitle || 'Лише декілька простих кроків');
+    safeSetValue('howStep1', formData.howStep1 || 'Залиште заявку на обрані Вами футболки');
+    safeSetValue('howStep2', formData.howStep2 || 'Ми Вам швидко зателефонуємо');
+    safeSetValue('howStep3', formData.howStep3 || 'Доставимо за 1-2 дні');
+    safeSetValue('howStep4', formData.howStep4 || 'Сплачуйте при отриманні');
+
+    // Request form section fields
+    safeSetValue('requestTitle', formData.requestTitle || 'Жіночі футболки оверсайз');
+    safeSetValue('requestTimerText', formData.requestTimerText || 'До кінця акції залишилося');
+    safeSetValue('requestInfoTitle', formData.requestInfoTitle || 'Залиште заявку');
+    safeSetValue('requestInfoDescription', formData.requestInfoDescription || 'Якщо бажаєте замовити або потрібна наша допомога');
+    safeSetValue('requestNamePlaceholder', formData.requestNamePlaceholder || 'Введіть Ваше ім`я');
+    safeSetValue('requestPhonePlaceholder', formData.requestPhonePlaceholder || 'Введіть Ваш номер телефона');
+    safeSetValue('requestPhoneFormat', formData.requestPhoneFormat || 'Формат телефона: <b>380999999999</b>');
+    safeSetValue('requestButtonText', formData.requestButtonText || 'ЗАМОВИТИ');
+    safeSetValue('requestStockPrefix', formData.requestStockPrefix || 'Залишилось');
+    safeSetValue('requestStockSuffix', formData.requestStockSuffix || 'футболок по акції');
 
     console.log('📂 Завантажені збережені значення:', formData);
 
