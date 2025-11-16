@@ -1465,7 +1465,31 @@ async function loadSavedValues() {
 
     }
 
+    // Завантажити дані TABS секції
+    safeSetChecked('enableTabs', formData.enableTabs);
+    safeSetValue('tabsLabel', formData.tabsLabel || '');
+    safeSetValue('tabsTitle', formData.tabsTitle || '');
 
+    // Tab 1
+    safeSetChecked('enableTabItem1', formData.enableTabItem1);
+    safeSetValue('tab1Title', formData.tab1Title || '');
+    safeSetValue('tab1Description', formData.tab1Description || '');
+    safeSetValue('tab1ImageDesktop', formData.tab1ImageDesktop || '');
+    safeSetValue('tab1ImageMobile', formData.tab1ImageMobile || '');
+
+    // Tab 2
+    safeSetChecked('enableTabItem2', formData.enableTabItem2);
+    safeSetValue('tab2Title', formData.tab2Title || '');
+    safeSetValue('tab2Description', formData.tab2Description || '');
+    safeSetValue('tab2ImageDesktop', formData.tab2ImageDesktop || '');
+    safeSetValue('tab2ImageMobile', formData.tab2ImageMobile || '');
+
+    // Tab 3
+    safeSetChecked('enableTabItem3', formData.enableTabItem3);
+    safeSetValue('tab3Title', formData.tab3Title || '');
+    safeSetValue('tab3Description', formData.tab3Description || '');
+    safeSetValue('tab3ImageDesktop', formData.tab3ImageDesktop || '');
+    safeSetValue('tab3ImageMobile', formData.tab3ImageMobile || '');
 
     console.log('📂 Завантажені збережені значення:', formData);
 
