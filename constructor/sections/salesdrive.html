@@ -1,0 +1,70 @@
+<details class="form-section">
+  <summary class="form-section-header">🔗 Інтеграція SalesDrive</summary>
+  <div class="form-section-content">
+    <p style="margin-bottom: 15px; color: #666;">
+      Налаштування інтеграції з CRM системою SalesDrive для автоматичної передачі замовлень.
+    </p>
+
+    <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+      <input
+        type="checkbox"
+        id="enableSalesDrive"
+        name="enableSalesDrive"
+        style="width: auto; margin: 0;"
+      />
+      <label for="enableSalesDrive" style="margin: 0;">Увімкнути інтеграцію з SalesDrive</label>
+    </div>
+
+    <div class="form-group">
+      <label for="salesDriveApiKey">API ключ SalesDrive</label>
+      <input
+        type="text"
+        id="salesDriveApiKey"
+        name="salesDriveApiKey"
+        placeholder="Напр.: sd_live_xxxxxxxxxxxxxxxx"
+      />
+      <small class="helper-text">Знайдіть у налаштуваннях SalesDrive → API Keys</small>
+    </div>
+
+    <div class="form-group">
+      <label for="salesDriveStreamId">ID потоку (Stream ID)</label>
+      <input
+        type="text"
+        id="salesDriveStreamId"
+        name="salesDriveStreamId"
+        placeholder="Напр.: 12345"
+      />
+      <small class="helper-text">ID потоку в SalesDrive, куди надсилатимуться замовлення</small>
+    </div>
+
+    <div class="form-group">
+      <label for="salesDriveOfferId">ID офера (необов'язково)</label>
+      <input
+        type="text"
+        id="salesDriveOfferId"
+        name="salesDriveOfferId"
+        placeholder="Напр.: 67890"
+      />
+      <small class="helper-text">ID конкретного офера, якщо потрібно прив'язати до нього</small>
+    </div>
+
+    <div class="form-group">
+      <label for="salesDriveWebmasterId">ID вебмайстра (необов'язково)</label>
+      <input
+        type="text"
+        id="salesDriveWebmasterId"
+        name="salesDriveWebmasterId"
+        placeholder="Напр.: 11111"
+      />
+      <small class="helper-text">ID вебмайстра для трекінгу джерела трафіку</small>
+    </div>
+
+    <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 6px; border-left: 4px solid #2196f3;">
+      <strong>ℹ️ Інформація:</strong>
+      <p style="margin: 10px 0 0 0; font-size: 0.9em;">
+        При увімкненій інтеграції всі замовлення з форми будуть автоматично передаватися в SalesDrive CRM.
+        Переконайтеся, що API ключ та Stream ID вказані правильно.
+      </p>
+    </div>
+  </div>
+</details>
