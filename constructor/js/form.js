@@ -937,7 +937,27 @@ async function saveFormToServer() {
     product9PriceOld: safeGetValue('product9PriceOld'),
     product9Price: safeGetValue('product9Price'),
     enableProduct9: safeGetChecked('enableProduct9'),
-    product9Images: product9Images
+    product9Images: product9Images,
+
+    // TABS section
+    enableTabs: safeGetChecked('enableTabs'),
+    tabsLabel: safeGetValue('tabsLabel'),
+    tabsTitle: safeGetValue('tabsTitle'),
+    enableTabItem1: safeGetChecked('enableTabItem1'),
+    tab1Title: safeGetValue('tab1Title'),
+    tab1Description: safeGetValue('tab1Description'),
+    tab1ImageDesktop: safeGetValue('tab1ImageDesktop'),
+    tab1ImageMobile: safeGetValue('tab1ImageMobile'),
+    enableTabItem2: safeGetChecked('enableTabItem2'),
+    tab2Title: safeGetValue('tab2Title'),
+    tab2Description: safeGetValue('tab2Description'),
+    tab2ImageDesktop: safeGetValue('tab2ImageDesktop'),
+    tab2ImageMobile: safeGetValue('tab2ImageMobile'),
+    enableTabItem3: safeGetChecked('enableTabItem3'),
+    tab3Title: safeGetValue('tab3Title'),
+    tab3Description: safeGetValue('tab3Description'),
+    tab3ImageDesktop: safeGetValue('tab3ImageDesktop'),
+    tab3ImageMobile: safeGetValue('tab3ImageMobile')
 
   };
 
