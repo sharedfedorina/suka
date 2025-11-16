@@ -1,0 +1,38 @@
+      <details class="form-section">
+        <summary class="form-section-header">📏 Розмірна сітка</summary>
+        <div class="form-section-content">
+
+          <div class="form-group">
+            <label for="sizeChartLabel">Мітка розмірної сітки</label>
+            <input
+              type="text"
+              id="sizeChartLabel"
+              name="sizeChartLabel"
+              value="Розмірна сітка"
+              placeholder="Напр.: Розмірна сітка"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="sizeChartTitle">Заголовок розмірної сітки (можна з HTML)</label>
+            <input
+              type="text"
+              id="sizeChartTitle"
+              name="sizeChartTitle"
+              value="Вагаєтесь з розміром?<br> "
+              placeholder="Напр.: Вагаєтесь з розміром?"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="sizeChartImageUpload">🖼️ Завантажити фото розмірної сітки</label>
+            <input type="file" id="sizeChartImageUpload" accept="image/*" />
+            <input type="hidden" id="sizeChartImage" name="sizeChartImage" value="" />
+            <button type="button" onclick="handleSizeChartImageUpload()" style="margin-top: 8px; padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">📤 Завантажити</button>
+            <small class="helper-text">Таблиця з розмірами одягу</small>
+            <div id="sizeChartImagePreview" class="image-preview" style="display: none;">
+              <img id="sizeChartImageImg" src="" alt="Size Chart" />
+              <p id="sizeChartUploadStatus" style="margin: 8px 0 0; font-size: 0.9em; color: #2c3e50;"></p>
+            </div>
+        </div>
+      </details>
