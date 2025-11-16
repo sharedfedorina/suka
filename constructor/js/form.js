@@ -964,7 +964,14 @@ async function saveFormToServer() {
     salesDriveApiKey: safeGetValue('salesDriveApiKey'),
     salesDriveStreamId: safeGetValue('salesDriveStreamId'),
     salesDriveOfferId: safeGetValue('salesDriveOfferId'),
-    salesDriveWebmasterId: safeGetValue('salesDriveWebmasterId')
+    salesDriveWebmasterId: safeGetValue('salesDriveWebmasterId'),
+
+    // Section visibility checkboxes
+    enableComments: safeGetChecked('enableComments'),
+    enableReviews: safeGetChecked('enableReviews'),
+    enableFaq: safeGetChecked('enableFaq'),
+    enableHow: safeGetChecked('enableHow'),
+    enableRequest: safeGetChecked('enableRequest')
 
   };
 
@@ -1274,6 +1281,13 @@ async function loadSavedValues() {
     safeSetValue('salesDriveStreamId', formData.salesDriveStreamId || '');
     safeSetValue('salesDriveOfferId', formData.salesDriveOfferId || '');
     safeSetValue('salesDriveWebmasterId', formData.salesDriveWebmasterId || '');
+
+    // Section visibility checkboxes
+    safeSetChecked('enableComments', formData.enableComments !== undefined ? formData.enableComments : true);
+    safeSetChecked('enableReviews', formData.enableReviews !== undefined ? formData.enableReviews : false);
+    safeSetChecked('enableFaq', formData.enableFaq !== undefined ? formData.enableFaq : true);
+    safeSetChecked('enableHow', formData.enableHow !== undefined ? formData.enableHow : true);
+    safeSetChecked('enableRequest', formData.enableRequest !== undefined ? formData.enableRequest : true);
 
     console.log('📂 Завантажені збережені значення:', formData);
 
