@@ -238,7 +238,7 @@ function generateSlides(images = []) {
 // Функція для генерування HTML з даних
 function generateHTML(dataObj, options = {}) {
   try {
-    const templatePath = path.join(__dirname, 'index.html');
+    const templatePath = path.join(__dirname, 'views', 'template.ejs');
     let html = fs.readFileSync(templatePath, 'utf8');
 
     // Замінити основні поля
@@ -595,7 +595,7 @@ function generateHTML(dataObj, options = {}) {
 // GET /api/data - Повернути JSON дані
 app.get('/api/data', (req, res) => {
   try {
-    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     console.log(`✅ JSON дані відправлені (${Object.keys(data).length} полів)`);
     res.json(data);
@@ -608,7 +608,7 @@ app.get('/api/data', (req, res) => {
 // GET /api/original-form-data - Отримати оригінальні дані з landing-data.json
 app.get('/api/original-form-data', (req, res) => {
   try {
-    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
     const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     const formData = {
@@ -1391,7 +1391,7 @@ app.post('/upload-size-chart-image', uploadSizeChartImage.single('sizeChartImage
 // GET /generate - Генерувати та відправити HTML з параметрами
 app.get('/generate', (req, res) => {
   try {
-    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
     let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     const configPath = path.join(__dirname, 'data', 'user-config.json');
@@ -1503,7 +1503,7 @@ app.get('/generate', (req, res) => {
 app.post('/generate', (req, res) => {
   try {
     const customData = req.body || {};
-    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
     const defaultData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     // Об'єднати дефолтні та користувацькі дані
@@ -1526,7 +1526,7 @@ app.post('/generate', (req, res) => {
 // GET /export - Генерувати та скачати ZIP архів зі статичним сайтом
 app.get('/export', (req, res) => {
   try {
-    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
     let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
     const configPath = path.join(__dirname, 'data', 'user-config.json');
