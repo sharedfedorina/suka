@@ -914,6 +914,8 @@ async function saveFormToServer() {
 
     heroPrice: safeGetValue('heroPrice'),
 
+    heroButtonText: safeGetValue('heroButtonText'),
+
     enableTimer: safeGetChecked('enableTimer'),
 
     enableStock: safeGetChecked('enableStock'),
@@ -1275,6 +1277,8 @@ async function loadSavedValues() {
     safeSetValue('heroTitle', formData.heroTitle);
 
     safeSetValue('heroPrice', formData.heroPrice || '');
+
+    safeSetValue('heroButtonText', formData.heroButtonText || '');
 
     safeSetChecked('enableTimer', formData.enableTimer);
 
