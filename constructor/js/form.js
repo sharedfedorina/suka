@@ -1484,7 +1484,7 @@ function showImagePreview(imagePath) {
 
   const previewImg = document.getElementById('previewImg');
 
-
+  if (!previewDiv || !previewImg) return;
 
   if (!imagePath) {
 
