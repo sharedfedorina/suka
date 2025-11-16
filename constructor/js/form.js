@@ -957,7 +957,14 @@ async function saveFormToServer() {
     tab3Title: safeGetValue('tab3Title'),
     tab3Description: safeGetValue('tab3Description'),
     tab3ImageDesktop: safeGetValue('tab3ImageDesktop'),
-    tab3ImageMobile: safeGetValue('tab3ImageMobile')
+    tab3ImageMobile: safeGetValue('tab3ImageMobile'),
+
+    // SalesDrive integration
+    enableSalesDrive: safeGetChecked('enableSalesDrive'),
+    salesDriveApiKey: safeGetValue('salesDriveApiKey'),
+    salesDriveStreamId: safeGetValue('salesDriveStreamId'),
+    salesDriveOfferId: safeGetValue('salesDriveOfferId'),
+    salesDriveWebmasterId: safeGetValue('salesDriveWebmasterId')
 
   };
 
@@ -1260,6 +1267,13 @@ async function loadSavedValues() {
     safeSetValue('tab3Description', formData.tab3Description || '');
     safeSetValue('tab3ImageDesktop', formData.tab3ImageDesktop || '');
     safeSetValue('tab3ImageMobile', formData.tab3ImageMobile || '');
+
+    // SalesDrive integration
+    safeSetChecked('enableSalesDrive', formData.enableSalesDrive || false);
+    safeSetValue('salesDriveApiKey', formData.salesDriveApiKey || '');
+    safeSetValue('salesDriveStreamId', formData.salesDriveStreamId || '');
+    safeSetValue('salesDriveOfferId', formData.salesDriveOfferId || '');
+    safeSetValue('salesDriveWebmasterId', formData.salesDriveWebmasterId || '');
 
     console.log('📂 Завантажені збережені значення:', formData);
 
