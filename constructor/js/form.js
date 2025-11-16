@@ -1110,7 +1110,7 @@ async function loadOriginalValues() {
 
     document.getElementById('heroTitle').value = formData.heroTitle;
 
-    document.getElementById('heroPrice').value = formData.heroPrice || 'від 330 грн';
+    document.getElementById('heroPrice').value = formData.heroPrice || '';
 
     document.getElementById('enableTimer').checked = formData.enableTimer;
 
@@ -1125,12 +1125,16 @@ async function loadOriginalValues() {
     imageUrlValue = formData.imageUrl;
 
     if (formData.imageUrl) {
-
-      document.getElementById('previewImageUpload').src = formData.imageUrl;
-
+      const previewImg = document.getElementById('previewImageUpload');
+      if (previewImg) {
+        previewImg.src = formData.imageUrl;
+      }
     }
 
-    document.getElementById('imageUploadPreview').style.display = formData.imageUrl ? 'block' : 'none';
+    const imageUploadPreview = document.getElementById('imageUploadPreview');
+    if (imageUploadPreview) {
+      imageUploadPreview.style.display = formData.imageUrl ? 'block' : 'none';
+    }
 
     document.getElementById('enableVideo').checked = formData.enableVideo;
 
@@ -1140,8 +1144,8 @@ async function loadOriginalValues() {
     const videoThumbToggle = (typeof formData.enableVideoThumbnail === 'boolean') ? formData.enableVideoThumbnail : true;
     document.getElementById('enableVideoThumbnail').checked = videoThumbToggle;
 
-    videoThumbnailDesktopValue = formData.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP;
-    videoThumbnailMobileValue = formData.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE;
+    videoThumbnailDesktopValue = formData.videoThumbnailDesktop || '';
+    videoThumbnailMobileValue = formData.videoThumbnailMobile || '';
     showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
 
     // Завантажити дані 5 продуктів
@@ -1249,7 +1253,7 @@ async function loadSavedValues() {
 
     document.getElementById('heroTitle').value = formData.heroTitle;
 
-    document.getElementById('heroPrice').value = formData.heroPrice || 'від 330 грн';
+    document.getElementById('heroPrice').value = formData.heroPrice || '';
 
     document.getElementById('enableTimer').checked = formData.enableTimer;
 
@@ -1264,12 +1268,16 @@ async function loadSavedValues() {
     imageUrlValue = formData.imageUrl;
 
     if (formData.imageUrl) {
-
-      document.getElementById('previewImageUpload').src = formData.imageUrl;
-
+      const previewImg = document.getElementById('previewImageUpload');
+      if (previewImg) {
+        previewImg.src = formData.imageUrl;
+      }
     }
 
-    document.getElementById('imageUploadPreview').style.display = formData.imageUrl ? 'block' : 'none';
+    const imageUploadPreview = document.getElementById('imageUploadPreview');
+    if (imageUploadPreview) {
+      imageUploadPreview.style.display = formData.imageUrl ? 'block' : 'none';
+    }
 
     document.getElementById('enableVideo').checked = formData.enableVideo;
 
@@ -1279,50 +1287,56 @@ async function loadSavedValues() {
     const videoThumbToggle = (typeof formData.enableVideoThumbnail === 'boolean') ? formData.enableVideoThumbnail : true;
     document.getElementById('enableVideoThumbnail').checked = videoThumbToggle;
 
-    videoThumbnailDesktopValue = formData.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP;
-    videoThumbnailMobileValue = formData.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE;
+    videoThumbnailDesktopValue = formData.videoThumbnailDesktop || '';
+    videoThumbnailMobileValue = formData.videoThumbnailMobile || '';
     showVideoThumbnailPreview(videoThumbnailDesktopValue || videoThumbnailMobileValue);
 
     // Завантажити фото розмірної сітки
-    sizeChartImageValue = formData.sizeChartImage || 'img/info/info-1.webp';
+    sizeChartImageValue = formData.sizeChartImage || '';
     if (formData.sizeChartImage) {
       const previewContainer = document.getElementById('sizeChartImagePreview');
       const previewImg = document.getElementById('previewSizeChartImage');
       const statusText = document.getElementById('sizeChartUploadStatus');
 
-      previewImg.src = formData.sizeChartImage;
-      previewContainer.style.display = 'block';
-      statusText.textContent = '✅ Завантажено з конфігурації';
-      statusText.style.color = '#27ae60';
+      if (previewImg) {
+        previewImg.src = formData.sizeChartImage;
+      }
+      if (previewContainer) {
+        previewContainer.style.display = 'block';
+      }
+      if (statusText) {
+        statusText.textContent = '✅ Завантажено з конфігурації';
+        statusText.style.color = '#27ae60';
+      }
     }
 
     // Завантажити дані інформаційного блоку
-    document.getElementById('infoEnableBrand').checked = formData.infoEnableBrand !== false;
-    document.getElementById('infoBrandLabel').value = formData.infoBrandLabel || 'Бренд';
-    document.getElementById('infoBrandValue').value = formData.infoBrandValue || 'Kopo™ (Україна)';
+    document.getElementById('infoEnableBrand').checked = formData.infoEnableBrand || false;
+    document.getElementById('infoBrandLabel').value = formData.infoBrandLabel || '';
+    document.getElementById('infoBrandValue').value = formData.infoBrandValue || '';
 
-    document.getElementById('infoEnableModel').checked = formData.infoEnableModel !== false;
-    document.getElementById('infoModelLabel').value = formData.infoModelLabel || 'Модель';
-    document.getElementById('infoModelValue').value = formData.infoModelValue || 'Жіноча';
+    document.getElementById('infoEnableModel').checked = formData.infoEnableModel || false;
+    document.getElementById('infoModelLabel').value = formData.infoModelLabel || '';
+    document.getElementById('infoModelValue').value = formData.infoModelValue || '';
 
-    document.getElementById('infoEnableQuantity').checked = formData.infoEnableQuantity !== false;
-    document.getElementById('infoQuantityLabel').value = formData.infoQuantityLabel || 'Кількість';
-    document.getElementById('infoQuantityValue').value = formData.infoQuantityValue || 'Одна футболка або набір';
+    document.getElementById('infoEnableQuantity').checked = formData.infoEnableQuantity || false;
+    document.getElementById('infoQuantityLabel').value = formData.infoQuantityLabel || '';
+    document.getElementById('infoQuantityValue').value = formData.infoQuantityValue || '';
 
-    document.getElementById('infoEnableColors').checked = formData.infoEnableColors !== false;
-    document.getElementById('infoColorsLabel').value = formData.infoColorsLabel || 'Кольори';
+    document.getElementById('infoEnableColors').checked = formData.infoEnableColors || false;
+    document.getElementById('infoColorsLabel').value = formData.infoColorsLabel || '';
 
-    document.getElementById('infoEnableSizes').checked = formData.infoEnableSizes !== false;
-    document.getElementById('infoSizesLabel').value = formData.infoSizesLabel || 'Розміри';
-    document.getElementById('infoSizesValue').value = formData.infoSizesValue || 'від S до 5XL';
+    document.getElementById('infoEnableSizes').checked = formData.infoEnableSizes || false;
+    document.getElementById('infoSizesLabel').value = formData.infoSizesLabel || '';
+    document.getElementById('infoSizesValue').value = formData.infoSizesValue || '';
 
-    document.getElementById('infoEnableMaterial').checked = formData.infoEnableMaterial !== false;
-    document.getElementById('infoMaterialLabel').value = formData.infoMaterialLabel || 'Матеріал';
-    document.getElementById('infoMaterialValue').value = formData.infoMaterialValue || 'Бавовна 95%, еластан 5%';
+    document.getElementById('infoEnableMaterial').checked = formData.infoEnableMaterial || false;
+    document.getElementById('infoMaterialLabel').value = formData.infoMaterialLabel || '';
+    document.getElementById('infoMaterialValue').value = formData.infoMaterialValue || '';
 
-    document.getElementById('infoEnablePackaging').checked = formData.infoEnablePackaging !== false;
-    document.getElementById('infoPackagingLabel').value = formData.infoPackagingLabel || 'Упаковка';
-    document.getElementById('infoPackagingValue').value = formData.infoPackagingValue || 'Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.';
+    document.getElementById('infoEnablePackaging').checked = formData.infoEnablePackaging || false;
+    document.getElementById('infoPackagingLabel').value = formData.infoPackagingLabel || '';
+    document.getElementById('infoPackagingValue').value = formData.infoPackagingValue || '';
 
     // Завантажити дані 5 продуктів
 
@@ -1392,7 +1406,7 @@ async function loadSavedValues() {
     document.getElementById('product8Name').value = formData.product8Name || '';
     document.getElementById('product8Color').value = formData.product8Color || '';
 
-    const colorHex8 = formData.product8ColorHex || '#000000';
+    const colorHex8 = formData.product8ColorHex || '';
     document.getElementById('product8ColorHex').value = colorHex8;
     const displayEl8 = document.getElementById('product8ColorHexDisplay');
     if (displayEl8) {
@@ -1414,7 +1428,7 @@ async function loadSavedValues() {
     document.getElementById('product9Name').value = formData.product9Name || '';
     document.getElementById('product9Color').value = formData.product9Color || '';
 
-    const colorHex9 = formData.product9ColorHex || '#000000';
+    const colorHex9 = formData.product9ColorHex || '';
     document.getElementById('product9ColorHex').value = colorHex9;
     const displayEl9 = document.getElementById('product9ColorHexDisplay');
     if (displayEl9) {
