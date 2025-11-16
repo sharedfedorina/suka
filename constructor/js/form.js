@@ -1323,44 +1323,44 @@ async function loadSavedValues() {
 
     // Завантажити дані інформаційного блоку
     safeSetChecked('infoEnableBrand', formData.infoEnableBrand || false);
-    document.getElementById('infoBrandLabel').value = formData.infoBrandLabel || '';
-    document.getElementById('infoBrandValue').value = formData.infoBrandValue || '';
+    safeSetValue('infoBrandLabel', formData.infoBrandLabel || '');
+    safeSetValue('infoBrandValue', formData.infoBrandValue || '');
 
-    document.getElementById('infoEnableModel').checked = formData.infoEnableModel || false;
-    document.getElementById('infoModelLabel').value = formData.infoModelLabel || '';
-    document.getElementById('infoModelValue').value = formData.infoModelValue || '';
+    safeSetChecked('infoEnableModel', formData.infoEnableModel || false);
+    safeSetValue('infoModelLabel', formData.infoModelLabel || '');
+    safeSetValue('infoModelValue', formData.infoModelValue || '');
 
-    document.getElementById('infoEnableQuantity').checked = formData.infoEnableQuantity || false;
-    document.getElementById('infoQuantityLabel').value = formData.infoQuantityLabel || '';
-    document.getElementById('infoQuantityValue').value = formData.infoQuantityValue || '';
+    safeSetChecked('infoEnableQuantity', formData.infoEnableQuantity || false);
+    safeSetValue('infoQuantityLabel', formData.infoQuantityLabel || '');
+    safeSetValue('infoQuantityValue', formData.infoQuantityValue || '');
 
-    document.getElementById('infoEnableColors').checked = formData.infoEnableColors || false;
-    document.getElementById('infoColorsLabel').value = formData.infoColorsLabel || '';
+    safeSetChecked('infoEnableColors', formData.infoEnableColors || false);
+    safeSetValue('infoColorsLabel', formData.infoColorsLabel || '');
 
-    document.getElementById('infoEnableSizes').checked = formData.infoEnableSizes || false;
-    document.getElementById('infoSizesLabel').value = formData.infoSizesLabel || '';
-    document.getElementById('infoSizesValue').value = formData.infoSizesValue || '';
+    safeSetChecked('infoEnableSizes', formData.infoEnableSizes || false);
+    safeSetValue('infoSizesLabel', formData.infoSizesLabel || '');
+    safeSetValue('infoSizesValue', formData.infoSizesValue || '');
 
-    document.getElementById('infoEnableMaterial').checked = formData.infoEnableMaterial || false;
-    document.getElementById('infoMaterialLabel').value = formData.infoMaterialLabel || '';
-    document.getElementById('infoMaterialValue').value = formData.infoMaterialValue || '';
+    safeSetChecked('infoEnableMaterial', formData.infoEnableMaterial || false);
+    safeSetValue('infoMaterialLabel', formData.infoMaterialLabel || '');
+    safeSetValue('infoMaterialValue', formData.infoMaterialValue || '');
 
-    document.getElementById('infoEnablePackaging').checked = formData.infoEnablePackaging || false;
-    document.getElementById('infoPackagingLabel').value = formData.infoPackagingLabel || '';
-    document.getElementById('infoPackagingValue').value = formData.infoPackagingValue || '';
+    safeSetChecked('infoEnablePackaging', formData.infoEnablePackaging || false);
+    safeSetValue('infoPackagingLabel', formData.infoPackagingLabel || '');
+    safeSetValue('infoPackagingValue', formData.infoPackagingValue || '');
 
     // Завантажити дані 5 продуктів
 
     for (let i = 1; i <= 5; i++) {
 
-      document.getElementById(`enableProduct${i}`).checked = formData[`enableProduct${i}`];
+      safeSetChecked(`enableProduct${i}`, formData[`enableProduct${i}`]);
 
-      document.getElementById(`product${i}Name`).value = formData[`product${i}Name`] || '';
+      safeSetValue(`product${i}Name`, formData[`product${i}Name`] || '');
 
-      document.getElementById(`product${i}Color`).value = formData[`product${i}Color`] || '';
+      safeSetValue(`product${i}Color`, formData[`product${i}Color`] || '');
 
       const colorHex = formData[`product${i}ColorHex`] || '';
-      document.getElementById(`product${i}ColorHex`).value = colorHex;
+      safeSetValue(`product${i}ColorHex`, colorHex);
       // Only set ColorHexDisplay for products 1,2 that have the color picker UI
       if (usesColorPickerUI(i)) {
         const displayEl = document.getElementById(`product${i}ColorHexDisplay`);
@@ -1372,11 +1372,11 @@ async function loadSavedValues() {
       const sizes = formData[`product${i}Size`] || '';
       setSelectedSizes(i, sizes);
 
-      document.getElementById(`product${i}Material`).value = formData[`product${i}Material`] || '';
+      safeSetValue(`product${i}Material`, formData[`product${i}Material`] || '');
 
-      document.getElementById(`product${i}PriceOld`).value = formData[`product${i}PriceOld`] || '';
+      safeSetValue(`product${i}PriceOld`, formData[`product${i}PriceOld`] || '');
 
-      document.getElementById(`product${i}Price`).value = formData[`product${i}Price`] || '';
+      safeSetValue(`product${i}Price`, formData[`product${i}Price`] || '');
 
 
 
@@ -1413,12 +1413,12 @@ async function loadSavedValues() {
     }
 
     // Завантажити дані для маркетингових продуктів (product8, product9)
-    document.getElementById('enableProduct8').checked = formData.enableProduct8;
-    document.getElementById('product8Name').value = formData.product8Name || '';
-    document.getElementById('product8Color').value = formData.product8Color || '';
+    safeSetChecked('enableProduct8', formData.enableProduct8);
+    safeSetValue('product8Name', formData.product8Name || '');
+    safeSetValue('product8Color', formData.product8Color || '');
 
     const colorHex8 = formData.product8ColorHex || '';
-    document.getElementById('product8ColorHex').value = colorHex8;
+    safeSetValue('product8ColorHex', colorHex8);
     const displayEl8 = document.getElementById('product8ColorHexDisplay');
     if (displayEl8) {
       displayEl8.value = colorHex8;
@@ -1426,21 +1426,21 @@ async function loadSavedValues() {
 
     const sizes8 = formData.product8Size || '';
     setSelectedSizes(8, sizes8);
-    document.getElementById('product8Material').value = formData.product8Material || '';
-    document.getElementById('product8PriceOld').value = formData.product8PriceOld || '';
-    document.getElementById('product8Price').value = formData.product8Price || '';
+    safeSetValue('product8Material', formData.product8Material || '');
+    safeSetValue('product8PriceOld', formData.product8PriceOld || '');
+    safeSetValue('product8Price', formData.product8Price || '');
 
     if (formData.product8Images && Array.isArray(formData.product8Images)) {
       product8Images = formData.product8Images;
       renderProductImages(8);
     }
 
-    document.getElementById('enableProduct9').checked = formData.enableProduct9;
-    document.getElementById('product9Name').value = formData.product9Name || '';
-    document.getElementById('product9Color').value = formData.product9Color || '';
+    safeSetChecked('enableProduct9', formData.enableProduct9);
+    safeSetValue('product9Name', formData.product9Name || '');
+    safeSetValue('product9Color', formData.product9Color || '');
 
     const colorHex9 = formData.product9ColorHex || '';
-    document.getElementById('product9ColorHex').value = colorHex9;
+    safeSetValue('product9ColorHex', colorHex9);
     const displayEl9 = document.getElementById('product9ColorHexDisplay');
     if (displayEl9) {
       displayEl9.value = colorHex9;
@@ -1448,9 +1448,9 @@ async function loadSavedValues() {
 
     const sizes9 = formData.product9Size || '';
     setSelectedSizes(9, sizes9);
-    document.getElementById('product9Material').value = formData.product9Material || '';
-    document.getElementById('product9PriceOld').value = formData.product9PriceOld || '';
-    document.getElementById('product9Price').value = formData.product9Price || '';
+    safeSetValue('product9Material', formData.product9Material || '');
+    safeSetValue('product9PriceOld', formData.product9PriceOld || '');
+    safeSetValue('product9Price', formData.product9Price || '');
 
     if (formData.product9Images && Array.isArray(formData.product9Images)) {
       product9Images = formData.product9Images;
