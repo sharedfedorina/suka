@@ -1,3 +1,14 @@
+// Helper function для безпечного встановлення значень
+function safeSetValue(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value;
+}
+
+function safeSetChecked(id, checked) {
+  const el = document.getElementById(id);
+  if (el) el.checked = checked;
+}
+
 let uploadedHeroImageFilename = '';
 
 let imageUrlValue = '';
@@ -1136,13 +1147,13 @@ async function loadOriginalValues() {
       imageUploadPreview.style.display = formData.imageUrl ? 'block' : 'none';
     }
 
-    document.getElementById('enableVideo').checked = formData.enableVideo;
+    safeSetChecked('enableVideo', formData.enableVideo);
 
     videoUrlValue = formData.videoUrl || '';
     showVideoPreview(videoUrlValue);
 
     const videoThumbToggle = (typeof formData.enableVideoThumbnail === 'boolean') ? formData.enableVideoThumbnail : true;
-    document.getElementById('enableVideoThumbnail').checked = videoThumbToggle;
+    safeSetChecked('enableVideoThumbnail', videoThumbToggle);
 
     videoThumbnailDesktopValue = formData.videoThumbnailDesktop || '';
     videoThumbnailMobileValue = formData.videoThumbnailMobile || '';
@@ -1249,21 +1260,21 @@ async function loadSavedValues() {
 
 
 
-    document.getElementById('headerText').value = formData.headerText;
+    safeSetValue('headerText', formData.headerText);
 
-    document.getElementById('heroTitle').value = formData.heroTitle;
+    safeSetValue('heroTitle', formData.heroTitle);
 
-    document.getElementById('heroPrice').value = formData.heroPrice || '';
+    safeSetValue('heroPrice', formData.heroPrice || '');
 
-    document.getElementById('enableTimer').checked = formData.enableTimer;
+    safeSetChecked('enableTimer', formData.enableTimer);
 
-    document.getElementById('enableStock').checked = formData.enableStock;
+    safeSetChecked('enableStock', formData.enableStock);
 
     uploadedHeroImageFilename = formData.heroImage;
 
     showImagePreview(formData.heroImage);
 
-    document.getElementById('enableImage').checked = formData.enableImage;
+    safeSetChecked('enableImage', formData.enableImage);
 
     imageUrlValue = formData.imageUrl;
 
@@ -1279,13 +1290,13 @@ async function loadSavedValues() {
       imageUploadPreview.style.display = formData.imageUrl ? 'block' : 'none';
     }
 
-    document.getElementById('enableVideo').checked = formData.enableVideo;
+    safeSetChecked('enableVideo', formData.enableVideo);
 
     videoUrlValue = formData.videoUrl || '';
     showVideoPreview(videoUrlValue);
 
     const videoThumbToggle = (typeof formData.enableVideoThumbnail === 'boolean') ? formData.enableVideoThumbnail : true;
-    document.getElementById('enableVideoThumbnail').checked = videoThumbToggle;
+    safeSetChecked('enableVideoThumbnail', videoThumbToggle);
 
     videoThumbnailDesktopValue = formData.videoThumbnailDesktop || '';
     videoThumbnailMobileValue = formData.videoThumbnailMobile || '';
@@ -1311,7 +1322,7 @@ async function loadSavedValues() {
     }
 
     // Завантажити дані інформаційного блоку
-    document.getElementById('infoEnableBrand').checked = formData.infoEnableBrand || false;
+    safeSetChecked('infoEnableBrand', formData.infoEnableBrand || false);
     document.getElementById('infoBrandLabel').value = formData.infoBrandLabel || '';
     document.getElementById('infoBrandValue').value = formData.infoBrandValue || '';
 
