@@ -1,4 +1,4 @@
-// Helper function для безпечного встановлення значень
+// Helper functions для безпечного встановлення та отримання значень
 function safeSetValue(id, value) {
   const el = document.getElementById(id);
   if (el) el.value = value;
@@ -7,6 +7,16 @@ function safeSetValue(id, value) {
 function safeSetChecked(id, checked) {
   const el = document.getElementById(id);
   if (el) el.checked = checked;
+}
+
+function safeGetValue(id, defaultValue = '') {
+  const el = document.getElementById(id);
+  return el ? el.value : defaultValue;
+}
+
+function safeGetChecked(id, defaultValue = false) {
+  const el = document.getElementById(id);
+  return el ? el.checked : defaultValue;
 }
 
 let uploadedHeroImageFilename = '';
@@ -898,27 +908,27 @@ async function saveFormToServer() {
 
   const formData = {
 
-    headerText: document.getElementById('headerText').value,
+    headerText: safeGetValue('headerText'),
 
-    heroTitle: document.getElementById('heroTitle').value,
+    heroTitle: safeGetValue('heroTitle'),
 
-    heroPrice: document.getElementById('heroPrice').value,
+    heroPrice: safeGetValue('heroPrice'),
 
-    enableTimer: document.getElementById('enableTimer').checked,
+    enableTimer: safeGetChecked('enableTimer'),
 
-    enableStock: document.getElementById('enableStock').checked,
+    enableStock: safeGetChecked('enableStock'),
 
     heroImage: uploadedHeroImageFilename,
 
-    enableImage: document.getElementById('enableImage').checked,
+    enableImage: safeGetChecked('enableImage'),
 
     imageUrl: imageUrlValue,
 
-    enableVideo: document.getElementById('enableVideo').checked,
+    enableVideo: safeGetChecked('enableVideo'),
 
     videoUrl: videoUrlValue,
 
-    enableVideoThumbnail: document.getElementById('enableVideoThumbnail').checked,
+    enableVideoThumbnail: safeGetChecked('enableVideoThumbnail'),
 
     videoThumbnailDesktop: videoThumbnailDesktopValue,
 
@@ -927,110 +937,110 @@ async function saveFormToServer() {
     sizeChartImage: sizeChartImageValue,
 
     // Info list (product characteristics)
-    infoEnableBrand: document.getElementById('infoEnableBrand').checked,
-    infoBrandLabel: document.getElementById('infoBrandLabel').value,
-    infoBrandValue: document.getElementById('infoBrandValue').value,
-    infoEnableModel: document.getElementById('infoEnableModel').checked,
-    infoModelLabel: document.getElementById('infoModelLabel').value,
-    infoModelValue: document.getElementById('infoModelValue').value,
-    infoEnableQuantity: document.getElementById('infoEnableQuantity').checked,
-    infoQuantityLabel: document.getElementById('infoQuantityLabel').value,
-    infoQuantityValue: document.getElementById('infoQuantityValue').value,
-    infoEnableColors: document.getElementById('infoEnableColors').checked,
-    infoColorsLabel: document.getElementById('infoColorsLabel').value,
-    infoEnableSizes: document.getElementById('infoEnableSizes').checked,
-    infoSizesLabel: document.getElementById('infoSizesLabel').value,
-    infoSizesValue: document.getElementById('infoSizesValue').value,
-    infoEnableMaterial: document.getElementById('infoEnableMaterial').checked,
-    infoMaterialLabel: document.getElementById('infoMaterialLabel').value,
-    infoMaterialValue: document.getElementById('infoMaterialValue').value,
-    infoEnablePackaging: document.getElementById('infoEnablePackaging').checked,
-    infoPackagingLabel: document.getElementById('infoPackagingLabel').value,
-    infoPackagingValue: document.getElementById('infoPackagingValue').value,
+    infoEnableBrand: safeGetChecked('infoEnableBrand'),
+    infoBrandLabel: safeGetValue('infoBrandLabel'),
+    infoBrandValue: safeGetValue('infoBrandValue'),
+    infoEnableModel: safeGetChecked('infoEnableModel'),
+    infoModelLabel: safeGetValue('infoModelLabel'),
+    infoModelValue: safeGetValue('infoModelValue'),
+    infoEnableQuantity: safeGetChecked('infoEnableQuantity'),
+    infoQuantityLabel: safeGetValue('infoQuantityLabel'),
+    infoQuantityValue: safeGetValue('infoQuantityValue'),
+    infoEnableColors: safeGetChecked('infoEnableColors'),
+    infoColorsLabel: safeGetValue('infoColorsLabel'),
+    infoEnableSizes: safeGetChecked('infoEnableSizes'),
+    infoSizesLabel: safeGetValue('infoSizesLabel'),
+    infoSizesValue: safeGetValue('infoSizesValue'),
+    infoEnableMaterial: safeGetChecked('infoEnableMaterial'),
+    infoMaterialLabel: safeGetValue('infoMaterialLabel'),
+    infoMaterialValue: safeGetValue('infoMaterialValue'),
+    infoEnablePackaging: safeGetChecked('infoEnablePackaging'),
+    infoPackagingLabel: safeGetValue('infoPackagingLabel'),
+    infoPackagingValue: safeGetValue('infoPackagingValue'),
 
     benefits: benefits,
 
     // Product data
 
-    product1Name: document.getElementById('product1Name').value,
+    product1Name: safeGetValue('product1Name'),
 
-    product1Color: document.getElementById('product1Color').value,
+    product1Color: safeGetValue('product1Color'),
 
-    product1ColorHex: document.getElementById('product1ColorHex').value,
+    product1ColorHex: safeGetValue('product1ColorHex'),
 
     product1Size: getSelectedSizesAsString(1),
 
-    product1Material: document.getElementById('product1Material').value,
+    product1Material: safeGetValue('product1Material'),
 
-    product1PriceOld: document.getElementById('product1PriceOld').value,
+    product1PriceOld: safeGetValue('product1PriceOld'),
 
-    product1Price: document.getElementById('product1Price').value,
+    product1Price: safeGetValue('product1Price'),
 
-    enableProduct1: document.getElementById('enableProduct1').checked,
+    enableProduct1: safeGetChecked('enableProduct1'),
 
-    product2Name: document.getElementById('product2Name').value,
+    product2Name: safeGetValue('product2Name'),
 
-    product2Color: document.getElementById('product2Color').value,
+    product2Color: safeGetValue('product2Color'),
 
-    product2ColorHex: document.getElementById('product2ColorHex').value,
+    product2ColorHex: safeGetValue('product2ColorHex'),
 
     product2Size: getSelectedSizesAsString(2),
 
-    product2Material: document.getElementById('product2Material').value,
+    product2Material: safeGetValue('product2Material'),
 
-    product2PriceOld: document.getElementById('product2PriceOld').value,
+    product2PriceOld: safeGetValue('product2PriceOld'),
 
-    product2Price: document.getElementById('product2Price').value,
+    product2Price: safeGetValue('product2Price'),
 
-    enableProduct2: document.getElementById('enableProduct2').checked,
+    enableProduct2: safeGetChecked('enableProduct2'),
 
-    product3Name: document.getElementById('product3Name').value,
+    product3Name: safeGetValue('product3Name'),
 
-    product3Color: document.getElementById('product3Color').value,
+    product3Color: safeGetValue('product3Color'),
 
-    product3ColorHex: document.getElementById('product3ColorHex').value,
+    product3ColorHex: safeGetValue('product3ColorHex'),
 
     product3Size: getSelectedSizesAsString(3),
 
-    product3Material: document.getElementById('product3Material').value,
+    product3Material: safeGetValue('product3Material'),
 
-    product3PriceOld: document.getElementById('product3PriceOld').value,
+    product3PriceOld: safeGetValue('product3PriceOld'),
 
-    product3Price: document.getElementById('product3Price').value,
+    product3Price: safeGetValue('product3Price'),
 
-    enableProduct3: document.getElementById('enableProduct3').checked,
+    enableProduct3: safeGetChecked('enableProduct3'),
 
-    product4Name: document.getElementById('product4Name').value,
+    product4Name: safeGetValue('product4Name'),
 
-    product4Color: document.getElementById('product4Color').value,
+    product4Color: safeGetValue('product4Color'),
 
-    product4ColorHex: document.getElementById('product4ColorHex').value,
+    product4ColorHex: safeGetValue('product4ColorHex'),
 
     product4Size: getSelectedSizesAsString(4),
 
-    product4Material: document.getElementById('product4Material').value,
+    product4Material: safeGetValue('product4Material'),
 
-    product4PriceOld: document.getElementById('product4PriceOld').value,
+    product4PriceOld: safeGetValue('product4PriceOld'),
 
-    product4Price: document.getElementById('product4Price').value,
+    product4Price: safeGetValue('product4Price'),
 
-    enableProduct4: document.getElementById('enableProduct4').checked,
+    enableProduct4: safeGetChecked('enableProduct4'),
 
-    product5Name: document.getElementById('product5Name').value,
+    product5Name: safeGetValue('product5Name'),
 
-    product5Color: document.getElementById('product5Color').value,
+    product5Color: safeGetValue('product5Color'),
 
-    product5ColorHex: document.getElementById('product5ColorHex').value,
+    product5ColorHex: safeGetValue('product5ColorHex'),
 
     product5Size: getSelectedSizesAsString(5),
 
-    product5Material: document.getElementById('product5Material').value,
+    product5Material: safeGetValue('product5Material'),
 
-    product5PriceOld: document.getElementById('product5PriceOld').value,
+    product5PriceOld: safeGetValue('product5PriceOld'),
 
-    product5Price: document.getElementById('product5Price').value,
+    product5Price: safeGetValue('product5Price'),
 
-    enableProduct5: document.getElementById('enableProduct5').checked,
+    enableProduct5: safeGetChecked('enableProduct5'),
 
     // Product images
 
@@ -1045,24 +1055,24 @@ async function saveFormToServer() {
     product5Images: product5Images,
 
     // Marketing products (bundles)
-    product8Name: document.getElementById('product8Name').value,
-    product8Color: document.getElementById('product8Color').value,
-    product8ColorHex: document.getElementById('product8ColorHex').value,
+    product8Name: safeGetValue('product8Name'),
+    product8Color: safeGetValue('product8Color'),
+    product8ColorHex: safeGetValue('product8ColorHex'),
     product8Size: getSelectedSizesAsString(8),
-    product8Material: document.getElementById('product8Material').value,
-    product8PriceOld: document.getElementById('product8PriceOld').value,
-    product8Price: document.getElementById('product8Price').value,
-    enableProduct8: document.getElementById('enableProduct8').checked,
+    product8Material: safeGetValue('product8Material'),
+    product8PriceOld: safeGetValue('product8PriceOld'),
+    product8Price: safeGetValue('product8Price'),
+    enableProduct8: safeGetChecked('enableProduct8'),
     product8Images: product8Images,
 
-    product9Name: document.getElementById('product9Name').value,
-    product9Color: document.getElementById('product9Color').value,
-    product9ColorHex: document.getElementById('product9ColorHex').value,
+    product9Name: safeGetValue('product9Name'),
+    product9Color: safeGetValue('product9Color'),
+    product9ColorHex: safeGetValue('product9ColorHex'),
     product9Size: getSelectedSizesAsString(9),
-    product9Material: document.getElementById('product9Material').value,
-    product9PriceOld: document.getElementById('product9PriceOld').value,
-    product9Price: document.getElementById('product9Price').value,
-    enableProduct9: document.getElementById('enableProduct9').checked,
+    product9Material: safeGetValue('product9Material'),
+    product9PriceOld: safeGetValue('product9PriceOld'),
+    product9Price: safeGetValue('product9Price'),
+    enableProduct9: safeGetChecked('enableProduct9'),
     product9Images: product9Images
 
   };
