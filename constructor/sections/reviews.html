@@ -1,0 +1,170 @@
+      <details class="form-section">
+        <summary class="form-section-header">⭐ Відгуки клієнтів (з фото)</summary>
+        <div class="form-section-content">
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+            <input
+              type="checkbox"
+              id="enableReviews"
+              name="enableReviews"
+              style="width: auto; margin: 0;"
+            />
+            <label for="enableReviews" style="margin: 0;">Показувати блок "Відгуки клієнтів"</label>
+          </div>
+
+          <div class="form-group">
+            <label for="reviewsLabel">Мітка секції</label>
+            <input
+              type="text"
+              id="reviewsLabel"
+              name="reviewsLabel"
+              value="Відгуки клієнтів"
+              placeholder="Напр.: Відгуки клієнтів"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="reviewsTitle">Заголовок секції</label>
+            <input
+              type="text"
+              id="reviewsTitle"
+              name="reviewsTitle"
+              value="Що кажуть наші клієнти"
+              placeholder="Напр.: Що кажуть наші клієнти"
+            />
+          </div>
+
+          <h3 style="margin-top: 20px; color: #555;">Відгук 1</h3>
+
+          <div class="form-group">
+            <label for="review1Name">Ім'я клієнта</label>
+            <input
+              type="text"
+              id="review1Name"
+              name="review1Name"
+              value=""
+              placeholder="Напр.: Олена К."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="review1Text">Текст відгуку</label>
+            <textarea
+              id="review1Text"
+              name="review1Text"
+              rows="3"
+              placeholder="Напр.: Чудові худі! Дуже теплі та комфортні."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="review1ImageUpload">🖼️ Фото до відгуку 1</label>
+            <input type="file" id="review1ImageUpload" accept="image/*" onchange="handleReview1ImageUpload(event)" />
+            <input type="hidden" id="review1Image" name="review1Image" value="" />
+            <small class="helper-text">Фото клієнта або товару</small>
+            <div id="review1ImagePreview" class="image-preview">
+              <div class="image-preview-empty">Фото не завантажено</div>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 20px; color: #555;">Відгук 2</h3>
+
+          <div class="form-group">
+            <label for="review2Name">Ім'я клієнта</label>
+            <input
+              type="text"
+              id="review2Name"
+              name="review2Name"
+              value=""
+              placeholder="Напр.: Марина П."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="review2Text">Текст відгуку</label>
+            <textarea
+              id="review2Text"
+              name="review2Text"
+              rows="3"
+              placeholder="Напр.: Відмінна якість тканини та пошиву."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="review2ImageUpload">🖼️ Фото до відгуку 2</label>
+            <input type="file" id="review2ImageUpload" accept="image/*" onchange="handleReview2ImageUpload(event)" />
+            <input type="hidden" id="review2Image" name="review2Image" value="" />
+            <small class="helper-text">Фото клієнта або товару</small>
+            <div id="review2ImagePreview" class="image-preview">
+              <div class="image-preview-empty">Фото не завантажено</div>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 20px; color: #555;">Відгук 3</h3>
+
+          <div class="form-group">
+            <label for="review3Name">Ім'я клієнта</label>
+            <input
+              type="text"
+              id="review3Name"
+              name="review3Name"
+              value=""
+              placeholder="Напр.: Анна С."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="review3Text">Текст відгуку</label>
+            <textarea
+              id="review3Text"
+              name="review3Text"
+              rows="3"
+              placeholder="Напр.: Дуже задоволена покупкою!"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="review3ImageUpload">🖼️ Фото до відгуку 3</label>
+            <input type="file" id="review3ImageUpload" accept="image/*" onchange="handleReview3ImageUpload(event)" />
+            <input type="hidden" id="review3Image" name="review3Image" value="" />
+            <small class="helper-text">Фото клієнта або товару</small>
+            <div id="review3ImagePreview" class="image-preview">
+              <div class="image-preview-empty">Фото не завантажено</div>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 20px; color: #555;">Відгук 4</h3>
+
+          <div class="form-group">
+            <label for="review4Name">Ім'я клієнта</label>
+            <input
+              type="text"
+              id="review4Name"
+              name="review4Name"
+              value=""
+              placeholder="Напр.: Юлія В."
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="review4Text">Текст відгуку</label>
+            <textarea
+              id="review4Text"
+              name="review4Text"
+              rows="3"
+              placeholder="Напр.: Рекомендую всім подругам!"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="review4ImageUpload">🖼️ Фото до відгуку 4</label>
+            <input type="file" id="review4ImageUpload" accept="image/*" onchange="handleReview4ImageUpload(event)" />
+            <input type="hidden" id="review4Image" name="review4Image" value="" />
+            <small class="helper-text">Фото клієнта або товару</small>
+            <div id="review4ImagePreview" class="image-preview">
+              <div class="image-preview-empty">Фото не завантажено</div>
+            </div>
+          </div>
+
+        </div>
+      </details>
