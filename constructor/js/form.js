@@ -1605,11 +1605,13 @@ function showVideoThumbnailPreview(imagePath) {
 
 // Обробка завантаження фото
 
-document.getElementById('heroImage').addEventListener('change', async function(e) {
+const heroImageEl = document.getElementById('heroImage');
+if (heroImageEl) {
+  heroImageEl.addEventListener('change', async function(e) {
 
-  const file = e.target.files[0];
+    const file = e.target.files[0];
 
-  if (!file) return;
+    if (!file) return;
 
 
 
@@ -1655,13 +1657,16 @@ document.getElementById('heroImage').addEventListener('change', async function(e
 
   }
 
-});
+  });
+}
 
 
 
 // Обробка завантаження фото для plus-logo блоку
 
-document.getElementById('imageUpload').addEventListener('change', async function(e) {
+const imageUploadEl = document.getElementById('imageUpload');
+if (imageUploadEl) {
+  imageUploadEl.addEventListener('change', async function(e) {
 
   const file = e.target.files[0];
 
@@ -1707,7 +1712,8 @@ document.getElementById('imageUpload').addEventListener('change', async function
 
   }
 
-});
+  });
+}
 
 const videoUploadInput = document.getElementById('videoUpload');
 if (videoUploadInput) {
@@ -2021,13 +2027,16 @@ function previewSite() {
 
 
 
-document.getElementById('constructorForm').addEventListener('submit', function(e) {
+const constructorFormEl = document.getElementById('constructorForm');
+if (constructorFormEl) {
+  constructorFormEl.addEventListener('submit', function(e) {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const params = getFormParams();
+    const params = getFormParams();
 
-  window.location.href = '/export?' + params;
+    window.location.href = '/export?' + params;
 
-});
+  });
+}
 
