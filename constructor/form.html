@@ -99,10 +99,10 @@
 
     <!-- Кнопки керування збереженням (закріплені при скролінгу) -->
     <div class="buttons-management">
-      <button type="button" class="button button-secondary" onclick="saveFormToServer()" style="flex: 1;">
+      <button type="button" id="saveButton" class="button button-secondary" onclick="saveFormToServer()" style="flex: 1;" disabled title="Спочатку завантажте дані">
         💾 Зберегти
       </button>
-      <button type="button" class="button button-secondary" onclick="loadSavedValues()" style="flex: 1;">
+      <button type="button" id="loadButton" class="button button-secondary" onclick="loadSavedValues()" style="flex: 1;">
         📂 Завантажити останні зміни
       </button>
     </div>

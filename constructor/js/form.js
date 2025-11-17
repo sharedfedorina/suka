@@ -1445,6 +1445,13 @@ async function loadSavedValues() {
 
     console.log('📂 Завантажені збережені значення:', formData);
 
+    // Активувати кнопку "Зберегти" після успішного завантаження
+    const saveButton = document.getElementById('saveButton');
+    if (saveButton) {
+      saveButton.disabled = false;
+      saveButton.title = 'Зберегти зміни в конфігурацію';
+    }
+
     alert('✅ Завантажені ваші останні зміни!');
 
   } catch (error) {
