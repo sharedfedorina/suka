@@ -748,10 +748,18 @@ app.post('/api/save-config', express.json(), (req, res) => {
     const configPath = path.join(__dirname, 'data', 'user-config.json');
     const configData = req.body;
 
+    // АВТОМАТИЧНИЙ BACKUP перед збереженням
+    if (fs.existsSync(configPath)) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+      const backupPath = path.join(__dirname, 'data', `user-config.backup-${timestamp}.json`);
+      fs.copyFileSync(configPath, backupPath);
+      console.log(`📦 Створено backup: ${backupPath}`);
+    }
+
     // Записати з явним UTF-8 кодуванням
     const jsonContent = JSON.stringify(configData, null, 2);
     fs.writeFileSync(configPath, jsonContent, { encoding: 'utf8' });
-    console.log(`✅ Конфігурація збережена на сервері:`, configData);
+    console.log(`✅ Конфігурація збережена на сервері`);
     res.json({ success: true, message: 'Конфігурація збережена' });
   } catch (err) {
     console.error('❌ Помилка при збереженні конфігурації:', err.message);
