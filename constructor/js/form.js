@@ -1733,20 +1733,29 @@ if (videoThumbnailUploadInput) {
 
 
 function getFormParams() {
+  try {
+    console.log('📝 getFormParams: Starting...');
 
-  const headerText = document.getElementById('headerText').value;
+    const headerText = safeGetValue('headerText', '');
+    console.log('✓ headerText:', headerText);
 
-  const heroTitle = document.getElementById('heroTitle').value;
+    const heroTitle = safeGetValue('heroTitle', '');
+    console.log('✓ heroTitle:', heroTitle);
 
-  const heroPrice = document.getElementById('heroPrice').value;
+    const heroPrice = safeGetValue('heroPrice', '');
+    console.log('✓ heroPrice:', heroPrice);
 
-  const enableTimer = document.getElementById('enableTimer').checked ? 'on' : 'off';
+    const enableTimer = safeGetChecked('enableTimer', false) ? 'on' : 'off';
+    console.log('✓ enableTimer:', enableTimer);
 
-  const enableStock = document.getElementById('enableStock').checked ? 'on' : 'off';
+    const enableStock = safeGetChecked('enableStock', false) ? 'on' : 'off';
+    console.log('✓ enableStock:', enableStock);
 
-  const heroImage = uploadedHeroImageFilename;
+    const heroImage = uploadedHeroImageFilename || '';
+    console.log('✓ heroImage:', heroImage);
 
-  const enableImage = document.getElementById('enableImage').checked ? 'on' : 'off';
+    const enableImage = safeGetChecked('enableImage', false) ? 'on' : 'off';
+    console.log('✓ enableImage:', enableImage);
 
   const imageUrl = imageUrlValue;
   const enableVideo = document.getElementById('enableVideo').checked ? 'on' : 'off';
@@ -1960,35 +1969,72 @@ function getFormParams() {
 
 
 
-  return params.toString();
+    console.log('✅ getFormParams: Success! Returning params...');
+    return params.toString();
 
+  } catch (error) {
+    console.error('❌ getFormParams ERROR:', error);
+    console.error('❌ Stack:', error.stack);
+    throw new Error('Помилка в getFormParams: ' + error.message);
+  }
 }
 
 
 
 function previewSite() {
   // Use POST instead of GET to avoid URL length limits
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = '/generate';
-  form.target = '_blank';
-  form.style.display = 'none';
+  console.log('🔍 Preview button clicked');
 
-  // Get all form data as URLSearchParams
-  const params = new URLSearchParams(getFormParams());
+  try {
+    console.log('📊 Step 1: Getting form params...');
+    const paramsString = getFormParams();
 
-  // Add each parameter as hidden input
-  for (const [key, value] of params) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = value;
-    form.appendChild(input);
+    if (!paramsString) {
+      throw new Error('getFormParams() повернув порожній результат');
+    }
+
+    console.log('✅ Step 1 OK: Form params length:', paramsString.length);
+
+    console.log('📊 Step 2: Parsing URLSearchParams...');
+    const params = new URLSearchParams(paramsString);
+    const paramsCount = Array.from(params).length;
+    console.log('✅ Step 2 OK: Total params:', paramsCount);
+
+    if (paramsCount === 0) {
+      throw new Error('Немає параметрів для відправки');
+    }
+
+    console.log('📊 Step 3: Creating form...');
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/generate';
+    form.target = '_blank';
+    form.style.display = 'none';
+    console.log('✅ Step 3 OK: Form created');
+
+    console.log('📊 Step 4: Adding hidden inputs...');
+    let inputCount = 0;
+    for (const [key, value] of params) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+      inputCount++;
+    }
+    console.log('✅ Step 4 OK: Added', inputCount, 'inputs');
+
+    console.log('📊 Step 5: Submitting form...');
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    console.log('✅ Step 5 OK: Form submitted successfully!');
+
+  } catch (error) {
+    console.error('❌ ERROR:', error);
+    console.error('❌ Stack:', error.stack);
+    alert('ПОМИЛКА:\n\n' + error.message + '\n\nДивись консоль (F12) для деталей');
   }
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
 }
 
 

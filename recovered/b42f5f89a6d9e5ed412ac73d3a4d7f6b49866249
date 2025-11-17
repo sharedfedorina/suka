@@ -1,0 +1,2114 @@
+﻿const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const archiver = require('archiver');
+const multer = require('multer');
+const sharp = require('sharp');
+
+const app = express();
+const PORT = 6614;
+
+app.use(express.json());
+
+// GET / - РЎРµСЂРІС–СЂСѓРІР°РЅРЅСЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° Р· РѕРєСЂРµРјРёС… С„Р°Р№Р»С–РІ
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'form.html'));
+});
+
+app.use(express.static(__dirname, { index: false }));
+
+// РќР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ multer РґР»СЏ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ С„РѕС‚Рѕ
+const heroImageDir = path.join(__dirname, 'public', 'img', 'hero');
+if (!fs.existsSync(heroImageDir)) {
+  fs.mkdirSync(heroImageDir, { recursive: true });
+}
+
+const imageDir = path.join(__dirname, 'public', 'img', 'image');
+if (!fs.existsSync(imageDir)) {
+  fs.mkdirSync(imageDir, { recursive: true });
+}
+
+const videoDir = path.join(__dirname, 'video');
+if (!fs.existsSync(videoDir)) {
+  fs.mkdirSync(videoDir, { recursive: true });
+}
+
+const videoThumbnailDir = path.join(__dirname, 'public', 'img', 'video');
+if (!fs.existsSync(videoThumbnailDir)) {
+  fs.mkdirSync(videoThumbnailDir, { recursive: true });
+}
+
+const productsImageDir = path.join(__dirname, 'public', 'img', 'products');
+if (!fs.existsSync(productsImageDir)) {
+  fs.mkdirSync(productsImageDir, { recursive: true });
+}
+const productImageDir = productsImageDir; // Alias РґР»СЏ СЃСѓРјС–СЃРЅРѕСЃС‚С–
+
+const sizeChartImageDir = path.join(__dirname, 'public', 'img', 'info');
+if (!fs.existsSync(sizeChartImageDir)) {
+  fs.mkdirSync(sizeChartImageDir, { recursive: true });
+}
+
+const DEFAULT_VIDEO_THUMBNAIL_DESKTOP = 'img/promo/promo-1.jpg';
+const DEFAULT_VIDEO_THUMBNAIL_MOBILE = 'img/promo/promo-1_m.webp';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, heroImageDir);
+  },
+  filename: (req, file, cb) => {
+    // Р—Р±РµСЂС–РіР°С”РјРѕ Р· РѕРґРёРЅР°РєРѕРІРёРј С–Рј'СЏРј, РѕС‚СЂРёРјСѓС”РјРѕ СЂРѕР·С€РёСЂРµРЅРЅСЏ Р· РѕСЂРёРіС–РЅР°Р»Сѓ
+    const ext = path.extname(file.originalname);
+    cb(null, 'custom-hero' + ext);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB РјР°РєСЃРёРјСѓРј
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('РўС–Р»СЊРєРё Р·РѕР±СЂР°Р¶РµРЅРЅСЏ РґРѕР·РІРѕР»РµРЅС–'));
+    }
+  }
+});
+
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, imageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, 'custom-image' + ext);
+  }
+});
+
+const uploadImage = multer({
+  storage: imageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB РјР°РєСЃРёРјСѓРј
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('РўС–Р»СЊРєРё Р·РѕР±СЂР°Р¶РµРЅРЅСЏ РґРѕР·РІРѕР»РµРЅС–'));
+    }
+  }
+});
+
+const videoStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, videoDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.mp4';
+    const timestamp = Date.now();
+    cb(null, 'custom-video-' + timestamp + ext);
+  }
+});
+
+const uploadVideo = multer({
+  storage: videoStorage,
+  limits: { fileSize: 30 * 1024 * 1024 }, // 30MB ?????
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('video/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('????????? ???? ??????????'));
+    }
+  }
+});
+
+
+const videoThumbnailStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, videoThumbnailDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'custom-video-thumb-' + timestamp + ext);
+  }
+});
+
+const uploadVideoThumbnail = multer({
+  storage: videoThumbnailStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('РќРµРїСЂРёРїСѓСЃС‚РёРјРёР№ С„РѕСЂРјР°С‚ РїСЂРµРІ\'СЋ'));
+    }
+  }
+});
+
+const productImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, productsImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'product-' + timestamp + ext);
+  }
+});
+
+const uploadProductImage = multer({
+  storage: productImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB РјР°РєСЃРёРјСѓРј
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('РўС–Р»СЊРєРё Р·РѕР±СЂР°Р¶РµРЅРЅСЏ РґРѕР·РІРѕР»РµРЅС–'));
+    }
+  }
+});
+
+const sizeChartImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, sizeChartImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'size-chart-' + timestamp + ext);
+  }
+});
+
+const uploadSizeChartImage = multer({
+  storage: sizeChartImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB РјР°РєСЃРёРјСѓРј
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('РўС–Р»СЊРєРё Р·РѕР±СЂР°Р¶РµРЅРЅСЏ РґРѕР·РІРѕР»РµРЅС–'));
+    }
+  }
+});
+
+function parseArrayParam(value, fallback = []) {
+  if (!value) {
+    return fallback;
+  }
+
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch (err) {
+    try {
+      return JSON.parse(decodeURIComponent(value));
+    } catch (parseErr) {
+      console.error('Failed to parse array param:', parseErr.message);
+      return fallback;
+    }
+  }
+}
+
+
+// Р¤СѓРЅРєС†С–СЏ РґР»СЏ РіРµРЅРµСЂСѓРІР°РЅРЅСЏ СЃР»Р°Р№РґС–РІ Р· РјР°СЃРёРІСѓ Р·РѕР±СЂР°Р¶РµРЅСЊ
+
+function resolveToggle(optionValue, dataValue, defaultValue = false) {
+  const normalize = (value) => {
+    if (typeof value === 'string') {
+      const normalized = value.trim().toLowerCase();
+      return normalized === 'on' || normalized === 'true' || normalized === '1';
+    }
+    return Boolean(value);
+  };
+
+  if (optionValue !== undefined) {
+    return normalize(optionValue);
+  }
+
+  if (dataValue !== undefined) {
+    return normalize(dataValue);
+  }
+
+  return defaultValue;
+}
+
+function generateSlides(images = []) {
+  if (!Array.isArray(images) || images.length === 0) {
+    return '';
+  }
+
+  return images.map(imagePath => {
+    // Remove leading slash for relative paths in generated HTML
+    const desktopPath = imagePath.replace(/^\//, '');
+
+    // Generate mobile path: replace .jpg with _m.webp
+    const mobilePath = desktopPath.replace(/\.jpg$/, '_m.webp');
+
+    // Desktop gets JPG, mobile gets WebP
+    return `          <div class="swiper-slide products-slide">
+           <picture>
+            <source srcset="${desktopPath}" media="(min-width: 800px)">
+            <img src="${mobilePath}" alt="img">
+           </picture>
+          </div>`;
+  }).join('');
+}
+
+// Р¤СѓРЅРєС†С–СЏ РґР»СЏ РіРµРЅРµСЂСѓРІР°РЅРЅСЏ HTML Р· РґР°РЅРёС…
+function generateHTML(dataObj, options = {}) {
+  try {
+    const templatePath = path.join(__dirname, 'index.html');
+    let html = fs.readFileSync(templatePath, 'utf8');
+
+    // Р—Р°РјС–РЅРёС‚Рё РїР»РµР№СЃС…РѕР»РґРµСЂРё РґР»СЏ С…РµРґРµСЂ С‚РµРєСЃС‚, С‚РёС‚Р», С†С–РЅР°
+
+    // Auto-generated missing parameters
+    const enableProduct1 = resolveToggle(options.enableProduct1, dataObj.enableProduct1, true);
+    const enableProduct2 = resolveToggle(options.enableProduct2, dataObj.enableProduct2, true);
+    const enableProduct3 = resolveToggle(options.enableProduct3, dataObj.enableProduct3, false);
+    const enableProduct4 = resolveToggle(options.enableProduct4, dataObj.enableProduct4, false);
+    const enableProduct5 = resolveToggle(options.enableProduct5, dataObj.enableProduct5, false);
+    const product1Images = options.product1Images || dataObj.product1Images || [];
+    const product2Images = options.product2Images || dataObj.product2Images || [];
+    const product3Images = options.product3Images || dataObj.product3Images || [];
+    const product4Images = options.product4Images || dataObj.product4Images || [];
+    const product5Images = options.product5Images || dataObj.product5Images || [];
+    const enableTabs = resolveToggle(options.enableTabs, dataObj.enableTabs, true);
+    const tabsLabel = (options.tabsLabel && options.tabsLabel.trim()) ? options.tabsLabel : (dataObj.tabsLabel || '');
+    const tabsTitle = (options.tabsTitle && options.tabsTitle.trim()) ? options.tabsTitle : (dataObj.tabsTitle || '');
+    const enableTabItem1 = resolveToggle(options.enableTabItem1, dataObj.enableTabItem1, true);
+    const tab1Description = (options.tab1Description && options.tab1Description.trim()) ? options.tab1Description : (dataObj.tab1Description || '');
+    const enableTabItem2 = resolveToggle(options.enableTabItem2, dataObj.enableTabItem2, true);
+    const tab2Description = (options.tab2Description && options.tab2Description.trim()) ? options.tab2Description : (dataObj.tab2Description || '');
+    const enableTabItem3 = resolveToggle(options.enableTabItem3, dataObj.enableTabItem3, true);
+    const tab3Description = (options.tab3Description && options.tab3Description.trim()) ? options.tab3Description : (dataObj.tab3Description || '');
+    const enableTimer = resolveToggle(options.enableTimer, dataObj.enableTimer, true);
+        const enableStock = resolveToggle(options.enableStock, dataObj.enableStock, true);
+        const enableImageBlock = resolveToggle(options.enableImage, dataObj.enableImage, true);
+        const enableVideoBlock = resolveToggle(options.enableVideo, dataObj.enableVideo, false);
+        const enableVideoThumbnailBlock = resolveToggle(options.enableVideoThumbnail, dataObj.enableVideoThumbnail, true);
+        const enableProduct8 = resolveToggle(options.enableProduct8, dataObj.enableProduct8, true);
+        const enableProduct9 = resolveToggle(options.enableProduct9, dataObj.enableProduct9, false);
+    const faqImage = (options.faqImage && options.faqImage.trim()) ? options.faqImage : (dataObj.faqImage || '');
+    const enableFaqItem1 = resolveToggle(options.enableFaqItem1, dataObj.enableFaqItem1, true);
+    const faqItem1Title = (options.faqItem1Title && options.faqItem1Title.trim()) ? options.faqItem1Title : (dataObj.faqItem1Title || '');
+    const faqItem1Description = (options.faqItem1Description && options.faqItem1Description.trim()) ? options.faqItem1Description : (dataObj.faqItem1Description || '');
+    const enableFaqItem2 = resolveToggle(options.enableFaqItem2, dataObj.enableFaqItem2, true);
+    const faqItem2Title = (options.faqItem2Title && options.faqItem2Title.trim()) ? options.faqItem2Title : (dataObj.faqItem2Title || '');
+    const faqItem2Description = (options.faqItem2Description && options.faqItem2Description.trim()) ? options.faqItem2Description : (dataObj.faqItem2Description || '');
+    const enableFaqItem3 = resolveToggle(options.enableFaqItem3, dataObj.enableFaqItem3, true);
+    const faqItem3Title = (options.faqItem3Title && options.faqItem3Title.trim()) ? options.faqItem3Title : (dataObj.faqItem3Title || '');
+    const faqItem3Description = (options.faqItem3Description && options.faqItem3Description.trim()) ? options.faqItem3Description : (dataObj.faqItem3Description || '');
+    const enableFaqItem4 = resolveToggle(options.enableFaqItem4, dataObj.enableFaqItem4, true);
+    const faqItem4Title = (options.faqItem4Title && options.faqItem4Title.trim()) ? options.faqItem4Title : (dataObj.faqItem4Title || '');
+    const faqItem4Description = (options.faqItem4Description && options.faqItem4Description.trim()) ? options.faqItem4Description : (dataObj.faqItem4Description || '');
+    const howStep1 = (options.howStep1 && options.howStep1.trim()) ? options.howStep1 : (dataObj.howStep1 || '');
+    const howStep2 = (options.howStep2 && options.howStep2.trim()) ? options.howStep2 : (dataObj.howStep2 || '');
+    const howStep3 = (options.howStep3 && options.howStep3.trim()) ? options.howStep3 : (dataObj.howStep3 || '');
+    const howStep4 = (options.howStep4 && options.howStep4.trim()) ? options.howStep4 : (dataObj.howStep4 || '');
+    const commentsImages = options.commentsImages || dataObj.commentsImages || [];
+    const enableAutoPopup = resolveToggle(options.enableAutoPopup, dataObj.enableAutoPopup, false);
+    const autoPopupDelay = (options.autoPopupDelay && options.autoPopupDelay.trim()) ? options.autoPopupDelay : (dataObj.autoPopupDelay || '350');
+    const popupLabel = (options.popupLabel && options.popupLabel.trim()) ? options.popupLabel : (dataObj.popupLabel || '');
+    const popupTitle = (options.popupTitle && options.popupTitle.trim()) ? options.popupTitle : (dataObj.popupTitle || '');
+    const popupButtonText = (options.popupButtonText && options.popupButtonText.trim()) ? options.popupButtonText : (dataObj.popupButtonText || 'Р—РђРњРћР’РРўР');
+    const popupSuccessMessage = (options.popupSuccessMessage && options.popupSuccessMessage.trim()) ? options.popupSuccessMessage : (dataObj.popupSuccessMessage || '');
+    const popupNamePlaceholder = (options.popupNamePlaceholder && options.popupNamePlaceholder.trim()) ? options.popupNamePlaceholder : (dataObj.popupNamePlaceholder || '');
+    const popupPhonePlaceholder = (options.popupPhonePlaceholder && options.popupPhonePlaceholder.trim()) ? options.popupPhonePlaceholder : (dataObj.popupPhonePlaceholder || '');
+    const footerLink1 = (options.footerLink1 && options.footerLink1.trim()) ? options.footerLink1 : (dataObj.footerLink1 || '');
+    const footerLink2 = (options.footerLink2 && options.footerLink2.trim()) ? options.footerLink2 : (dataObj.footerLink2 || '');
+    const footerLink3 = (options.footerLink3 && options.footerLink3.trim()) ? options.footerLink3 : (dataObj.footerLink3 || '');
+    const salesdriveApiKey = (options.salesdriveApiKey && options.salesdriveApiKey.trim()) ? options.salesdriveApiKey : (dataObj.salesdriveApiKey || '');
+    const salesdriveEndpoint = (options.salesdriveEndpoint && options.salesdriveEndpoint.trim()) ? options.salesdriveEndpoint : (dataObj.salesdriveEndpoint || '');
+    const salesdriveFunnelId = (options.salesdriveFunnelId && options.salesdriveFunnelId.trim()) ? options.salesdriveFunnelId : (dataObj.salesdriveFunnelId || '1');
+    const metaPixelId = (options.metaPixelId && options.metaPixelId.trim()) ? options.metaPixelId : (dataObj.metaPixelId || '');
+    const metaAccessToken = (options.metaAccessToken && options.metaAccessToken.trim()) ? options.metaAccessToken : (dataObj.metaAccessToken || '');
+    const metaTestEventCode = (options.metaTestEventCode && options.metaTestEventCode.trim()) ? options.metaTestEventCode : (dataObj.metaTestEventCode || '');
+    const productId = (options.productId && options.productId.trim()) ? options.productId : (dataObj.productId || 'w.2.02');
+    const sku = (options.sku && options.sku.trim()) ? options.sku : (dataObj.sku || 'w.2.02');
+    const website = (options.website && options.website.trim()) ? options.website : (dataObj.website || 'hoodie');
+    html = html.replace(/\{\{tabsLabel\}\}/g, tabsLabel);
+    html = html.replace(/\{\{tabsTitle\}\}/g, tabsTitle);
+    html = html.replace(/\{\{tab1Description\}\}/g, tab1Description);
+    html = html.replace(/\{\{tab2Description\}\}/g, tab2Description);
+    html = html.replace(/\{\{tab3Description\}\}/g, tab3Description);
+    html = html.replace(/\{\{faqImage\}\}/g, faqImage);
+    html = html.replace(/\{\{faqItem1Title\}\}/g, faqItem1Title);
+    html = html.replace(/\{\{faqItem1Description\}\}/g, faqItem1Description);
+    html = html.replace(/\{\{faqItem2Title\}\}/g, faqItem2Title);
+    html = html.replace(/\{\{faqItem2Description\}\}/g, faqItem2Description);
+    html = html.replace(/\{\{faqItem3Title\}\}/g, faqItem3Title);
+    html = html.replace(/\{\{faqItem3Description\}\}/g, faqItem3Description);
+    html = html.replace(/\{\{faqItem4Title\}\}/g, faqItem4Title);
+    html = html.replace(/\{\{faqItem4Description\}\}/g, faqItem4Description);
+    html = html.replace(/\{\{howStep1\}\}/g, howStep1);
+    html = html.replace(/\{\{howStep2\}\}/g, howStep2);
+    html = html.replace(/\{\{howStep3\}\}/g, howStep3);
+    html = html.replace(/\{\{howStep4\}\}/g, howStep4);
+    html = html.replace(/\{\{autoPopupDelay\}\}/g, autoPopupDelay);
+    html = html.replace(/\{\{popupLabel\}\}/g, popupLabel);
+    html = html.replace(/\{\{popupTitle\}\}/g, popupTitle);
+    html = html.replace(/\{\{popupButtonText\}\}/g, popupButtonText);
+    html = html.replace(/\{\{popupSuccessMessage\}\}/g, popupSuccessMessage);
+    html = html.replace(/\{\{popupNamePlaceholder\}\}/g, popupNamePlaceholder);
+    html = html.replace(/\{\{popupPhonePlaceholder\}\}/g, popupPhonePlaceholder);
+    html = html.replace(/\{\{footerLink1\}\}/g, footerLink1);
+    html = html.replace(/\{\{footerLink2\}\}/g, footerLink2);
+    html = html.replace(/\{\{footerLink3\}\}/g, footerLink3);
+    html = html.replace(/\{\{salesdriveApiKey\}\}/g, salesdriveApiKey);
+    html = html.replace(/\{\{salesdriveEndpoint\}\}/g, salesdriveEndpoint);
+    html = html.replace(/\{\{salesdriveFunnelId\}\}/g, salesdriveFunnelId);
+    html = html.replace(/\{\{metaPixelId\}\}/g, metaPixelId);
+    html = html.replace(/\{\{metaAccessToken\}\}/g, metaAccessToken);
+    html = html.replace(/\{\{metaTestEventCode\}\}/g, metaTestEventCode);
+    html = html.replace(/\{\{productId\}\}/g, productId);
+    html = html.replace(/\{\{sku\}\}/g, sku);
+    html = html.replace(/\{\{website\}\}/g, website);
+
+    const finalHeaderText = (options.headerText && options.headerText.trim()) ? options.headerText : (dataObj.headerText || '');
+    const finalHeroTitle = (options.heroTitle && options.heroTitle.trim()) ? options.heroTitle : (dataObj.heroTitle || '');
+    const finalHeroPrice = (options.heroPrice && options.heroPrice.trim()) ? options.heroPrice : (dataObj.heroPrice ?? dataObj.hero?.price ?? '');
+    const finalStockCount = (options.stockCount && options.stockCount.toString().trim()) ? options.stockCount : (dataObj.stockCount ?? dataObj.hero?.stock_count ?? '19');
+
+    html = html.replace('{{headerText}}', finalHeaderText);
+    html = html.replace('{{heroTitle}}', finalHeroTitle);
+    html = html.replace('{{heroPrice}}', finalHeroPrice);
+    html = html.replace('{{stockCount}}', finalStockCount);
+
+    // Р’РёРґР°Р»РёС‚Рё С‚Р°Р№РјРµСЂ СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ
+    if (!enableTimer) {
+      // Р’РёРґР°Р»РёС‚Рё РІРµСЃСЊ Р±Р»РѕРє Р·Р° РґРѕРїРѕРјРѕРіРѕСЋ HTML РєРѕРјРµРЅС‚Р°СЂС–РІ
+      html = html.replace(/\s*<!--\s*timer\s*-->[\s\S]*?<!--\s*\/timer\s*-->\s*/g, '');
+    }
+
+    // Р’РёРґР°Р»РёС‚Рё Р±Р»РѕРє "Р—Р°Р»РёС€РёР»РѕСЃСЊ X С„СѓС‚Р±РѕР»РѕРє" СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ
+    if (!enableStock) {
+      // Р’РёРґР°Р»РёС‚Рё РІРµСЃСЊ Р±Р»РѕРє Р·Р° РґРѕРїРѕРјРѕРіРѕСЋ HTML РєРѕРјРµРЅС‚Р°СЂС–РІ
+      html = html.replace(/\s*<!--\s*stock\s*-->[\s\S]*?<!--\s*\/stock\s*-->\s*/g, '');
+    }
+
+    // HEAD meta tags
+    const pageTitle = (options.pageTitle && options.pageTitle.trim()) ? options.pageTitle : (dataObj.pageTitle || '');
+    const metaDescription = (options.metaDescription && options.metaDescription.trim()) ? options.metaDescription : (dataObj.metaDescription || '');
+    const ogUrl = (options.ogUrl && options.ogUrl.trim()) ? options.ogUrl : (dataObj.ogUrl || '');
+    const ogTitle = (options.ogTitle && options.ogTitle.trim()) ? options.ogTitle : (dataObj.ogTitle || '');
+    const ogSiteName = (options.ogSiteName && options.ogSiteName.trim()) ? options.ogSiteName : (dataObj.ogSiteName || '');
+    const ogDescription = (options.ogDescription && options.ogDescription.trim()) ? options.ogDescription : (dataObj.ogDescription || '');
+    const ogImage = (options.ogImage && options.ogImage.trim()) ? options.ogImage : (dataObj.ogImage || '');
+    const facebookPixelId = (options.facebookPixelId && options.facebookPixelId.trim()) ? options.facebookPixelId : (dataObj.facebookPixelId || '');
+
+    html = html.replace(/\{\{pageTitle\}\}/g, pageTitle);
+    html = html.replace(/\{\{metaDescription\}\}/g, metaDescription);
+    html = html.replace(/\{\{ogUrl\}\}/g, ogUrl);
+    html = html.replace(/\{\{ogTitle\}\}/g, ogTitle);
+    html = html.replace(/\{\{ogSiteName\}\}/g, ogSiteName);
+    html = html.replace(/\{\{ogDescription\}\}/g, ogDescription);
+    html = html.replace(/\{\{ogImage\}\}/g, ogImage);
+    html = html.replace(/\{\{facebookPixelId\}\}/g, facebookPixelId);
+
+    // Hero section
+    const rawHeroImage = (options.heroImage && options.heroImage.trim()) ? options.heroImage : (dataObj.heroImage || '');
+    const heroImage = rawHeroImage.replace(/^\//, '').replace(/^public\//, '');
+    const heroImageMobile = heroImage.replace(/\.jpg$/, '_m.webp').replace(/\.png$/, '_m.webp');
+    const heroButtonText = (options.heroButtonText && options.heroButtonText.trim()) ? options.heroButtonText : (dataObj.heroButtonText || 'Р’РР‘Р РђРўР');
+    const timerText = (options.timerText && options.timerText.trim()) ? options.timerText : (dataObj.timerText || '');
+
+    html = html.replace(/\{\{heroImage\}\}/g, heroImage);
+    html = html.replace(/\{\{heroImageMobile\}\}/g, heroImageMobile);
+    html = html.replace(/\{\{heroButtonText\}\}/g, heroButtonText);
+    html = html.replace(/\{\{timerText\}\}/g, timerText);
+
+    // Action section
+    const actionChooseText = (options.actionChooseText && options.actionChooseText.trim()) ? options.actionChooseText : (dataObj.actionChooseText || '');
+    const actionPromoText = (options.actionPromoText && options.actionPromoText.trim()) ? options.actionPromoText : (dataObj.actionPromoText || '');
+
+    html = html.replace(/\{\{actionChooseText\}\}/g, actionChooseText);
+    html = html.replace(/\{\{actionPromoText\}\}/g, actionPromoText);
+
+    // Plus logo section
+    const rawImageUrlDesktop = (options.imageUrl && options.imageUrl.trim()) ? options.imageUrl : (dataObj.imageUrl || '');
+    const imageUrlDesktop = rawImageUrlDesktop.replace(/^\//, '').replace(/^public\//, '');
+    const imageUrlMobile = imageUrlDesktop.replace(/\.jpg$/, '_m.webp').replace(/\.png$/, '_m.webp');
+
+    html = html.replace(/\{\{imageUrlDesktop\}\}/g, imageUrlDesktop);
+    html = html.replace(/\{\{imageUrlMobile\}\}/g, imageUrlMobile);
+
+    // Video section
+    const videoSectionLabel = (options.videoSectionLabel && options.videoSectionLabel.trim()) ? options.videoSectionLabel : (dataObj.videoSectionLabel || 'Р’С–РґРµРѕРѕРіР»СЏРґ');
+    const videoSectionTitle = (options.videoSectionTitle && options.videoSectionTitle.trim()) ? options.videoSectionTitle : (dataObj.videoSectionTitle || '');
+
+    html = html.replace(/\{\{videoSectionLabel\}\}/g, videoSectionLabel);
+    html = html.replace(/\{\{videoSectionTitle\}\}/g, videoSectionTitle);
+
+    // Products section
+    const productsSectionLabel = (options.productsSectionLabel && options.productsSectionLabel.trim()) ? options.productsSectionLabel : (dataObj.productsSectionLabel || '');
+    const productsSectionTitle = (options.productsSectionTitle && options.productsSectionTitle.trim()) ? options.productsSectionTitle : (dataObj.productsSectionTitle || '');
+    const productOrderButtonText = (options.productOrderButtonText && options.productOrderButtonText.trim()) ? options.productOrderButtonText : (dataObj.productOrderButtonText || 'Р—РђРњРћР’РРўР');
+
+    html = html.replace(/\{\{productsSectionLabel\}\}/g, productsSectionLabel);
+    html = html.replace(/\{\{productsSectionTitle\}\}/g, productsSectionTitle);
+    html = html.replace(/\{\{productOrderButtonText\}\}/g, productOrderButtonText);
+
+    // Size chart section
+    const sizeChartLabel = (options.sizeChartLabel && options.sizeChartLabel.trim()) ? options.sizeChartLabel : (dataObj.sizeChartLabel || 'Р РѕР·РјС–СЂРЅР° СЃС–С‚РєР°');
+    const sizeChartTitle = (options.sizeChartTitle && options.sizeChartTitle.trim()) ? options.sizeChartTitle : (dataObj.sizeChartTitle || '');
+    const rawSizeChartImage = (options.sizeChartImage && options.sizeChartImage.trim()) ? options.sizeChartImage : (dataObj.sizeChartImage || '');
+    const sizeChartImageDesktop = rawSizeChartImage.replace(/^\//, '').replace(/^public\//, '');
+    const sizeChartImageMobile = sizeChartImageDesktop.replace(/\.jpg$/, '_m.webp').replace(/\.png$/, '_m.webp');
+
+    html = html.replace(/\{\{sizeChartLabel\}\}/g, sizeChartLabel);
+    html = html.replace(/\{\{sizeChartTitle\}\}/g, sizeChartTitle);
+    html = html.replace(/\{\{sizeChartImageDesktop\}\}/g, sizeChartImageDesktop);
+    html = html.replace(/\{\{sizeChartImageMobile\}\}/g, sizeChartImageMobile);
+
+    // Advantages/Tabs section
+    const advantagesLabel = (options.advantagesLabel && options.advantagesLabel.trim()) ? options.advantagesLabel : (dataObj.advantagesLabel || '');
+    const advantagesTitle = (options.advantagesTitle && options.advantagesTitle.trim()) ? options.advantagesTitle : (dataObj.advantagesTitle || '');
+
+    const tab1Title = (options.tab1Title && options.tab1Title.trim()) ? options.tab1Title : (dataObj.tab1Title || '');
+    const tab1Content = (options.tab1Content && options.tab1Content.trim()) ? options.tab1Content : (dataObj.tab1Content || '');
+    const rawTab1Image = (options.tab1Image && options.tab1Image.trim()) ? options.tab1Image : (dataObj.tab1Image || '');
+    const tab1Image = rawTab1Image.replace(/^\//, '').replace(/^public\//, '');
+    const tab1ImageMobile = tab1Image.replace(/\.jpg$/, '_m.webp').replace(/\.png$/, '_m.webp');
+
+    const tab2Title = (options.tab2Title && options.tab2Title.trim()) ? options.tab2Title : (dataObj.tab2Title || '');
+    const tab2Content = (options.tab2Content && options.tab2Content.trim()) ? options.tab2Content : (dataObj.tab2Content || '');
+    const rawTab2Image = (options.tab2Image && options.tab2Image.trim()) ? options.tab2Image : (dataObj.tab2Image || '');
+    const tab2Image = rawTab2Image.replace(/^\//, '').replace(/^public\//, '');
+    const tab2ImageMobile = tab2Image.replace(/\.jpg$/, '_m.webp').replace(/\.png$/, '_m.webp');
+
+    const tab3Title = (options.tab3Title && options.tab3Title.trim()) ? options.tab3Title : (dataObj.tab3Title || '');
+    const tab3Content = (options.tab3Content && options.tab3Content.trim()) ? options.tab3Content : (dataObj.tab3Content || '');
+    const rawTab3Image = (options.tab3Image && options.tab3Image.trim()) ? options.tab3Image : (dataObj.tab3Image || '');
+    const tab3Image = rawTab3Image.replace(/^\//, '').replace(/^public\//, '');
+    const tab3ImageMobile = tab3Image.replace(/\.jpg$/, '_m.webp').replace(/\.png$/, '_m.webp');
+
+    html = html.replace(/\{\{advantagesLabel\}\}/g, advantagesLabel);
+    html = html.replace(/\{\{advantagesTitle\}\}/g, advantagesTitle);
+    html = html.replace(/\{\{tab1Title\}\}/g, tab1Title);
+    html = html.replace(/\{\{tab1Content\}\}/g, tab1Content);
+    html = html.replace(/\{\{tab1Image\}\}/g, tab1Image);
+    html = html.replace(/\{\{tab1ImageMobile\}\}/g, tab1ImageMobile);
+    html = html.replace(/\{\{tab2Title\}\}/g, tab2Title);
+    html = html.replace(/\{\{tab2Content\}\}/g, tab2Content);
+    html = html.replace(/\{\{tab2Image\}\}/g, tab2Image);
+    html = html.replace(/\{\{tab2ImageMobile\}\}/g, tab2ImageMobile);
+    html = html.replace(/\{\{tab3Title\}\}/g, tab3Title);
+    html = html.replace(/\{\{tab3Content\}\}/g, tab3Content);
+    html = html.replace(/\{\{tab3Image\}\}/g, tab3Image);
+    html = html.replace(/\{\{tab3ImageMobile\}\}/g, tab3ImageMobile);
+
+    // Reviews section
+    const enableReviews = (options.enableReviews !== undefined) ? options.enableReviews : (dataObj.enableReviews || false);
+    const reviewsLabel = (options.reviewsLabel && options.reviewsLabel.trim()) ? options.reviewsLabel : (dataObj.reviewsLabel || 'Р’С–РґРіСѓРєРё');
+    const reviewsTitle = (options.reviewsTitle && options.reviewsTitle.trim()) ? options.reviewsTitle : (dataObj.reviewsTitle || '');
+
+    const review1Image = (options.review1Image && options.review1Image.trim()) ? options.review1Image : (dataObj.review1Image || '');
+    const review1Name = (options.review1Name && options.review1Name.trim()) ? options.review1Name : (dataObj.review1Name || '');
+    const review1Text = (options.review1Text && options.review1Text.trim()) ? options.review1Text : (dataObj.review1Text || '');
+
+    const review2Image = (options.review2Image && options.review2Image.trim()) ? options.review2Image : (dataObj.review2Image || '');
+    const review2Name = (options.review2Name && options.review2Name.trim()) ? options.review2Name : (dataObj.review2Name || '');
+    const review2Text = (options.review2Text && options.review2Text.trim()) ? options.review2Text : (dataObj.review2Text || '');
+
+    const review3Image = (options.review3Image && options.review3Image.trim()) ? options.review3Image : (dataObj.review3Image || '');
+    const review3Name = (options.review3Name && options.review3Name.trim()) ? options.review3Name : (dataObj.review3Name || '');
+    const review3Text = (options.review3Text && options.review3Text.trim()) ? options.review3Text : (dataObj.review3Text || '');
+
+    const review4Image = (options.review4Image && options.review4Image.trim()) ? options.review4Image : (dataObj.review4Image || '');
+    const review4Name = (options.review4Name && options.review4Name.trim()) ? options.review4Name : (dataObj.review4Name || '');
+    const review4Text = (options.review4Text && options.review4Text.trim()) ? options.review4Text : (dataObj.review4Text || '');
+
+    html = html.replace(/\{\{enableReviews\}\}/g, enableReviews ? 'block' : 'none');
+    html = html.replace(/\{\{reviewsLabel\}\}/g, reviewsLabel);
+    html = html.replace(/\{\{reviewsTitle\}\}/g, reviewsTitle);
+    html = html.replace(/\{\{review1Image\}\}/g, review1Image);
+    html = html.replace(/\{\{review1Name\}\}/g, review1Name);
+    html = html.replace(/\{\{review1Text\}\}/g, review1Text);
+    html = html.replace(/\{\{review2Image\}\}/g, review2Image);
+    html = html.replace(/\{\{review2Name\}\}/g, review2Name);
+    html = html.replace(/\{\{review2Text\}\}/g, review2Text);
+    html = html.replace(/\{\{review3Image\}\}/g, review3Image);
+    html = html.replace(/\{\{review3Name\}\}/g, review3Name);
+    html = html.replace(/\{\{review3Text\}\}/g, review3Text);
+    html = html.replace(/\{\{review4Image\}\}/g, review4Image);
+    html = html.replace(/\{\{review4Name\}\}/g, review4Name);
+    html = html.replace(/\{\{review4Text\}\}/g, review4Text);
+
+    // FAQ section
+    const faq1Question = (options.faq1Question && options.faq1Question.trim()) ? options.faq1Question : (dataObj.faq1Question || 'Р”РѕСЃС‚Р°РІРєР°');
+    const faq1Answer = (options.faq1Answer && options.faq1Answer.trim()) ? options.faq1Answer : (dataObj.faq1Answer || '');
+    const faq2Question = (options.faq2Question && options.faq2Question.trim()) ? options.faq2Question : (dataObj.faq2Question || 'РћРїР»Р°С‚Р°');
+    const faq2Answer = (options.faq2Answer && options.faq2Answer.trim()) ? options.faq2Answer : (dataObj.faq2Answer || '');
+    const faq3Question = (options.faq3Question && options.faq3Question.trim()) ? options.faq3Question : (dataObj.faq3Question || 'РќР°РґС–Р№РЅС–СЃС‚СЊ');
+    const faq3Answer = (options.faq3Answer && options.faq3Answer.trim()) ? options.faq3Answer : (dataObj.faq3Answer || '');
+    const faq4Question = (options.faq4Question && options.faq4Question.trim()) ? options.faq4Question : (dataObj.faq4Question || 'РќР°С€С– РїР°СЂС‚РЅРµСЂРё');
+    const faq4Answer = (options.faq4Answer && options.faq4Answer.trim()) ? options.faq4Answer : (dataObj.faq4Answer || '');
+
+    html = html.replace(/\{\{faq1Question\}\}/g, faq1Question);
+    html = html.replace(/\{\{faq1Answer\}\}/g, faq1Answer);
+    html = html.replace(/\{\{faq2Question\}\}/g, faq2Question);
+    html = html.replace(/\{\{faq2Answer\}\}/g, faq2Answer);
+    html = html.replace(/\{\{faq3Question\}\}/g, faq3Question);
+    html = html.replace(/\{\{faq3Answer\}\}/g, faq3Answer);
+    html = html.replace(/\{\{faq4Question\}\}/g, faq4Question);
+    html = html.replace(/\{\{faq4Answer\}\}/g, faq4Answer);
+
+    // Request section
+    const requestTitle = (options.requestTitle && options.requestTitle.trim()) ? options.requestTitle : (dataObj.requestTitle || '');
+    const requestTimerText = (options.requestTimerText && options.requestTimerText.trim()) ? options.requestTimerText : (dataObj.requestTimerText || '');
+
+    html = html.replace(/\{\{requestTitle\}\}/g, requestTitle);
+    html = html.replace(/\{\{requestTimerText\}\}/g, requestTimerText);
+    // Р’РёРґР°Р»РёС‚Рё image Р±Р»РѕРє СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ
+    if (!enableImageBlock) {
+      html = html.replace(/\s*<!--\s*image\s*-->[\s\S]*?<!--\s*\/image\s*-->\s*/g, '');
+    }
+
+    const rawVideoUrl = (options.videoUrl && options.videoUrl.trim()) ? options.videoUrl : (dataObj.videoUrl || '');
+    const finalVideoUrl = rawVideoUrl.replace(/^\//, '');
+    html = html.replace('{{videoUrl}}', finalVideoUrl);
+    if (!enableVideoBlock) {
+      html = html.replace(/\s*<!--\s*video\s*-->[\s\S]*?<!--\s*\/video\s*-->\s*/g, '');
+    }
+
+    const rawVideoThumbnailDesktop = (options.videoThumbnailDesktop && options.videoThumbnailDesktop.trim()) ? options.videoThumbnailDesktop : (dataObj.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP);
+    const rawVideoThumbnailMobile = (options.videoThumbnailMobile && options.videoThumbnailMobile.trim()) ? options.videoThumbnailMobile : (dataObj.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE);
+    const finalVideoThumbnailDesktop = rawVideoThumbnailDesktop.replace(/^\//, '');
+    const finalVideoThumbnailMobile = rawVideoThumbnailMobile.replace(/^\//, '');
+    html = html.replace('{{videoThumbnailDesktop}}', finalVideoThumbnailDesktop);
+    html = html.replace('{{videoThumbnailMobile}}', finalVideoThumbnailMobile);
+    if (!enableVideoThumbnailBlock) {
+      html = html.replace(/\s*<!--\s*videoThumbnail\s*-->[\s\S]*?<!--\s*\/videoThumbnail\s*-->\s*/g, '');
+    }
+
+    // Р“РµРЅРµСЂР°С†С–СЏ С–РЅС„РѕСЂРјР°С†С–Р№РЅРѕРіРѕ Р±Р»РѕРєСѓ (СЃРїРёСЃРѕРє С…Р°СЂР°РєС‚РµСЂРёСЃС‚РёРє)
+    // Р—Р±РёСЂР°С”РјРѕ ColorHex Р· СѓРІС–РјРєРЅРµРЅРёС… РїСЂРѕРґСѓРєС‚С–РІ РґР»СЏ Р°РІС‚РѕРіРµРЅРµСЂР°С†С–С— РєРѕР»СЊРѕСЂС–РІ
+    const productColors = [];
+    const primaryProductEnabled = {
+      1: enableProduct1,
+      2: enableProduct2,
+      3: enableProduct3,
+      4: enableProduct4,
+      5: enableProduct5
+    };
+
+    for (let i = 1; i <= 5; i++) {
+      if (primaryProductEnabled[i]) {
+        const colorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+        if (colorHex) {
+          productColors.push(colorHex);
+        }
+      }
+    }
+
+    if (enableProduct8) {
+      const colorHex8 = (options.product8ColorHex && options.product8ColorHex.trim()) ? options.product8ColorHex : (dataObj.product8ColorHex || '');
+      if (colorHex8) {
+        productColors.push(colorHex8);
+      }
+    }
+
+    if (enableProduct9) {
+      const colorHex9 = (options.product9ColorHex && options.product9ColorHex.trim()) ? options.product9ColorHex : (dataObj.product9ColorHex || '');
+      if (colorHex9) {
+        productColors.push(colorHex9);
+      }
+    }
+
+    const colorCircles = productColors.map(color => {
+      return `<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="13" cy="13" r="13" fill="${color}" />
+          </svg>`;
+    }).join('\n           ');
+
+    const infoBrandLabel = (options.infoBrandLabel && options.infoBrandLabel.trim()) ? options.infoBrandLabel : (dataObj.infoBrandLabel || 'Р‘СЂРµРЅРґ');
+    const infoBrandValue = (options.infoBrandValue && options.infoBrandValue.trim()) ? options.infoBrandValue : (dataObj.infoBrandValue || '');
+    const infoModelLabel = (options.infoModelLabel && options.infoModelLabel.trim()) ? options.infoModelLabel : (dataObj.infoModelLabel || 'РњРѕРґРµР»СЊ');
+    const infoModelValue = (options.infoModelValue && options.infoModelValue.trim()) ? options.infoModelValue : (dataObj.infoModelValue || 'Р–С–РЅРѕС‡Р°');
+    const infoQuantityLabel = (options.infoQuantityLabel && options.infoQuantityLabel.trim()) ? options.infoQuantityLabel : (dataObj.infoQuantityLabel || 'РљС–Р»СЊРєС–СЃС‚СЊ');
+    const infoQuantityValue = (options.infoQuantityValue && options.infoQuantityValue.trim()) ? options.infoQuantityValue : (dataObj.infoQuantityValue || '');
+    const infoColorsLabel = (options.infoColorsLabel && options.infoColorsLabel.trim()) ? options.infoColorsLabel : (dataObj.infoColorsLabel || 'РљРѕР»СЊРѕСЂРё');
+    const infoSizesLabel = (options.infoSizesLabel && options.infoSizesLabel.trim()) ? options.infoSizesLabel : (dataObj.infoSizesLabel || 'Р РѕР·РјС–СЂРё');
+    const infoSizesValue = (options.infoSizesValue && options.infoSizesValue.trim()) ? options.infoSizesValue : (dataObj.infoSizesValue || 'РІС–Рґ S РґРѕ 5XL');
+    const infoMaterialLabel = (options.infoMaterialLabel && options.infoMaterialLabel.trim()) ? options.infoMaterialLabel : (dataObj.infoMaterialLabel || 'РњР°С‚РµСЂС–Р°Р»');
+    const infoMaterialValue = (options.infoMaterialValue && options.infoMaterialValue.trim()) ? options.infoMaterialValue : (dataObj.infoMaterialValue || '');
+    const infoPackagingLabel = (options.infoPackagingLabel && options.infoPackagingLabel.trim()) ? options.infoPackagingLabel : (dataObj.infoPackagingLabel || 'РЈРїР°РєРѕРІРєР°');
+    const infoPackagingValue = (options.infoPackagingValue && options.infoPackagingValue.trim()) ? options.infoPackagingValue : (dataObj.infoPackagingValue || '');
+
+    html = html.replace('{{infoBrandLabel}}', infoBrandLabel);
+    html = html.replace('{{infoBrandValue}}', infoBrandValue);
+    html = html.replace('{{infoModelLabel}}', infoModelLabel);
+    html = html.replace('{{infoModelValue}}', infoModelValue);
+    html = html.replace('{{infoQuantityLabel}}', infoQuantityLabel);
+    html = html.replace('{{infoQuantityValue}}', infoQuantityValue);
+    html = html.replace('{{infoColorsLabel}}', infoColorsLabel);
+    html = html.replace('{{infoColorCircles}}', colorCircles);
+    html = html.replace('{{infoSizesLabel}}', infoSizesLabel);
+    html = html.replace('{{infoSizesValue}}', infoSizesValue);
+    html = html.replace('{{infoMaterialLabel}}', infoMaterialLabel);
+    html = html.replace('{{infoMaterialValue}}', infoMaterialValue);
+    html = html.replace('{{infoPackagingLabel}}', infoPackagingLabel);
+    html = html.replace('{{infoPackagingValue}}', infoPackagingValue);
+
+    // Р’РёРґР°Р»РёС‚Рё РїРѕР»СЏ СЏРєС‰Рѕ РІРёРјРєРЅРµРЅС– (Р· fallback РЅР° dataObj)
+    const infoEnableBrand = (options.infoEnableBrand === 'on' || options.infoEnableBrand === true) || (options.infoEnableBrand === undefined && dataObj.infoEnableBrand === true);
+    const infoEnableModel = (options.infoEnableModel === 'on' || options.infoEnableModel === true) || (options.infoEnableModel === undefined && dataObj.infoEnableModel === true);
+    const infoEnableQuantity = (options.infoEnableQuantity === 'on' || options.infoEnableQuantity === true) || (options.infoEnableQuantity === undefined && dataObj.infoEnableQuantity === true);
+    const infoEnableColors = (options.infoEnableColors === 'on' || options.infoEnableColors === true) || (options.infoEnableColors === undefined && dataObj.infoEnableColors === true);
+    const infoEnableSizes = (options.infoEnableSizes === 'on' || options.infoEnableSizes === true) || (options.infoEnableSizes === undefined && dataObj.infoEnableSizes === true);
+    const infoEnableMaterial = (options.infoEnableMaterial === 'on' || options.infoEnableMaterial === true) || (options.infoEnableMaterial === undefined && dataObj.infoEnableMaterial === true);
+    const infoEnablePackaging = (options.infoEnablePackaging === 'on' || options.infoEnablePackaging === true) || (options.infoEnablePackaging === undefined && dataObj.infoEnablePackaging === true);
+
+    if (!infoEnableBrand) {
+      html = html.replace(/\s*<!--\s*infoBrand\s*-->[\s\S]*?<!--\s*\/infoBrand\s*-->\s*/g, '');
+    }
+    if (!infoEnableModel) {
+      html = html.replace(/\s*<!--\s*infoModel\s*-->[\s\S]*?<!--\s*\/infoModel\s*-->\s*/g, '');
+    }
+    if (!infoEnableQuantity) {
+      html = html.replace(/\s*<!--\s*infoQuantity\s*-->[\s\S]*?<!--\s*\/infoQuantity\s*-->\s*/g, '');
+    }
+    if (!infoEnableColors) {
+      html = html.replace(/\s*<!--\s*infoColors\s*-->[\s\S]*?<!--\s*\/infoColors\s*-->\s*/g, '');
+    }
+    if (!infoEnableSizes) {
+      html = html.replace(/\s*<!--\s*infoSizes\s*-->[\s\S]*?<!--\s*\/infoSizes\s*-->\s*/g, '');
+    }
+    if (!infoEnableMaterial) {
+      html = html.replace(/\s*<!--\s*infoMaterial\s*-->[\s\S]*?<!--\s*\/infoMaterial\s*-->\s*/g, '');
+    }
+    if (!infoEnablePackaging) {
+      html = html.replace(/\s*<!--\s*infoPackaging\s*-->[\s\S]*?<!--\s*\/infoPackaging\s*-->\s*/g, '');
+    }
+
+    // Р—Р°РјС–РЅРёС‚Рё РїР»РµР№СЃС…РѕР»РґРµСЂРё РґР»СЏ 5 РїСЂРѕРґСѓРєС‚С–РІ
+    for (let i = 1; i <= 5; i++) {
+      const productName = (options[`product${i}Name`] && options[`product${i}Name`].trim()) ? options[`product${i}Name`] : (dataObj[`product${i}Name`] || '');
+      const productColor = (options[`product${i}Color`] && options[`product${i}Color`].trim()) ? options[`product${i}Color`] : (dataObj[`product${i}Color`] || '');
+      const productColorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+      const productSize = (options[`product${i}Size`] && options[`product${i}Size`].trim()) ? options[`product${i}Size`] : (dataObj[`product${i}Size`] || '');
+      const productMaterial = (options[`product${i}Material`] && options[`product${i}Material`].trim()) ? options[`product${i}Material`] : (dataObj[`product${i}Material`] || '');
+      const productPriceOld = (options[`product${i}PriceOld`] && options[`product${i}PriceOld`].trim()) ? options[`product${i}PriceOld`] : (dataObj[`product${i}PriceOld`] || '');
+      const productPrice = (options[`product${i}Price`] && options[`product${i}Price`].trim()) ? options[`product${i}Price`] : (dataObj[`product${i}Price`] || '');
+      const productImages = options[`product${i}Images`] || dataObj[`product${i}Images`] || [];
+
+      html = html.replace(`{{product${i}Name}}`, productName);
+      html = html.replace(`{{product${i}Color}}`, productColor);
+      html = html.replace(`{{product${i}ColorHex}}`, productColorHex);
+      html = html.replace(`{{product${i}Size}}`, productSize);
+      html = html.replace(`{{product${i}Material}}`, productMaterial);
+      html = html.replace(`{{product${i}PriceOld}}`, productPriceOld);
+      html = html.replace(`{{product${i}Price}}`, productPrice);
+
+      // Р“РµРЅРµСЂСѓРІР°С‚Рё СЃР»Р°Р№РґРё Р· РјР°СЃРёРІСѓ Р·РѕР±СЂР°Р¶РµРЅСЊ
+      const slides = generateSlides(productImages);
+      html = html.replace(`{{product${i}Slides}}`, slides);
+
+      // Р’РёРґР°Р»РёС‚Рё РїСЂРѕРґСѓРєС‚ Р±Р»РѕРє СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ
+      if (options[`enableProduct${i}`] !== 'on' && options[`enableProduct${i}`] !== true) {
+        html = html.replace(new RegExp(`<!--product${i}-->\\s*[\\s\\S]*?<!--\\/product${i}-->\\s*`, 'g'), '');
+      }
+    }
+
+    // Р—Р°РјС–РЅРёС‚Рё РґР°РЅС– РґР»СЏ РїСЂРѕРґСѓРєС‚С–РІ 8 С‚Р° 9 (С‚Рµ Р¶ СЃР°РјРµ СЏРє РїСЂРѕРґСѓРєС‚Рё 1-5)
+    const product8Name = (options.product8Name && options.product8Name.trim()) ? options.product8Name : (dataObj.product8Name || '');
+    const product8Color = (options.product8Color && options.product8Color.trim()) ? options.product8Color : (dataObj.product8Color || '');
+    const product8ColorHex = (options.product8ColorHex && options.product8ColorHex.trim()) ? options.product8ColorHex : (dataObj.product8ColorHex || '');
+    const product8Size = (options.product8Size && options.product8Size.trim()) ? options.product8Size : (dataObj.product8Size || '');
+    const product8Material = (options.product8Material && options.product8Material.trim()) ? options.product8Material : (dataObj.product8Material || '');
+    const product8PriceOld = (options.product8PriceOld && options.product8PriceOld.trim()) ? options.product8PriceOld : (dataObj.product8PriceOld || '');
+    const product8Price = (options.product8Price && options.product8Price.trim()) ? options.product8Price : (dataObj.product8Price || '');
+
+    html = html.replace('{{product8Name}}', product8Name);
+    html = html.replace('{{product8Color}}', product8Color);
+    html = html.replace('{{product8ColorHex}}', product8ColorHex);
+    html = html.replace('{{product8Size}}', product8Size);
+    html = html.replace('{{product8Material}}', product8Material);
+    html = html.replace('{{product8PriceOld}}', product8PriceOld);
+    html = html.replace('{{product8Price}}', product8Price);
+
+    const product9Name = (options.product9Name && options.product9Name.trim()) ? options.product9Name : (dataObj.product9Name || '');
+    const product9Color = (options.product9Color && options.product9Color.trim()) ? options.product9Color : (dataObj.product9Color || '');
+    const product9ColorHex = (options.product9ColorHex && options.product9ColorHex.trim()) ? options.product9ColorHex : (dataObj.product9ColorHex || '');
+    const product9Size = (options.product9Size && options.product9Size.trim()) ? options.product9Size : (dataObj.product9Size || '');
+    const product9Material = (options.product9Material && options.product9Material.trim()) ? options.product9Material : (dataObj.product9Material || '');
+    const product9PriceOld = (options.product9PriceOld && options.product9PriceOld.trim()) ? options.product9PriceOld : (dataObj.product9PriceOld || '');
+    const product9Price = (options.product9Price && options.product9Price.trim()) ? options.product9Price : (dataObj.product9Price || '');
+
+    html = html.replace('{{product9Name}}', product9Name);
+    html = html.replace('{{product9Color}}', product9Color);
+    html = html.replace('{{product9ColorHex}}', product9ColorHex);
+    html = html.replace('{{product9Size}}', product9Size);
+    html = html.replace('{{product9Material}}', product9Material);
+    html = html.replace('{{product9PriceOld}}', product9PriceOld);
+    html = html.replace('{{product9Price}}', product9Price);
+
+    // Р“РµРЅРµСЂСѓРІР°С‚Рё СЃР»Р°Р№РґРё РґР»СЏ product8 С‚Р° product9
+    const product8Images = options.product8Images || dataObj.product8Images || [];
+    const slides8 = generateSlides(product8Images);
+    html = html.replace('{{product8Slides}}', slides8);
+
+    const product9Images = options.product9Images || dataObj.product9Images || [];
+    const slides9 = generateSlides(product9Images);
+    html = html.replace('{{product9Slides}}', slides9);
+
+    // Р’РёРґР°Р»РёС‚Рё РїСЂРѕРґСѓРєС‚ Р±Р»РѕРєРё СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ (product8, product9)
+    if (!enableProduct8) {
+      html = html.replace(new RegExp(`<!--product8-->\\s*[\\s\\S]*?<!--\\/product8-->\\s*`, 'g'), '');
+    }
+    if (!enableProduct9) {
+      html = html.replace(new RegExp(`<!--product9-->\\s*[\\s\\S]*?<!--\\/product9-->\\s*`, 'g'), '');
+    }
+
+    // Р—Р°РјС–РЅРёС‚Рё Comments СЃРµРєС†С–СЋ
+    const commentsLabel = (options.commentsLabel && options.commentsLabel.trim()) ? options.commentsLabel : (dataObj.commentsLabel ?? dataObj.comments?.label ?? 'Р’С–РґРіСѓРєРё');
+    const commentsTitle = (options.commentsTitle && options.commentsTitle.trim()) ? options.commentsTitle : (dataObj.commentsTitle ?? dataObj.comments?.title ?? 'РџС–РєР»СѓС”РјРѕСЃСЊ РїСЂРѕ РєРѕР¶РЅРѕРіРѕ.');
+    const commentsSalesStat = (options.commentsSalesStat && options.commentsSalesStat.trim()) ? options.commentsSalesStat : (dataObj.commentsSalesStat ?? dataObj.comments?.stats?.sales ?? '> 3500');
+    const commentsSalesText = (options.commentsSalesText && options.commentsSalesText.trim()) ? options.commentsSalesText : (dataObj.commentsSalesText ?? dataObj.comments?.text?.[0] ?? 'РїСЂРѕРґР°Р¶С–РІ');
+    const commentsSatisfiedStat = (options.commentsSatisfiedStat && options.commentsSatisfiedStat.trim()) ? options.commentsSatisfiedStat : (dataObj.commentsSatisfiedStat ?? dataObj.comments?.stats?.satisfied ?? '98%');
+    const commentsSatisfiedText = (options.commentsSatisfiedText && options.commentsSatisfiedText.trim()) ? options.commentsSatisfiedText : (dataObj.commentsSatisfiedText ?? dataObj.comments?.text?.[1] ?? 'Р·Р°РґРѕРІРѕР»РµРЅРёС… РєР»С–С”РЅС‚С–РІ');
+    const commentsRepeatStat = (options.commentsRepeatStat && options.commentsRepeatStat.trim()) ? options.commentsRepeatStat : (dataObj.commentsRepeatStat ?? dataObj.comments?.stats?.repeat ?? '48%');
+    const commentsRepeatText = (options.commentsRepeatText && options.commentsRepeatText.trim()) ? options.commentsRepeatText : (dataObj.commentsRepeatText ?? dataObj.comments?.text?.[2] ?? 'РІР¶Рµ РїРѕРІС‚РѕСЂРЅРѕ Р·СЂРѕР±РёР»Рё Р·Р°РјРѕРІР»РµРЅРЅСЏ РґР»СЏ СЃРµР±Рµ Р°Р±Рѕ Р±Р»РёР·СЊРєРёС…');
+    const commentsButtonText = (options.commentsButtonText && options.commentsButtonText.trim()) ? options.commentsButtonText : (dataObj.commentsButtonText ?? 'Р—РђР›РРЁРРўР Р’Р†Р”Р“РЈРљ');
+
+    html = html.replace('{{commentsLabel}}', commentsLabel);
+    html = html.replace('{{commentsTitle}}', commentsTitle);
+    html = html.replace('{{commentsSalesStat}}', commentsSalesStat);
+    html = html.replace('{{commentsSalesText}}', commentsSalesText);
+    html = html.replace('{{commentsSatisfiedStat}}', commentsSatisfiedStat);
+    html = html.replace('{{commentsSatisfiedText}}', commentsSatisfiedText);
+    html = html.replace('{{commentsRepeatStat}}', commentsRepeatStat);
+    html = html.replace('{{commentsRepeatText}}', commentsRepeatText);
+    html = html.replace('{{commentsButtonText}}', commentsButtonText);
+
+    // Р’РёРґР°Р»РёС‚Рё Comments СЃРµРєС†С–СЋ СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ
+    const enableComments = (options.enableComments === 'on' || options.enableComments === true) || (options.enableComments === undefined && dataObj.enableComments !== false);
+    if (!enableComments) {
+      html = html.replace(/\s*<!--\s*comments\s*-->[\s\S]*?<!--\s*\/comments\s*-->\s*/g, '');
+    }
+
+    // Р—Р°РјС–РЅРёС‚Рё FAQ СЃРµРєС†С–СЋ
+    const faqLabel = (options.faqLabel && options.faqLabel.trim()) ? options.faqLabel : (dataObj.faqLabel ?? dataObj.faq?.label ?? 'Р”РѕСЃС‚Р°РІРєР° С– РѕРїР»Р°С‚Р°');
+    const faqTitle = (options.faqTitle && options.faqTitle.trim()) ? options.faqTitle : (dataObj.faqTitle ?? dataObj.faq?.title ?? 'РЁРІРёРґРєРѕ, Р·СЂСѓС‡РЅРѕ, РЅР°РґС–Р№РЅРѕ.');
+
+    html = html.replace('{{faqLabel}}', faqLabel);
+    html = html.replace('{{faqTitle}}', faqTitle);
+
+    // Р’РёРґР°Р»РёС‚Рё FAQ СЃРµРєС†С–СЋ СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ
+    const enableFaq = (options.enableFaq === 'on' || options.enableFaq === true) || (options.enableFaq === undefined && dataObj.enableFaq !== false);
+    if (!enableFaq) {
+      html = html.replace(/\s*<!--\s*faq\s*-->[\s\S]*?<!--\s*\/faq\s*-->\s*/g, '');
+    }
+
+    // Р—Р°РјС–РЅРёС‚Рё How to Buy СЃРµРєС†С–СЋ
+    const howLabel = (options.howLabel && options.howLabel.trim()) ? options.howLabel : (dataObj.howLabel ?? dataObj.how_to_buy?.label ?? 'РЇРє РїСЂРёРґР±Р°С‚Рё С„СѓС‚Р±РѕР»РєРё?');
+    const howTitle = (options.howTitle && options.howTitle.trim()) ? options.howTitle : (dataObj.howTitle ?? dataObj.how_to_buy?.title ?? 'Р›РёС€Рµ РґРµРєС–Р»СЊРєР° РїСЂРѕСЃС‚РёС… РєСЂРѕРєС–РІ');
+
+    html = html.replace('{{howLabel}}', howLabel);
+    html = html.replace('{{howTitle}}', howTitle);
+
+    // Р’РёРґР°Р»РёС‚Рё How to Buy СЃРµРєС†С–СЋ СЏРєС‰Рѕ РІРёРјРєРЅРµРЅРѕ
+    const enableHow = (options.enableHow === 'on' || options.enableHow === true) || (options.enableHow === undefined && dataObj.enableHow !== false);
+    if (!enableHow) {
+      html = html.replace(/\s*<!--\s*how\s*-->[\s\S]*?<!--\s*\/how\s*-->\s*/g, '');
+    }
+
+    // Р—Р°РјС–РЅРёС‚Рё Request Form РїРѕР»СЏ
+    const requestInfoTitle = (options.requestInfoTitle && options.requestInfoTitle.trim()) ? options.requestInfoTitle : (dataObj.requestInfoTitle ?? dataObj.request?.info_title ?? 'Р—Р°Р»РёС€С‚Рµ Р·Р°СЏРІРєСѓ');
+    const requestInfoDescription = (options.requestInfoDescription && options.requestInfoDescription.trim()) ? options.requestInfoDescription : (dataObj.requestInfoDescription ?? dataObj.request?.info_description ?? 'РЇРєС‰Рѕ Р±Р°Р¶Р°С”С‚Рµ Р·Р°РјРѕРІРёС‚Рё Р°Р±Рѕ РїРѕС‚СЂС–Р±РЅР° РЅР°С€Р° РґРѕРїРѕРјРѕРіР°');
+    const requestButtonText = (options.requestButtonText && options.requestButtonText.trim()) ? options.requestButtonText : (dataObj.requestButtonText ?? 'Р—РђР›РРЁРРўР Р—РђРЇР’РљРЈ');
+    const requestNamePlaceholder = (options.requestNamePlaceholder && options.requestNamePlaceholder.trim()) ? options.requestNamePlaceholder : (dataObj.requestNamePlaceholder ?? 'Р’РІРµРґС–С‚СЊ Р’Р°С€Рµ С–Рј`СЏ');
+    const requestPhonePlaceholder = (options.requestPhonePlaceholder && options.requestPhonePlaceholder.trim()) ? options.requestPhonePlaceholder : (dataObj.requestPhonePlaceholder ?? 'Р’РІРµРґС–С‚СЊ Р’Р°С€ С‚РµР»РµС„РѕРЅ');
+
+    html = html.replace('{{requestInfoTitle}}', requestInfoTitle);
+    html = html.replace('{{requestInfoDescription}}', requestInfoDescription);
+    html = html.replace('{{requestButtonText}}', requestButtonText);
+    html = html.replace('{{requestNamePlaceholder}}', requestNamePlaceholder);
+    html = html.replace('{{requestPhonePlaceholder}}', requestPhonePlaceholder);
+
+    // Р—Р°РјС–РЅРёС‚Рё Footer copyright
+    const footerCopyright = (options.footerCopyright && options.footerCopyright.trim()) ? options.footerCopyright : (dataObj.footerCopyright ?? dataObj.footer?.copyright ?? 'В© 2022 В«KOPOВ»');
+    html = html.replace('{{footerCopyright}}', footerCopyright);    // AUTO-GENERATED: Missing placeholders from user-config.json
+    html = html.replace('{{imageUrl}}', dataObj.imageUrl || '');
+    html = html.replace('{{product1Name}}', dataObj.product1Name || '');
+    html = html.replace('{{product1Color}}', dataObj.product1Color || '');
+    html = html.replace('{{product1ColorHex}}', dataObj.product1ColorHex || '');
+    html = html.replace('{{product1Size}}', dataObj.product1Size || '');
+    html = html.replace('{{product1Material}}', dataObj.product1Material || '');
+    html = html.replace('{{product1PriceOld}}', dataObj.product1PriceOld || '');
+    html = html.replace('{{product1Price}}', dataObj.product1Price || '');
+    html = html.replace('{{product2Name}}', dataObj.product2Name || '');
+    html = html.replace('{{product2Color}}', dataObj.product2Color || '');
+    html = html.replace('{{product2ColorHex}}', dataObj.product2ColorHex || '');
+    html = html.replace('{{product2Size}}', dataObj.product2Size || '');
+    html = html.replace('{{product2Material}}', dataObj.product2Material || '');
+    html = html.replace('{{product2PriceOld}}', dataObj.product2PriceOld || '');
+    html = html.replace('{{product2Price}}', dataObj.product2Price || '');
+    html = html.replace('{{product3Name}}', dataObj.product3Name || '');
+    html = html.replace('{{product3Color}}', dataObj.product3Color || '');
+    html = html.replace('{{product3ColorHex}}', dataObj.product3ColorHex || '');
+    html = html.replace('{{product3Size}}', dataObj.product3Size || '');
+    html = html.replace('{{product3Material}}', dataObj.product3Material || '');
+    html = html.replace('{{product3PriceOld}}', dataObj.product3PriceOld || '');
+    html = html.replace('{{product3Price}}', dataObj.product3Price || '');
+    html = html.replace('{{product4Name}}', dataObj.product4Name || '');
+    html = html.replace('{{product4Color}}', dataObj.product4Color || '');
+    html = html.replace('{{product4ColorHex}}', dataObj.product4ColorHex || '');
+    html = html.replace('{{product4Size}}', dataObj.product4Size || '');
+    html = html.replace('{{product4Material}}', dataObj.product4Material || '');
+    html = html.replace('{{product4PriceOld}}', dataObj.product4PriceOld || '');
+    html = html.replace('{{product4Price}}', dataObj.product4Price || '');
+    html = html.replace('{{product5Name}}', dataObj.product5Name || '');
+    html = html.replace('{{product5Color}}', dataObj.product5Color || '');
+    html = html.replace('{{product5ColorHex}}', dataObj.product5ColorHex || '');
+    html = html.replace('{{product5Size}}', dataObj.product5Size || '');
+    html = html.replace('{{product5Material}}', dataObj.product5Material || '');
+    html = html.replace('{{product5PriceOld}}', dataObj.product5PriceOld || '');
+    html = html.replace('{{product5Price}}', dataObj.product5Price || '');
+    html = html.replace('{{sizeChartImage}}', dataObj.sizeChartImage || '');
+
+    // Р—Р°РјС–РЅРёС‚Рё РїРµСЂРµРІР°РіРё (С‚С–Р»СЊРєРё Р· user-config.json)
+    const benefits = dataObj.benefits || [];
+    if (Array.isArray(benefits)) {
+      benefits.forEach((benefit) => {
+        const num = benefit.id;
+        html = html.replace(`{{benefit${num}Title}}`, benefit.title || '');
+        html = html.replace(`{{benefit${num}Description}}`, benefit.description || '');
+      });
+    }
+
+    console.log(`вњ… HTML СѓСЃРїС–С€РЅРѕ Р·РіРµРЅРµСЂРѕРІР°РЅРёР№ (${html.length} Р±Р°Р№С‚)`);
+    return html;
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё РіРµРЅРµСЂСѓРІР°РЅРЅС– HTML:', err.message);
+    throw err;
+  }
+}
+
+// GET /api/data - РџРѕРІРµСЂРЅСѓС‚Рё JSON РґР°РЅС–
+app.get('/api/data', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    console.log(`вњ… JSON РґР°РЅС– РІС–РґРїСЂР°РІР»РµРЅС– (${Object.keys(data).length} РїРѕР»С–РІ)`);
+    res.json(data);
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё С‡РёС‚Р°РЅРЅС– JSON:', err.message);
+    res.status(500).json({ error: 'РџРѕРјРёР»РєР° РїСЂРё С‡РёС‚Р°РЅРЅС– РґР°РЅРёС…' });
+  }
+});
+
+// GET /api/original-form-data - РћС‚СЂРёРјР°С‚Рё РґР°РЅС– Р· user-config.json
+app.get('/api/original-form-data', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    const formData = {
+      headerText: data.headerText,
+      heroTitle: data.heroTitle,
+      heroPrice: data.hero.price,
+      enableTimer: data.enableTimer,
+      enableStock: data.enableStock,
+      heroImage: data.heroImage,
+      enableImage: data.enableImage,
+      imageUrl: data.imageUrl,
+      enableVideo: data.enableVideo,
+      videoUrl: data.videoUrl,
+      enableVideoThumbnail: (data.enableVideoThumbnail !== undefined) ? data.enableVideoThumbnail : true,
+      videoThumbnailDesktop: data.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP,
+      videoThumbnailMobile: data.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE,
+      benefits: data.benefits || [],
+      // Product data
+      product1Name: data.product1Name || '',
+      product1Color: data.product1Color || '',
+      product1ColorHex: data.product1ColorHex || '',
+      product1Size: data.product1Size || '',
+      product1Material: data.product1Material || '',
+      product1PriceOld: data.product1PriceOld || '',
+      product1Price: data.product1Price || '',
+      product1Images: data.product1Images || [],
+      enableProduct1: data.enableProduct1 || true,
+      product2Name: data.product2Name || '',
+      product2Color: data.product2Color || '',
+      product2ColorHex: data.product2ColorHex || '',
+      product2Size: data.product2Size || '',
+      product2Material: data.product2Material || '',
+      product2PriceOld: data.product2PriceOld || '',
+      product2Price: data.product2Price || '',
+      product2Images: data.product2Images || [],
+      enableProduct2: data.enableProduct2 || true,
+      product3Name: data.product3Name || '',
+      product3Color: data.product3Color || '',
+      product3ColorHex: data.product3ColorHex || '',
+      product3Size: data.product3Size || '',
+      product3Material: data.product3Material || '',
+      product3PriceOld: data.product3PriceOld || '',
+      product3Price: data.product3Price || '',
+      product3Images: data.product3Images || [],
+      enableProduct3: data.enableProduct3 || true,
+      product4Name: data.product4Name || '',
+      product4Color: data.product4Color || '',
+      product4ColorHex: data.product4ColorHex || '',
+      product4Size: data.product4Size || '',
+      product4Material: data.product4Material || '',
+      product4PriceOld: data.product4PriceOld || '',
+      product4Price: data.product4Price || '',
+      product4Images: data.product4Images || [],
+      enableProduct4: data.enableProduct4 || true,
+      product5Name: data.product5Name || '',
+      product5Color: data.product5Color || '',
+      product5ColorHex: data.product5ColorHex || '',
+      product5Size: data.product5Size || '',
+      product5Material: data.product5Material || '',
+      product5PriceOld: data.product5PriceOld || '',
+      product5Price: data.product5Price || '',
+      product5Images: data.product5Images || [],
+      enableProduct5: data.enableProduct5 || true,
+      // Product 8 & 9 data
+      product8Name: data.product8Name || '',
+      product8Color: data.product8Color || '',
+      product8ColorHex: data.product8ColorHex || '',
+      product8Size: data.product8Size || '',
+      product8Material: data.product8Material || '',
+      product8PriceOld: data.product8PriceOld || '',
+      product8Price: data.product8Price || '',
+      product8Images: data.product8Images || [],
+      enableProduct8: data.enableProduct8 || false,
+      product9Name: data.product9Name || '',
+      product9Color: data.product9Color || '',
+      product9ColorHex: data.product9ColorHex || '',
+      product9Size: data.product9Size || '',
+      product9Material: data.product9Material || '',
+      product9PriceOld: data.product9PriceOld || '',
+      product9Price: data.product9Price || '',
+      product9Images: data.product9Images || [],
+      enableProduct9: data.enableProduct9 || false
+    };
+
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅС– РґР°РЅС– С„РѕСЂРјРё РѕС‚СЂРёРјР°РЅС–`);
+    res.json(formData);
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё С‡РёС‚Р°РЅРЅС– РѕСЂРёРіС–РЅР°Р»СЊРЅРёС… РґР°РЅРёС…:', err.message);
+    res.status(500).json({ error: 'РџРѕРјРёР»РєР° РїСЂРё С‡РёС‚Р°РЅРЅС– РґР°РЅРёС…' });
+  }
+});
+
+// GET /api/get-user-config - РћС‚СЂРёРјР°С‚Рё Р·Р±РµСЂРµР¶РµРЅСѓ РєРѕРЅС„С–РіСѓСЂР°С†С–СЋ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°
+app.get('/api/get-user-config', (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+
+    // РЇРєС‰Рѕ С„Р°Р№Р» РЅРµ С–СЃРЅСѓС”, РїРѕРІРµСЂС‚Р°С”РјРѕ РїРѕСЂРѕР¶РЅС– РґР°РЅС–
+    if (!fs.existsSync(configPath)) {
+      return res.json({
+        headerText: '',
+        heroTitle: '',
+        heroPrice: 'РІС–Рґ 330 РіСЂРЅ',
+        enableTimer: true,
+        enableStock: true,
+        heroImage: '',
+        enableImage: true,
+        imageUrl: '',
+        enableVideo: true,
+        videoUrl: '',
+        benefits: [],
+        // Product data defaults
+        product1Name: '', product1Color: '', product1ColorHex: '', product1Size: '', product1Material: '', product1PriceOld: '', product1Price: '', enableProduct1: true,
+        product2Name: '', product2Color: '', product2ColorHex: '', product2Size: '', product2Material: '', product2PriceOld: '', product2Price: '', enableProduct2: true,
+        product3Name: '', product3Color: '', product3ColorHex: '', product3Size: '', product3Material: '', product3PriceOld: '', product3Price: '', enableProduct3: true,
+        product4Name: '', product4Color: '', product4ColorHex: '', product4Size: '', product4Material: '', product4PriceOld: '', product4Price: '', enableProduct4: true,
+        product5Name: '', product5Color: '', product5ColorHex: '', product5Size: '', product5Material: '', product5PriceOld: '', product5Price: '', enableProduct5: true,
+        product8Name: '', product8Color: '', product8ColorHex: '', product8Size: '', product8Material: '', product8PriceOld: '', product8Price: '', enableProduct8: false,
+        product9Name: '', product9Color: '', product9ColorHex: '', product9Size: '', product9Material: '', product9PriceOld: '', product9Price: '', enableProduct9: false
+      });
+    }
+
+    // Р§РёС‚Р°С‚Рё Р· СЏРІРЅРёРј UTF-8 РєРѕРґСѓРІР°РЅРЅСЏРј
+    const fileContent = fs.readFileSync(configPath, { encoding: 'utf8' });
+    const config = JSON.parse(fileContent);
+    console.log(`вњ… Р—Р±РµСЂРµР¶РµРЅР° РєРѕРЅС„С–РіСѓСЂР°С†С–СЏ РѕС‚СЂРёРјР°РЅР°:`, config);
+    res.json(config);
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё С‡РёС‚Р°РЅРЅС– РєРѕРЅС„С–РіСѓСЂР°С†С–С—:', err.message);
+    res.status(500).json({ error: 'РџРѕРјРёР»РєР° РїСЂРё С‡РёС‚Р°РЅРЅС– РґР°РЅРёС…' });
+  }
+});
+
+// POST /api/save-config - Р—Р±РµСЂРµРіС‚Рё РєРѕРЅС„С–РіСѓСЂР°С†С–СЋ РєРѕСЂРёСЃС‚СѓРІР°С‡Р°
+app.post('/api/save-config', express.json(), (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    const configData = req.body;
+
+    // Р—Р°РїРёСЃР°С‚Рё Р· СЏРІРЅРёРј UTF-8 РєРѕРґСѓРІР°РЅРЅСЏРј
+    const jsonContent = JSON.stringify(configData, null, 2);
+    fs.writeFileSync(configPath, jsonContent, { encoding: 'utf8' });
+    console.log(`вњ… РљРѕРЅС„С–РіСѓСЂР°С†С–СЏ Р·Р±РµСЂРµР¶РµРЅР° РЅР° СЃРµСЂРІРµСЂС–:`, configData);
+    res.json({ success: true, message: 'РљРѕРЅС„С–РіСѓСЂР°С†С–СЏ Р·Р±РµСЂРµР¶РµРЅР°' });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р±РµСЂРµР¶РµРЅРЅС– РєРѕРЅС„С–РіСѓСЂР°С†С–С—:', err.message);
+    res.status(500).json({ error: 'РџРѕРјРёР»РєР° РїСЂРё Р·Р±РµСЂРµР¶РµРЅРЅС– РґР°РЅРёС…' });
+  }
+});
+
+// POST /upload-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё РЅРѕРІРµ С„РѕС‚Рѕ РґР»СЏ plus-logo Р±Р»РѕРєСѓ
+app.post('/upload-image', uploadImage.single('imageUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ–јпёЏ Р¤РћРўРћ PLUS-LOGO Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `image-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё С‚Р° РѕРїС‚РёРјС–Р·СѓРІР°С‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (1200x600 - cover)
+    const desktopPath = path.join(imageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1200, 600, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (1200x600, 85% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё С‚Р° РѕРїС‚РёРјС–Р·СѓРІР°С‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (600x400 - cover)
+    const mobilePath = path.join(imageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(600, 400, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (600x400, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/image/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ РѕРїС‚РёРјС–Р·РѕРІР°РЅРѕ С‚Р° Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    // РЎРїСЂРѕР±СѓС”РјРѕ РІРёРґР°Р»РёС‚Рё С„Р°Р№Р» СЏРєС‰Рѕ СЃС‚Р°Р»Р°СЃСЏ РїРѕРјРёР»РєР°
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-video - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё РЅРѕРІРµ РІС–РґРµРѕ РґР»СЏ РІС–РґРµРѕ Р±Р»РѕРєСѓ
+app.post('/upload-video', uploadVideo.single('videoUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџЋ¬ Р’Р†Р”Р•Рћ Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const timestamp = Date.now();
+    const basename = `video-${timestamp}`;
+    const relativePath = `/video/${req.file.filename}`;
+
+    res.json({
+      success: true,
+      filename: relativePath,
+      message: 'Р’С–РґРµРѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС– РІС–РґРµРѕ:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // cleanup РїСЂРё РїРѕРјРёР»С†С–
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-video-thumbnail - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё РїСЂРµРІ'СЋ РґР»СЏ РІС–РґРµРѕ Р±Р»РѕРєСѓ
+app.post('/upload-video-thumbnail', uploadVideoThumbnail.single('videoThumbnailUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ' });
+    }
+
+    const timestamp = Date.now();
+    const basename = `video-thumb-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    const desktopPath = path.join(videoThumbnailDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1280, 720, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+
+    const mobilePath = path.join(videoThumbnailDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, 360, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+
+    fs.unlinkSync(uploadedPath);
+
+    res.json({
+      success: true,
+      desktop: `/public/img/video/${basename}.jpg`,
+      mobile: `/public/img/video/${basename}_m.webp`,
+      message: "РџСЂРµРІ'СЋ РІС–РґРµРѕ Р·Р±РµСЂРµР¶РµРЅРѕ"
+    });
+  } catch (err) {
+    console.error("РџРѕРјРёР»РєР° РїС–Рґ С‡Р°СЃ РѕР±СЂРѕР±РєРё РїСЂРµРІ'СЋ РІС–РґРµРѕ:", err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // ignore cleanup errors
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-hero-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё РЅРѕРІРµ С„РѕС‚Рѕ РґР»СЏ hero Р±Р»РѕРєСѓ
+app.post('/upload-hero-image', upload.single('heroImage'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ–јпёЏ Р¤РћРўРћ Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `hero-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё С‚Р° РѕРїС‚РёРјС–Р·СѓРІР°С‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (1200x600 - cover)
+    const desktopPath = path.join(heroImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1200, 600, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (1200x600, 85% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё С‚Р° РѕРїС‚РёРјС–Р·СѓРІР°С‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (600x400 - cover)
+    const mobilePath = path.join(heroImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(600, 400, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (600x400, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/hero/${basename}_m.webp`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ РѕРїС‚РёРјС–Р·РѕРІР°РЅРѕ С‚Р° Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    // РЎРїСЂРѕР±СѓС”РјРѕ РІРёРґР°Р»РёС‚Рё С„Р°Р№Р» СЏРєС‰Рѕ СЃС‚Р°Р»Р°СЃСЏ РїРѕРјРёР»РєР°
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product1-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ РґР»СЏ РїСЂРѕРґСѓРєС‚Сѓ 1
+app.post('/upload-product1-image', uploadProductImage.single('product1Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“ё Р¤РћРўРћ РџР РћР”РЈРљРўРЈ 1 Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product2-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ РґР»СЏ РїСЂРѕРґСѓРєС‚Сѓ 2
+app.post('/upload-product2-image', uploadProductImage.single('product2Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“ё Р¤РћРўРћ РџР РћР”РЈРљРўРЈ 2 Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product3-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ РґР»СЏ РїСЂРѕРґСѓРєС‚Сѓ 3
+app.post('/upload-product3-image', uploadProductImage.single('product3Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“ё Р¤РћРўРћ РџР РћР”РЈРљРўРЈ 3 Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product4-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ РґР»СЏ РїСЂРѕРґСѓРєС‚Сѓ 4
+app.post('/upload-product4-image', uploadProductImage.single('product4Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“ё Р¤РћРўРћ РџР РћР”РЈРљРўРЈ 4 Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product5-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ РґР»СЏ РїСЂРѕРґСѓРєС‚Сѓ 5
+app.post('/upload-product5-image', uploadProductImage.single('product5Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“ё Р¤РћРўРћ РџР РћР”РЈРљРўРЈ 5 Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product8-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ РґР»СЏ РїСЂРѕРґСѓРєС‚Сѓ 8
+app.post('/upload-product8-image', uploadProductImage.single('product8Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“ё Р¤РћРўРћ РџР РћР”РЈРљРўРЈ 8 Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product9-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ РґР»СЏ РїСЂРѕРґСѓРєС‚Сѓ 9
+app.post('/upload-product9-image', uploadProductImage.single('product9Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“ё Р¤РћРўРћ РџР РћР”РЈРљРўРЈ 9 Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.jpg (90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-size-chart-image - Р—Р°РІР°РЅС‚Р°Р¶РёС‚Рё С„РѕС‚Рѕ СЂРѕР·РјС–СЂРЅРѕС— СЃС–С‚РєРё
+app.post('/upload-size-chart-image', uploadSizeChartImage.single('sizeChartImage'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Р¤Р°Р№Р» РЅРµ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№' });
+    }
+
+    console.log(`рџ“Џ Р¤РћРўРћ Р РћР—РњР†Р РќРћР‡ РЎР†РўРљР Р—РђР’РђРќРўРђР–Р•РќРћ`);
+    console.log(`рџ“Ѓ РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р»: ${req.file.filename}`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІСѓ РЅР°Р·РІСѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ
+    const timestamp = Date.now();
+    const basename = `size-chart-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РґРµСЃРєС‚РѕРїСѓ (РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ СЂРѕР·РјС–СЂ, PNG)
+    const desktopPath = path.join(sizeChartImageDir, `${basename}.png`);
+    await sharp(uploadedPath)
+      .png({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`вњ… Р”РµСЃРєС‚РѕРї: ${basename}.png (PNG 90% quality)`);
+
+    // РџРµСЂРµСЃРѕС…СЂР°РЅРёС‚Рё РґР»СЏ РјРѕР±С–Р»СЊРЅРѕРіРѕ (640px width, WebP 80%)
+    const mobilePath = path.join(sizeChartImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`вњ… РњРѕР±С–Р»СЊРЅРёР№: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Р’РёРґР°Р»РёС‚Рё РѕСЂРёРіС–РЅР°Р»СЊРЅРёР№ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРёР№ С„Р°Р№Р»
+    fs.unlinkSync(uploadedPath);
+    console.log(`вњ… РћСЂРёРіС–РЅР°Р»СЊРЅРёР№ С„Р°Р№Р» РІРёРґР°Р»РµРЅРѕ`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/info/${basename}.png`,
+      message: 'Р¤РѕС‚Рѕ СѓСЃРїС–С€РЅРѕ Р·Р°РІР°РЅС‚Р°Р¶РµРЅРѕ'
+    });
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅС–:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Р†РіРЅРѕСЂСѓС”РјРѕ РїРѕРјРёР»РєСѓ РІРёРґР°Р»РµРЅРЅСЏ
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /generate - Р“РµРЅРµСЂСѓРІР°С‚Рё С‚Р° РІС–РґРїСЂР°РІРёС‚Рё HTML Р· РїР°СЂР°РјРµС‚СЂР°РјРё
+app.get('/generate', (req, res) => {
+  try {
+    // ONLY user-config.json is the source of truth
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    const data = JSON.parse(fs.readFileSync(configPath, 'utf8'));    // РћС‚СЂРёРјР°С‚Рё РїР°СЂР°РјРµС‚СЂРё Р· query string
+    const options = {
+      headerText: req.query.headerText,
+      heroTitle: req.query.heroTitle,
+      heroPrice: req.query.heroPrice,
+      enableTimer: req.query.enableTimer,
+      enableStock: req.query.enableStock,
+      heroImage: req.query.heroImage,
+      enableImage: req.query.enableImage,
+      imageUrl: req.query.imageUrl,
+      enableVideo: req.query.enableVideo,
+      videoUrl: req.query.videoUrl,
+      enableVideoThumbnail: req.query.enableVideoThumbnail,
+      videoThumbnailDesktop: req.query.videoThumbnailDesktop,
+      videoThumbnailMobile: req.query.videoThumbnailMobile,
+      sizeChartImage: req.query.sizeChartImage,
+      // Info list params
+      infoEnableBrand: req.query.infoEnableBrand,
+      infoBrandLabel: req.query.infoBrandLabel,
+      infoBrandValue: req.query.infoBrandValue,
+      infoEnableModel: req.query.infoEnableModel,
+      infoModelLabel: req.query.infoModelLabel,
+      infoModelValue: req.query.infoModelValue,
+      infoEnableQuantity: req.query.infoEnableQuantity,
+      infoQuantityLabel: req.query.infoQuantityLabel,
+      infoQuantityValue: req.query.infoQuantityValue,
+      infoEnableColors: req.query.infoEnableColors,
+      infoColorsLabel: req.query.infoColorsLabel,
+      infoEnableSizes: req.query.infoEnableSizes,
+      infoSizesLabel: req.query.infoSizesLabel,
+      infoSizesValue: req.query.infoSizesValue,
+      infoEnableMaterial: req.query.infoEnableMaterial,
+      infoMaterialLabel: req.query.infoMaterialLabel,
+      infoMaterialValue: req.query.infoMaterialValue,
+      infoEnablePackaging: req.query.infoEnablePackaging,
+      infoPackagingLabel: req.query.infoPackagingLabel,
+      infoPackagingValue: req.query.infoPackagingValue,
+      product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
+      product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
+      product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
+      product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || []),
+      enableProduct1: req.query.enableProduct1,
+      enableProduct2: req.query.enableProduct2,
+      enableProduct3: req.query.enableProduct3,
+      enableProduct4: req.query.enableProduct4,
+      enableProduct5: req.query.enableProduct5,
+
+      // Product 8 & 9 params
+      product8Name: req.query.product8Name,
+      product8Color: req.query.product8Color,
+      product8ColorHex: req.query.product8ColorHex,
+      product8Size: req.query.product8Size,
+      product8Material: req.query.product8Material,
+      product8PriceOld: req.query.product8PriceOld,
+      product8Price: req.query.product8Price,
+      enableProduct8: req.query.enableProduct8,
+      product8Images: parseArrayParam(req.query.product8Images, data.product8Images || []),
+
+      product9Name: req.query.product9Name,
+      product9Color: req.query.product9Color,
+      product9ColorHex: req.query.product9ColorHex,
+      product9Size: req.query.product9Size,
+      product9Material: req.query.product9Material,
+      product9PriceOld: req.query.product9PriceOld,
+      product9Price: req.query.product9Price,
+      enableProduct9: req.query.enableProduct9,
+      product9Images: parseArrayParam(req.query.product9Images, data.product9Images || [])
+    };
+
+    // РџР°СЂСЃРёС‚Рё benefits СЏРєС‰Рѕ РїРµСЂРµРґР°РЅРѕ СЏРє JSON string
+    if (req.query.benefits) {
+      try {
+        options.benefits = JSON.parse(decodeURIComponent(req.query.benefits));
+      } catch (e) {
+        console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё РїР°СЂСЃРёРЅРіСѓ benefits:', e.message);
+      }
+    }
+
+    console.log(`рџЋЁ Р“Р•РќР•Р РЈР’РђРќРќРЇ РЎРђР™РўРЈ...`);
+    console.log(`рџ“ќ РџР°СЂР°РјРµС‚СЂРё:`, options);
+    const html = generateHTML(data, options);
+
+    console.log(`вњ… РЎР°Р№С‚ СѓСЃРїС–С€РЅРѕ Р·РіРµРЅРµСЂРѕРІР°РЅРёР№`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(html.length / 1024).toFixed(2)} KB`);
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР°:', err.message);
+    res.status(500).send(`<h1>РџРѕРјРёР»РєР° РїСЂРё РіРµРЅРµСЂСѓРІР°РЅРЅС–</h1><p>${err.message}</p>`);
+  }
+});
+
+// POST /generate - Р“РµРЅРµСЂСѓРІР°С‚Рё HTML Р· РєРѕСЂРёСЃС‚СѓРІР°С†СЊРєРёРјРё РґР°РЅРёРјРё
+app.post('/generate', (req, res) => {
+  try {
+    const customData = req.body || {};
+    const dataPath = path.join(__dirname, 'data', 'user-config.json');
+    const defaultData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    // РћР±'С”РґРЅР°С‚Рё РґРµС„РѕР»С‚РЅС– С‚Р° РєРѕСЂРёСЃС‚СѓРІР°С†СЊРєС– РґР°РЅС–
+    const mergedData = { ...defaultData, ...customData };
+
+    console.log(`рџЋЁ Р“Р•РќР•Р РЈР’РђРќРќРЇ Р— CUSTOM Р”РђРќРРњР...`);
+    const html = generateHTML(mergedData);
+
+    console.log(`вњ… РЎР°Р№С‚ СѓСЃРїС–С€РЅРѕ Р·РіРµРЅРµСЂРѕРІР°РЅРёР№ Р· custom РґР°РЅРёРјРё`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ: ${(html.length / 1024).toFixed(2)} KB`);
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР°:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /export - Р“РµРЅРµСЂСѓРІР°С‚Рё С‚Р° СЃРєР°С‡Р°С‚Рё ZIP Р°СЂС…С–РІ Р·С– СЃС‚Р°С‚РёС‡РЅРёРј СЃР°Р№С‚РѕРј
+app.get('/export', (req, res) => {
+  try {
+    // ONLY user-config.json is the source of truth
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    const data = JSON.parse(fs.readFileSync(configPath, 'utf8'));    // РћС‚СЂРёРјР°С‚Рё РїР°СЂР°РјРµС‚СЂРё Р· query string
+    const options = {
+      headerText: req.query.headerText,
+      heroTitle: req.query.heroTitle,
+      heroPrice: req.query.heroPrice,
+      enableTimer: req.query.enableTimer,
+      enableStock: req.query.enableStock,
+      heroImage: req.query.heroImage,
+      enableImage: req.query.enableImage,
+      imageUrl: req.query.imageUrl,
+      enableVideo: req.query.enableVideo,
+      videoUrl: req.query.videoUrl,
+      enableVideoThumbnail: req.query.enableVideoThumbnail,
+      videoThumbnailDesktop: req.query.videoThumbnailDesktop,
+      videoThumbnailMobile: req.query.videoThumbnailMobile,
+      sizeChartImage: req.query.sizeChartImage,
+      // Info list params
+      infoEnableBrand: req.query.infoEnableBrand,
+      infoBrandLabel: req.query.infoBrandLabel,
+      infoBrandValue: req.query.infoBrandValue,
+      infoEnableModel: req.query.infoEnableModel,
+      infoModelLabel: req.query.infoModelLabel,
+      infoModelValue: req.query.infoModelValue,
+      infoEnableQuantity: req.query.infoEnableQuantity,
+      infoQuantityLabel: req.query.infoQuantityLabel,
+      infoQuantityValue: req.query.infoQuantityValue,
+      infoEnableColors: req.query.infoEnableColors,
+      infoColorsLabel: req.query.infoColorsLabel,
+      infoEnableSizes: req.query.infoEnableSizes,
+      infoSizesLabel: req.query.infoSizesLabel,
+      infoSizesValue: req.query.infoSizesValue,
+      infoEnableMaterial: req.query.infoEnableMaterial,
+      infoMaterialLabel: req.query.infoMaterialLabel,
+      infoMaterialValue: req.query.infoMaterialValue,
+      infoEnablePackaging: req.query.infoEnablePackaging,
+      infoPackagingLabel: req.query.infoPackagingLabel,
+      infoPackagingValue: req.query.infoPackagingValue,
+      product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
+      product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
+      product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
+      product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || []),
+      enableProduct1: req.query.enableProduct1,
+      enableProduct2: req.query.enableProduct2,
+      enableProduct3: req.query.enableProduct3,
+      enableProduct4: req.query.enableProduct4,
+      enableProduct5: req.query.enableProduct5,
+
+      // Product 8 & 9 params
+      product8Name: req.query.product8Name,
+      product8Color: req.query.product8Color,
+      product8ColorHex: req.query.product8ColorHex,
+      product8Size: req.query.product8Size,
+      product8Material: req.query.product8Material,
+      product8PriceOld: req.query.product8PriceOld,
+      product8Price: req.query.product8Price,
+      enableProduct8: req.query.enableProduct8,
+      product8Images: parseArrayParam(req.query.product8Images, data.product8Images || []),
+
+      product9Name: req.query.product9Name,
+      product9Color: req.query.product9Color,
+      product9ColorHex: req.query.product9ColorHex,
+      product9Size: req.query.product9Size,
+      product9Material: req.query.product9Material,
+      product9PriceOld: req.query.product9PriceOld,
+      product9Price: req.query.product9Price,
+      enableProduct9: req.query.enableProduct9,
+      product9Images: parseArrayParam(req.query.product9Images, data.product9Images || [])
+    };
+
+    // РџР°СЂСЃРёС‚Рё benefits СЏРєС‰Рѕ РїРµСЂРµРґР°РЅРѕ СЏРє JSON string
+    if (req.query.benefits) {
+      try {
+        options.benefits = JSON.parse(decodeURIComponent(req.query.benefits));
+      } catch (e) {
+        console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё РїР°СЂСЃРёРЅРіСѓ benefits:', e.message);
+      }
+    }
+
+    console.log(`рџ“¦ Р•РљРЎРџРћР Рў - РЎРўР’РћР Р•РќРќРЇ ZIP РђР РҐР†Р’РЈ...`);
+    console.log(`рџ“ќ РџР°СЂР°РјРµС‚СЂРё:`, options);
+
+    // Р“РµРЅРµСЂСѓРІР°С‚Рё HTML
+    let html = generateHTML(data, options);
+
+    // Р’РёРґР°Р»РёС‚Рё "public/" Р· СѓСЃС–С… С€Р»СЏС…С–РІ РґР»СЏ РµРєСЃРїРѕСЂС‚Сѓ (Р±Рѕ РІ ZIP РЅРµРјР°С” РїР°РїРєРё public/)
+    html = html.replace(/public\//g, '');
+
+    // РЎС‚РІРѕСЂРёС‚Рё ZIP Р°СЂС…С–РІ
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // 9 = РјР°РєСЃРёРјР°Р»СЊРЅРµ СЃС‚РёСЃРЅРµРЅРЅСЏ
+    });
+
+    // РћР±СЂРѕР±РєР° РїРѕРјРёР»РѕРє
+    archive.on('error', (err) => {
+      console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё СЃС‚РІРѕСЂРµРЅРЅС– ZIP:', err.message);
+      res.status(500).send('РџРѕРјРёР»РєР° РїСЂРё СЃС‚РІРѕСЂРµРЅРЅС– Р°СЂС…С–РІСѓ');
+    });
+
+    // Р’СЃС‚Р°РЅРѕРІРёС‚Рё Р·Р°РіРѕР»РѕРІРѕРє РґР»СЏ СЃРєР°С‡СѓРІР°РЅРЅСЏ
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', 'attachment; filename=landing-kopo.zip');
+
+    // Р”РѕРґР°С‚Рё HTML С„Р°Р№Р»
+    archive.append(html, { name: 'index.html' });
+
+    // Р”РѕРґР°С‚Рё СЃС‚Р°С‚РёС‡РЅС– РїР°РїРєРё
+    const dirs = ['css', 'js', 'img', 'fonts', 'icons', 'video'];
+    for (const dir of dirs) {
+      const dirPath = path.join(__dirname, dir);
+      if (fs.existsSync(dirPath)) {
+        archive.directory(dirPath, dir);
+        console.log(`вњ… Р”РѕРґР°РЅРѕ РїР°РїРєСѓ: ${dir}`);
+      }
+    }
+
+    // Р”РѕРґР°С‚Рё Р·Р°РІР°РЅС‚Р°Р¶РµРЅРµ С„РѕС‚Рѕ СЏРєС‰Рѕ С–СЃРЅСѓС”
+    if (options.heroImage) {
+      // Р’РёС‚СЏРіС‚Рё С–Рј'СЏ С„Р°Р№Р»Сѓ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ (hero-123456_m -> hero-123456)
+      const filename = path.basename(options.heroImage, '.webp').replace('_m', '');
+
+      // Р”РѕРґР°С‚Рё РґРµСЃРєС‚РѕРї РІРµСЂСЃС–СЋ (jpg)
+      const heroDesktopPath = path.join(heroImageDir, `${filename}.jpg`);
+      if (fs.existsSync(heroDesktopPath)) {
+        archive.file(heroDesktopPath, { name: `img/hero/${filename}.jpg` });
+        console.log(`вњ… Р”РѕРґР°РЅРѕ РґРµСЃРєС‚РѕРї С„РѕС‚Рѕ: img/hero/${filename}.jpg`);
+      }
+
+      // Р”РѕРґР°С‚Рё РјРѕР±С–Р»СЊРЅСѓ РІРµСЂСЃС–СЋ (webp)
+      const heroMobilePath = path.join(heroImageDir, `${filename}_m.webp`);
+      if (fs.existsSync(heroMobilePath)) {
+        archive.file(heroMobilePath, { name: `img/hero/${filename}_m.webp` });
+        console.log(`вњ… Р”РѕРґР°РЅРѕ РјРѕР±С–Р»СЊРЅРµ С„РѕС‚Рѕ: img/hero/${filename}_m.webp`);
+      }
+    }
+
+    // Р”РѕРґР°С‚Рё product images (products 1-5, 8-9)
+    const productKeys = ['product1Images', 'product2Images', 'product3Images', 'product4Images', 'product5Images', 'product8Images', 'product9Images'];
+    for (const key of productKeys) {
+      const images = options[key] || data[key] || [];
+      if (Array.isArray(images) && images.length > 0) {
+        for (const imagePath of images) {
+          // РћС‚СЂРёРјР°С‚Рё Р±Р°Р·РѕРІРµ С–Рј'СЏ Р±РµР· СЂРѕР·С€РёСЂРµРЅРЅСЏ (product-123456.jpg -> product-123456)
+          const filename = path.basename(imagePath, '.jpg');
+
+          // Р”РѕРґР°С‚Рё РґРµСЃРєС‚РѕРї РІРµСЂСЃС–СЋ (jpg)
+          const desktopPath = path.join(productImageDir, `${filename}.jpg`);
+          if (fs.existsSync(desktopPath)) {
+            archive.file(desktopPath, { name: `img/products/${filename}.jpg` });
+            console.log(`вњ… Р”РѕРґР°РЅРѕ РґРµСЃРєС‚РѕРї product: img/products/${filename}.jpg`);
+          }
+
+          // Р”РѕРґР°С‚Рё РјРѕР±С–Р»СЊРЅСѓ РІРµСЂСЃС–СЋ (webp)
+          const mobilePath = path.join(productImageDir, `${filename}_m.webp`);
+          if (fs.existsSync(mobilePath)) {
+            archive.file(mobilePath, { name: `img/products/${filename}_m.webp` });
+            console.log(`вњ… Р”РѕРґР°РЅРѕ РјРѕР±С–Р»СЊРЅРёР№ product: img/products/${filename}_m.webp`);
+          }
+        }
+      }
+    }
+
+    // Р”РѕРґР°С‚Рё С„Р°Р№Р» РґР°РЅРёС…
+    archive.append(JSON.stringify(data, null, 2), { name: 'data.json' });
+
+    // Р”РѕРґР°С‚Рё .htaccess РґР»СЏ Apache (СЏРєС‰Рѕ РїРѕС‚СЂС–Р±РЅРѕ)
+    const htaccess = `<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.html [L]
+</IfModule>`;
+    archive.append(htaccess, { name: '.htaccess' });
+
+    // Р¤РёРЅР°Р»С–Р·СѓРІР°С‚Рё Р°СЂС…С–РІ
+    archive.finalize();
+
+    // РџРµСЂРµРґР°С‚Рё РІ response
+    archive.pipe(res);
+
+    console.log(`вњ… ZIP Р°СЂС…С–РІ СѓСЃРїС–С€РЅРѕ СЃС‚РІРѕСЂРµРЅРёР№ Рё РІС–РґРїСЂР°РІР»РµРЅРёР№`);
+    console.log(`рџ“Џ Р РѕР·РјС–СЂ СЃР°Р№С‚Сѓ: ${(html.length / 1024).toFixed(2)} KB`);
+
+  } catch (err) {
+    console.error('вќЊ РџРѕРјРёР»РєР° РїСЂРё РµРєСЃРїРѕСЂС‚С–:', err.message);
+    res.status(500).send(`РџРѕРјРёР»РєР° РїСЂРё РµРєСЃРїРѕСЂС‚С–: ${err.message}`);
+  }
+});
+
+// РЎС‚Р°С‚РёС‡РЅС– С„Р°Р№Р»Рё (CSS, JS, С„РѕС‚Рѕ, С€СЂРёС„С‚Рё) - РњРђР®РўР¬ Р‘РЈРўР Р’ РљР†РќР¦Р†!
+
+// POST /api/submit-order - Р’С–РґРїСЂР°РІРєР° Р·Р°СЏРІРєРё Сѓ SalesDrive CRM
+app.post('/api/submit-order', async (req, res) => {
+  const { productName, productPrice, customerName, customerPhone } = req.body || {};
+
+  if (!productName || !productPrice || !customerName || !customerPhone) {
+    return res.status(400).json({
+      success: false,
+      message: 'Р‘СѓРґСЊ Р»Р°СЃРєР°, Р·Р°РїРѕРІРЅС–С‚СЊ СѓСЃС– РїРѕР»СЏ: С–РјвЂ™СЏ, С‚РµР»РµС„РѕРЅ, С‚РѕРІР°СЂ С‚Р° С†С–РЅСѓ'
+    });
+  }
+
+  const configPath = path.join(__dirname, 'data', 'user-config.json');
+  let salesdriveConfig = {};
+
+  try {
+    salesdriveConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  } catch (err) {
+    console.warn('РќРµ РІРґР°Р»РѕСЃСЏ РїСЂРѕС‡РёС‚Р°С‚Рё user-config.json РґР»СЏ SalesDrive:', err.message);
+  }
+
+  const endpoint = (salesdriveConfig.salesdriveEndpoint && salesdriveConfig.salesdriveEndpoint.trim()) || process.env.SALESDRIVE_ENDPOINT || 'https://comoyo.salesdrive.me/handler/';
+  const apiKey = (salesdriveConfig.salesdriveApiKey && salesdriveConfig.salesdriveApiKey.trim()) || process.env.SALESDRIVE_API_KEY;
+  const organizationId = (salesdriveConfig.salesdriveFunnelId && salesdriveConfig.salesdriveFunnelId.toString().trim()) || process.env.SALESDRIVE_ORGANIZATION_ID || '1';
+  const siteName = (salesdriveConfig.website && salesdriveConfig.website.trim()) || req.headers.host || 'landing';
+
+  if (!apiKey) {
+    return res.status(400).json({
+      success: false,
+      message: 'SalesDrive API РєР»СЋС‡ РЅРµ РЅР°Р»Р°С€С‚РѕРІР°РЅРёР№ Сѓ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС–'
+    });
+  }
+
+  const payload = {
+    getResultData: '1',
+    products: [{
+      name: productName,
+      costPerItem: Number(productPrice) || 0,
+      amount: 1
+    }],
+    fName: customerName,
+    phone: customerPhone,
+    sajt: siteName,
+    organizationId
+  };
+
+  try {
+    const { default: fetch } = await import('node-fetch');
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'X-Api-Key': apiKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('SalesDrive API error:', data);
+      return res.status(response.status).json({
+        success: false,
+        message: 'SalesDrive РїРѕРІРµСЂРЅСѓРІ РїРѕРјРёР»РєСѓ',
+        error: data
+      });
+    }
+
+    console.log('вњ… Р—Р°СЏРІРєР° РїРµСЂРµРґР°РЅР° Сѓ SalesDrive', {
+      product: productName,
+      customer: customerName,
+      phone: customerPhone
+    });
+
+    return res.json({
+      success: true,
+      message: 'Р—Р°СЏРІРєСѓ РІС–РґРїСЂР°РІР»РµРЅРѕ РґРѕ CRM',
+      data
+    });
+  } catch (err) {
+    console.error('РџРѕРјРёР»РєР° РІС–РґРїСЂР°РІРєРё Сѓ SalesDrive:', err.message);
+    return res.status(500).json({
+      success: false,
+      message: 'РќРµ РІРґР°Р»РѕСЃСЏ РІС–РґРїСЂР°РІРёС‚Рё Р·Р°СЏРІРєСѓ. РџРµСЂРµРІС–СЂС‚Рµ РЅР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ Р°Р±Рѕ СЃРїСЂРѕР±СѓР№С‚Рµ РїС–Р·РЅС–С€Рµ.',
+      error: err.message
+    });
+  }
+});
+
+
+app.use(express.static(path.join(__dirname)));
+
+// Р—Р°РїСѓСЃРє СЃРµСЂРІРµСЂР°
+app.listen(PORT, () => {
+  console.log('==============================');
+  console.log('Constructor server is running');
+  console.log(`Base URL: http://localhost:${PORT}/`);
+  console.log(`API data: http://localhost:${PORT}/api/data`);
+  console.log(`Preview:  http://localhost:${PORT}/generate`);
+  console.log('Press CTRL+C to stop.');
+});
+
+
+
+
+
+
+
+

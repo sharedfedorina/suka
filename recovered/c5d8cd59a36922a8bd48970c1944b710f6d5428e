@@ -1,0 +1,2535 @@
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const archiver = require('archiver');
+const multer = require('multer');
+const sharp = require('sharp');
+
+const app = express();
+const PORT = 6614;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// GET / - Сервірування конструктора з окремих файлів
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'form.html'));
+});
+
+// Маршрут для доступу до зображень через /img/ (вказує на public/img/)
+app.use('/img', express.static(path.join(__dirname, 'public', 'img')));
+
+app.use(express.static(__dirname, { index: false }));
+
+// Налаштування multer для завантаження фото
+const heroImageDir = path.join(__dirname, 'public', 'img', 'hero');
+if (!fs.existsSync(heroImageDir)) {
+  fs.mkdirSync(heroImageDir, { recursive: true });
+}
+
+const imageDir = path.join(__dirname, 'public', 'img', 'image');
+if (!fs.existsSync(imageDir)) {
+  fs.mkdirSync(imageDir, { recursive: true });
+}
+
+const videoDir = path.join(__dirname, 'video');
+if (!fs.existsSync(videoDir)) {
+  fs.mkdirSync(videoDir, { recursive: true });
+}
+
+const videoThumbnailDir = path.join(__dirname, 'public', 'img', 'video');
+if (!fs.existsSync(videoThumbnailDir)) {
+  fs.mkdirSync(videoThumbnailDir, { recursive: true });
+}
+
+const productsImageDir = path.join(__dirname, 'public', 'img', 'products');
+if (!fs.existsSync(productsImageDir)) {
+  fs.mkdirSync(productsImageDir, { recursive: true });
+}
+const productImageDir = productsImageDir; // Alias для сумісності
+
+const sizeChartImageDir = path.join(__dirname, 'public', 'img', 'info');
+if (!fs.existsSync(sizeChartImageDir)) {
+  fs.mkdirSync(sizeChartImageDir, { recursive: true });
+}
+
+const tabsImageDir = path.join(__dirname, 'public', 'img', 'tabs');
+if (!fs.existsSync(tabsImageDir)) {
+  fs.mkdirSync(tabsImageDir, { recursive: true });
+}
+
+const commentsImageDir = path.join(__dirname, 'public', 'img', 'comments');
+if (!fs.existsSync(commentsImageDir)) {
+  fs.mkdirSync(commentsImageDir, { recursive: true });
+}
+
+const DEFAULT_VIDEO_THUMBNAIL_DESKTOP = 'img/promo/promo-1.jpg';
+const DEFAULT_VIDEO_THUMBNAIL_MOBILE = 'img/promo/promo-1_m.webp';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, heroImageDir);
+  },
+  filename: (req, file, cb) => {
+    // Зберігаємо з одинаковим ім'ям, отримуємо розширення з оригіналу
+    const ext = path.extname(file.originalname);
+    cb(null, 'custom-hero' + ext);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, imageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, 'custom-image' + ext);
+  }
+});
+
+const uploadImage = multer({
+  storage: imageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+const videoStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, videoDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.mp4';
+    const timestamp = Date.now();
+    cb(null, 'custom-video-' + timestamp + ext);
+  }
+});
+
+const uploadVideo = multer({
+  storage: videoStorage,
+  limits: { fileSize: 30 * 1024 * 1024 }, // 30MB ?????
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('video/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('????????? ???? ??????????'));
+    }
+  }
+});
+
+
+const videoThumbnailStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, videoThumbnailDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'custom-video-thumb-' + timestamp + ext);
+  }
+});
+
+const uploadVideoThumbnail = multer({
+  storage: videoThumbnailStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Неприпустимий формат прев\'ю'));
+    }
+  }
+});
+
+const productImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, productsImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'product-' + timestamp + ext);
+  }
+});
+
+const uploadProductImage = multer({
+  storage: productImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+const sizeChartImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, sizeChartImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'size-chart-' + timestamp + ext);
+  }
+});
+
+const uploadSizeChartImage = multer({
+  storage: sizeChartImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+const tabsImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, tabsImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'tabs-' + timestamp + ext);
+  }
+});
+
+const uploadTabImage = multer({
+  storage: tabsImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+const commentsImageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, commentsImageDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    const timestamp = Date.now();
+    cb(null, 'comment-' + timestamp + ext);
+  }
+});
+
+const uploadCommentImage = multer({
+  storage: commentsImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB максимум
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Тільки зображення дозволені'));
+    }
+  }
+});
+
+function parseArrayParam(value, fallback = []) {
+  if (!value) {
+    return fallback;
+  }
+
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch (err) {
+    try {
+      return JSON.parse(decodeURIComponent(value));
+    } catch (parseErr) {
+      console.error('Failed to parse array param:', parseErr.message);
+      return fallback;
+    }
+  }
+}
+
+
+// Функція для генерування слайдів з масиву зображень
+function generateSlides(images = []) {
+  if (!Array.isArray(images) || images.length === 0) {
+    return '';
+  }
+
+  return images.map(imagePath => {
+    // Remove leading slash for relative paths in generated HTML
+    const desktopPath = imagePath.replace(/^\//, '');
+
+    // Generate mobile path: replace .jpg with _m.webp
+    const mobilePath = desktopPath.replace(/\.jpg$/, '_m.webp');
+
+    // Desktop gets JPG, mobile gets WebP
+    return `          <div class="swiper-slide products-slide">
+           <picture>
+            <source srcset="${desktopPath}" media="(min-width: 800px)">
+            <img src="${mobilePath}" alt="img">
+           </picture>
+          </div>`;
+  }).join('\n');
+}
+
+// Функція для генерування HTML з даних
+function generateHTML(dataObj, options = {}) {
+  try {
+    const templatePath = path.join(__dirname, 'index.html');
+    let html = fs.readFileSync(templatePath, 'utf8');
+
+    // Замінити основні поля
+    html = html.replace(
+      /<title>.*?<\/title>/,
+      `<title>${dataObj.page.title}</title>`
+    );
+
+    // Замінити плейсхолдери для хедер текст, титл, ціна
+    const finalHeaderText = (options.headerText && options.headerText.trim()) ? options.headerText : (dataObj.headerText || '');
+    const finalHeroTitle = (options.heroTitle && options.heroTitle.trim()) ? options.heroTitle : (dataObj.heroTitle || '');
+    const finalHeroPrice = (options.heroPrice && options.heroPrice.trim()) ? options.heroPrice : (dataObj.hero?.price || '');
+    const finalStockCount = (options.stockCount && options.stockCount.toString().trim()) ? options.stockCount : (dataObj.hero?.stock_count || '19');
+
+    html = html.replaceAll('{{headerText}}', finalHeaderText);
+    html = html.replaceAll('{{heroTitle}}', finalHeroTitle);
+    html = html.replaceAll('{{heroPrice}}', finalHeroPrice);
+    html = html.replaceAll('{{stockCount}}', finalStockCount);
+
+    // Видалити таймер якщо вимкнено
+    if (options.enableTimer !== 'on' && options.enableTimer !== true) {
+      // Видалити весь блок за допомогою HTML коментарів
+      html = html.replace(/\s*<!--\s*timer\s*-->[\s\S]*?<!--\s*\/timer\s*-->\s*/g, '');
+    }
+
+    // Видалити блок "Залишилось X футболок" якщо вимкнено
+    if (options.enableStock !== 'on' && options.enableStock !== true) {
+      // Видалити весь блок за допомогою HTML коментарів
+      html = html.replace(/\s*<!--\s*stock\s*-->[\s\S]*?<!--\s*\/stock\s*-->\s*/g, '');
+    }
+
+    // Видалити tabs секцію якщо вимкнено
+    const enableTabs = options.enableTabs !== undefined ? options.enableTabs : dataObj.enableTabs;
+    if (enableTabs !== 'on' && enableTabs !== true) {
+      html = html.replace(/\s*<!--\s*tabs\s*-->[\s\S]*?<!--\s*\/tabs\s*-->\s*/g, '');
+    }
+
+    // Видалити окремі tab items якщо вимкнено
+    const enableTabItem1 = options.enableTabItem1 !== undefined ? options.enableTabItem1 : dataObj.enableTabItem1;
+    if (enableTabItem1 !== 'on' && enableTabItem1 !== true) {
+      html = html.replace(/\s*<!--\s*tabItem1\s*-->[\s\S]*?<!--\s*\/tabItem1\s*-->\s*/g, '');
+    }
+    const enableTabItem2 = options.enableTabItem2 !== undefined ? options.enableTabItem2 : dataObj.enableTabItem2;
+    if (enableTabItem2 !== 'on' && enableTabItem2 !== true) {
+      html = html.replace(/\s*<!--\s*tabItem2\s*-->[\s\S]*?<!--\s*\/tabItem2\s*-->\s*/g, '');
+    }
+    const enableTabItem3 = options.enableTabItem3 !== undefined ? options.enableTabItem3 : dataObj.enableTabItem3;
+    if (enableTabItem3 !== 'on' && enableTabItem3 !== true) {
+      html = html.replace(/\s*<!--\s*tabItem3\s*-->[\s\S]*?<!--\s*\/tabItem3\s*-->\s*/g, '');
+    }
+
+    // Видалити FAQ секцію якщо вимкнено
+    const enableFaq = options.enableFaq !== undefined ? options.enableFaq : dataObj.enableFaq;
+    if (enableFaq !== 'on' && enableFaq !== true) {
+      html = html.replace(/\s*<!--\s*faq\s*-->[\s\S]*?<!--\s*\/faq\s*-->\s*/g, '');
+    }
+
+    // Видалити окремі FAQ items якщо вимкнено
+    const enableFaqItem1 = options.enableFaqItem1 !== undefined ? options.enableFaqItem1 : dataObj.enableFaqItem1;
+    if (enableFaqItem1 !== 'on' && enableFaqItem1 !== true) {
+      html = html.replace(/\s*<!--\s*faqItem1\s*-->[\s\S]*?<!--\s*\/faqItem1\s*-->\s*/g, '');
+    }
+    const enableFaqItem2 = options.enableFaqItem2 !== undefined ? options.enableFaqItem2 : dataObj.enableFaqItem2;
+    if (enableFaqItem2 !== 'on' && enableFaqItem2 !== true) {
+      html = html.replace(/\s*<!--\s*faqItem2\s*-->[\s\S]*?<!--\s*\/faqItem2\s*-->\s*/g, '');
+    }
+    const enableFaqItem3 = options.enableFaqItem3 !== undefined ? options.enableFaqItem3 : dataObj.enableFaqItem3;
+    if (enableFaqItem3 !== 'on' && enableFaqItem3 !== true) {
+      html = html.replace(/\s*<!--\s*faqItem3\s*-->[\s\S]*?<!--\s*\/faqItem3\s*-->\s*/g, '');
+    }
+    const enableFaqItem4 = options.enableFaqItem4 !== undefined ? options.enableFaqItem4 : dataObj.enableFaqItem4;
+    if (enableFaqItem4 !== 'on' && enableFaqItem4 !== true) {
+      html = html.replace(/\s*<!--\s*faqItem4\s*-->[\s\S]*?<!--\s*\/faqItem4\s*-->\s*/g, '');
+    }
+
+    // Видалити Comments секцію якщо вимкнено
+    const enableComments = options.enableComments !== undefined ? options.enableComments : dataObj.enableComments;
+    if (enableComments !== 'on' && enableComments !== true) {
+      html = html.replace(/\s*<!--\s*comments\s*-->[\s\S]*?<!--\s*\/comments\s*-->\s*/g, '');
+    }
+
+    // Видалити How To Buy секцію якщо вимкнено
+    const enableHow = options.enableHow !== undefined ? options.enableHow : dataObj.enableHow;
+    if (enableHow !== 'on' && enableHow !== true) {
+      html = html.replace(/\s*<!--\s*how\s*-->[\s\S]*?<!--\s*\/how\s*-->\s*/g, '');
+    }
+
+    // Замінити hero фото (desktop + mobile)
+    const rawHeroImage = (options.heroImage && options.heroImage.trim()) ? options.heroImage : (dataObj.heroImage || 'img/start/start-1_m.webp');
+    const finalHeroImage = rawHeroImage.replace(/^\//, '').replace(/^public\//, '');
+    html = html.replace(/\{\{heroImage\}\}/g, finalHeroImage);
+
+    if (options.heroImage) {
+      // Видалити тільки початковий слеш: /public/img/hero/hero-123.jpg -> public/img/hero/hero-123.jpg
+      const desktopPath = options.heroImage.replace(/^\//, '');
+
+      // Згенерувати mobile шлях: public/img/hero/hero-123.jpg -> public/img/hero/hero-123_m.webp
+      const mobilePath = desktopPath.replace(/\.jpg$/, '_m.webp');
+
+      // Замінити desktop версію
+      html = html.replace(
+        /img\/start\/start-1\.png/g,
+        desktopPath
+      );
+
+      // Замінити mobile версію
+      html = html.replace(
+        /img\/start\/start-1_m\.webp/g,
+        mobilePath
+      );
+    }
+
+    // Замінити imageUrl у plus-logo блоці
+    const rawImageUrl = (options.imageUrl && options.imageUrl.trim()) ? options.imageUrl : (dataObj.imageUrl || '');
+    const finalImageUrl = rawImageUrl.replace(/^\//, '');
+    html = html.replace(/\{\{imageUrl\}\}/g, finalImageUrl);
+
+    const imageToggle = (options.enableImage !== undefined) ? options.enableImage : dataObj.enableImage;
+
+
+    // Видалити image блок якщо вимкнено
+    if (imageToggle !== 'on' && imageToggle !== true) {
+      html = html.replace(/\s*<!--\s*image\s*-->[\s\S]*?<!--\s*\/image\s*-->\s*/g, '');
+    }
+
+    const rawVideoUrl = (options.videoUrl && options.videoUrl.trim()) ? options.videoUrl : (dataObj.videoUrl || '');
+    const finalVideoUrl = rawVideoUrl.replace(/^\//, '');
+    html = html.replace('{{videoUrl}}', finalVideoUrl);
+    const videoToggle = (options.enableVideo !== undefined) ? options.enableVideo : dataObj.enableVideo;
+
+
+    if (videoToggle !== 'on' && videoToggle !== true) {
+      html = html.replace(/\s*<!--\s*video\s*-->[\s\S]*?<!--\s*\/video\s*-->\s*/g, '');
+    }
+
+    const rawVideoThumbnailDesktop = (options.videoThumbnailDesktop && options.videoThumbnailDesktop.trim()) ? options.videoThumbnailDesktop : (dataObj.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP);
+    const rawVideoThumbnailMobile = (options.videoThumbnailMobile && options.videoThumbnailMobile.trim()) ? options.videoThumbnailMobile : (dataObj.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE);
+    const finalVideoThumbnailDesktop = rawVideoThumbnailDesktop.replace(/^\//, '');
+    const finalVideoThumbnailMobile = rawVideoThumbnailMobile.replace(/^\//, '');
+    html = html.replace('{{videoThumbnailDesktop}}', finalVideoThumbnailDesktop);
+    html = html.replace('{{videoThumbnailMobile}}', finalVideoThumbnailMobile);
+    const videoThumbnailToggle = (options.enableVideoThumbnail !== undefined) ? options.enableVideoThumbnail : (dataObj.enableVideoThumbnail !== undefined ? dataObj.enableVideoThumbnail : true);
+    if (videoThumbnailToggle !== 'on' && videoThumbnailToggle !== true) {
+      html = html.replace(/\s*<!--\s*videoThumbnail\s*-->[\s\S]*?<!--\s*\/videoThumbnail\s*-->\s*/g, '');
+    }
+
+    // Замінити фото розмірної сітки
+    const rawSizeChartImage = (options.sizeChartImage && options.sizeChartImage.trim()) ? options.sizeChartImage : (dataObj.sizeChartImage || 'img/info/info-1.webp');
+    let finalSizeChartImage = rawSizeChartImage.replace(/^\//, '');
+
+    // Конвертувати PNG → WebP для мобільної оптимізації
+    if (finalSizeChartImage.endsWith('.png')) {
+      finalSizeChartImage = finalSizeChartImage.replace(/\.png$/, '_m.webp');
+    } else if (finalSizeChartImage.endsWith('.jpg')) {
+      finalSizeChartImage = finalSizeChartImage.replace(/\.jpg$/, '_m.webp');
+    }
+
+    html = html.replace(/\{\{sizeChartImage\}\}/g, finalSizeChartImage);
+
+    // Замінити переваги (benefits з масиву)
+    const benefits = options.benefits || dataObj.benefits || [];
+    if (Array.isArray(benefits)) {
+      benefits.forEach((benefit) => {
+        const num = benefit.id;
+        const title = benefit.title || '';
+        const description = benefit.description || '';
+        html = html.replace(new RegExp(`\\{\\{benefit${num}Title\\}\\}`, 'g'), title);
+        html = html.replace(new RegExp(`\\{\\{benefit${num}Description\\}\\}`, 'g'), description);
+      });
+    }
+
+    // Генерація інформаційного блоку (список характеристик)
+    // Збираємо ColorHex з увімкнених продуктів для автогенерації кольорів
+    // ТІЛЬКИ з продуктів 1-5, НЕ включаючи продукти 8 та 9
+    const productColors = [];
+    for (let i = 1; i <= 5; i++) {
+      const enabledOpt = options[`enableProduct${i}`] === 'on' || options[`enableProduct${i}`] === true;
+      const enabledData = dataObj[`enableProduct${i}`] === true;
+      const enabled = enabledOpt || (options[`enableProduct${i}`] === undefined && enabledData);
+      if (enabled) {
+        const colorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+        if (colorHex) productColors.push(colorHex);
+      }
+    }
+
+    // Генеруємо SVG кружечки для кольорів
+    const colorCircles = productColors.map(color => {
+      return `<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="13" cy="13" r="13" fill="${color}" />
+          </svg>`;
+    }).join('\n           ');
+
+    // Обробка кожного поля інформаційного блоку
+    const infoBrandLabel = (options.infoBrandLabel && options.infoBrandLabel.trim()) ? options.infoBrandLabel : (dataObj.infoBrandLabel || 'Бренд');
+    const infoBrandValue = (options.infoBrandValue && options.infoBrandValue.trim()) ? options.infoBrandValue : (dataObj.infoBrandValue || 'Kopo™ (Україна)');
+    const infoModelLabel = (options.infoModelLabel && options.infoModelLabel.trim()) ? options.infoModelLabel : (dataObj.infoModelLabel || 'Модель');
+    const infoModelValue = (options.infoModelValue && options.infoModelValue.trim()) ? options.infoModelValue : (dataObj.infoModelValue || 'Жіноча');
+    const infoQuantityLabel = (options.infoQuantityLabel && options.infoQuantityLabel.trim()) ? options.infoQuantityLabel : (dataObj.infoQuantityLabel || 'Кількість');
+    const infoQuantityValue = (options.infoQuantityValue && options.infoQuantityValue.trim()) ? options.infoQuantityValue : (dataObj.infoQuantityValue || 'Одна футболка або набір');
+    const infoColorsLabel = (options.infoColorsLabel && options.infoColorsLabel.trim()) ? options.infoColorsLabel : (dataObj.infoColorsLabel || 'Кольори');
+    const infoSizesLabel = (options.infoSizesLabel && options.infoSizesLabel.trim()) ? options.infoSizesLabel : (dataObj.infoSizesLabel || 'Розміри');
+    const infoSizesValue = (options.infoSizesValue && options.infoSizesValue.trim()) ? options.infoSizesValue : (dataObj.infoSizesValue || 'від S до 5XL');
+    const infoMaterialLabel = (options.infoMaterialLabel && options.infoMaterialLabel.trim()) ? options.infoMaterialLabel : (dataObj.infoMaterialLabel || 'Матеріал');
+    const infoMaterialValue = (options.infoMaterialValue && options.infoMaterialValue.trim()) ? options.infoMaterialValue : (dataObj.infoMaterialValue || 'Бавовна 95%, еластан 5%');
+    const infoPackagingLabel = (options.infoPackagingLabel && options.infoPackagingLabel.trim()) ? options.infoPackagingLabel : (dataObj.infoPackagingLabel || 'Упаковка');
+    const infoPackagingValue = (options.infoPackagingValue && options.infoPackagingValue.trim()) ? options.infoPackagingValue : (dataObj.infoPackagingValue || 'Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.');
+
+    html = html.replace('{{infoBrandLabel}}', infoBrandLabel);
+    html = html.replace('{{infoBrandValue}}', infoBrandValue);
+    html = html.replace('{{infoModelLabel}}', infoModelLabel);
+    html = html.replace('{{infoModelValue}}', infoModelValue);
+    html = html.replace('{{infoQuantityLabel}}', infoQuantityLabel);
+    html = html.replace('{{infoQuantityValue}}', infoQuantityValue);
+    html = html.replace('{{infoColorsLabel}}', infoColorsLabel);
+    html = html.replace('{{infoColorCircles}}', colorCircles);
+    html = html.replace('{{infoSizesLabel}}', infoSizesLabel);
+    html = html.replace('{{infoSizesValue}}', infoSizesValue);
+    html = html.replace('{{infoMaterialLabel}}', infoMaterialLabel);
+    html = html.replace('{{infoMaterialValue}}', infoMaterialValue);
+    html = html.replace('{{infoPackagingLabel}}', infoPackagingLabel);
+    html = html.replace('{{infoPackagingValue}}', infoPackagingValue);
+
+    // Видалити поля якщо вимкнені (з fallback на dataObj)
+    const infoEnableBrand = (options.infoEnableBrand === 'on' || options.infoEnableBrand === true) || (options.infoEnableBrand === undefined && dataObj.infoEnableBrand === true);
+    const infoEnableModel = (options.infoEnableModel === 'on' || options.infoEnableModel === true) || (options.infoEnableModel === undefined && dataObj.infoEnableModel === true);
+    const infoEnableQuantity = (options.infoEnableQuantity === 'on' || options.infoEnableQuantity === true) || (options.infoEnableQuantity === undefined && dataObj.infoEnableQuantity === true);
+    const infoEnableColors = (options.infoEnableColors === 'on' || options.infoEnableColors === true) || (options.infoEnableColors === undefined && dataObj.infoEnableColors === true);
+    const infoEnableSizes = (options.infoEnableSizes === 'on' || options.infoEnableSizes === true) || (options.infoEnableSizes === undefined && dataObj.infoEnableSizes === true);
+    const infoEnableMaterial = (options.infoEnableMaterial === 'on' || options.infoEnableMaterial === true) || (options.infoEnableMaterial === undefined && dataObj.infoEnableMaterial === true);
+    const infoEnablePackaging = (options.infoEnablePackaging === 'on' || options.infoEnablePackaging === true) || (options.infoEnablePackaging === undefined && dataObj.infoEnablePackaging === true);
+
+    if (!infoEnableBrand) {
+      html = html.replace(/\s*<!--\s*infoBrand\s*-->[\s\S]*?<!--\s*\/infoBrand\s*-->\s*/g, '');
+    }
+    if (!infoEnableModel) {
+      html = html.replace(/\s*<!--\s*infoModel\s*-->[\s\S]*?<!--\s*\/infoModel\s*-->\s*/g, '');
+    }
+    if (!infoEnableQuantity) {
+      html = html.replace(/\s*<!--\s*infoQuantity\s*-->[\s\S]*?<!--\s*\/infoQuantity\s*-->\s*/g, '');
+    }
+    if (!infoEnableColors) {
+      html = html.replace(/\s*<!--\s*infoColors\s*-->[\s\S]*?<!--\s*\/infoColors\s*-->\s*/g, '');
+    }
+    if (!infoEnableSizes) {
+      html = html.replace(/\s*<!--\s*infoSizes\s*-->[\s\S]*?<!--\s*\/infoSizes\s*-->\s*/g, '');
+    }
+    if (!infoEnableMaterial) {
+      html = html.replace(/\s*<!--\s*infoMaterial\s*-->[\s\S]*?<!--\s*\/infoMaterial\s*-->\s*/g, '');
+    }
+    if (!infoEnablePackaging) {
+      html = html.replace(/\s*<!--\s*infoPackaging\s*-->[\s\S]*?<!--\s*\/infoPackaging\s*-->\s*/g, '');
+    }
+
+    // Замінити плейсхолдери для 5 продуктів
+    for (let i = 1; i <= 5; i++) {
+      const productName = (options[`product${i}Name`] && options[`product${i}Name`].trim()) ? options[`product${i}Name`] : (dataObj[`product${i}Name`] || '');
+      const productColor = (options[`product${i}Color`] && options[`product${i}Color`].trim()) ? options[`product${i}Color`] : (dataObj[`product${i}Color`] || '');
+      const productColorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+      const productSize = (options[`product${i}Size`] && options[`product${i}Size`].trim()) ? options[`product${i}Size`] : (dataObj[`product${i}Size`] || '');
+      const productMaterial = (options[`product${i}Material`] && options[`product${i}Material`].trim()) ? options[`product${i}Material`] : (dataObj[`product${i}Material`] || '');
+      const productPriceOld = (options[`product${i}PriceOld`] && options[`product${i}PriceOld`].trim()) ? options[`product${i}PriceOld`] : (dataObj[`product${i}PriceOld`] || '');
+      const productPrice = (options[`product${i}Price`] && options[`product${i}Price`].trim()) ? options[`product${i}Price`] : (dataObj[`product${i}Price`] || '');
+      const productImages = options[`product${i}Images`] || dataObj[`product${i}Images`] || [];
+
+      html = html.replace(`{{product${i}Name}}`, productName);
+      html = html.replace(`{{product${i}Color}}`, productColor);
+      html = html.replace(`{{product${i}ColorHex}}`, productColorHex);
+      html = html.replace(`{{product${i}Size}}`, productSize);
+      html = html.replace(`{{product${i}Material}}`, productMaterial);
+      html = html.replace(`{{product${i}PriceOld}}`, productPriceOld);
+      html = html.replace(`{{product${i}Price}}`, productPrice);
+
+      // Генерувати слайди з масиву зображень
+      const slides = generateSlides(productImages);
+      html = html.replace(`{{product${i}Slides}}`, slides);
+
+      // Видалити продукт блок якщо вимкнено
+      if (options[`enableProduct${i}`] !== 'on' && options[`enableProduct${i}`] !== true) {
+        html = html.replace(new RegExp(`<!--product${i}-->\\s*[\\s\\S]*?<!--\\/product${i}-->\\s*`, 'g'), '');
+      }
+    }
+
+    // Auto-generate product8 and product9 colors and sizes from active products 1-5
+    const activeProducts = [];
+    for (let i = 1; i <= 5; i++) {
+      if (options[`enableProduct${i}`] === 'on' || options[`enableProduct${i}`] === true) {
+        activeProducts.push(i);
+      }
+    }
+
+    // Collect colors and sizes from active products
+    const colorsSet = new Set();
+    const sizesSet = new Set();
+    const colorHexMap = {}; // Map color name to hex
+
+    for (const i of activeProducts) {
+      const color = (options[`product${i}Color`] && options[`product${i}Color`].trim()) ? options[`product${i}Color`] : (dataObj[`product${i}Color`] || '');
+      const colorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+      const size = (options[`product${i}Size`] && options[`product${i}Size`].trim()) ? options[`product${i}Size`] : (dataObj[`product${i}Size`] || '');
+
+      if (color) {
+        colorsSet.add(color);
+        if (colorHex && !colorHexMap[color]) {
+          colorHexMap[color] = colorHex;
+        }
+      }
+
+      if (size) {
+        // Split by comma and add each unique size (merge, not concatenate)
+        const sizes = size.split(',').map(s => s.trim()).filter(s => s);
+        sizes.forEach(s => sizesSet.add(s));
+      }
+    }
+
+    // Generate auto values
+    const autoGeneratedColors = Array.from(colorsSet).join(', ');
+    const autoGeneratedSizes = Array.from(sizesSet).join(', ');
+    const autoGeneratedColorHex = colorHexMap[Array.from(colorsSet)[0]] || ''; // Use first color's hex
+
+    // Generate color circles (SVG) for products 8 & 9 based on active products 1-5
+    const productColorCircles = Array.from(colorsSet).map(color => {
+      const hex = colorHexMap[color] || '#000000';
+      return `<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="13" cy="13" r="13" fill="${hex}" />
+          </svg>`;
+    }).join('\n           ');
+
+    // Замінити дані для продуктів 8 та 9 (використовуємо auto-generated значення)
+    const product8Name = (options.product8Name && options.product8Name.trim()) ? options.product8Name : (dataObj.product8Name || '');
+    const product8Color = autoGeneratedColors || ((options.product8Color && options.product8Color.trim()) ? options.product8Color : (dataObj.product8Color || ''));
+    const product8ColorHex = autoGeneratedColorHex || ((options.product8ColorHex && options.product8ColorHex.trim()) ? options.product8ColorHex : (dataObj.product8ColorHex || ''));
+    const product8Size = autoGeneratedSizes || ((options.product8Size && options.product8Size.trim()) ? options.product8Size : (dataObj.product8Size || ''));
+    const product8Material = (options.product8Material && options.product8Material.trim()) ? options.product8Material : (dataObj.product8Material || '');
+    const product8PriceOld = (options.product8PriceOld && options.product8PriceOld.trim()) ? options.product8PriceOld : (dataObj.product8PriceOld || '');
+    const product8Price = (options.product8Price && options.product8Price.trim()) ? options.product8Price : (dataObj.product8Price || '');
+
+    html = html.replace('{{product8Name}}', product8Name);
+    html = html.replace('{{product8Color}}', product8Color);
+    html = html.replace('{{product8ColorHex}}', product8ColorHex);
+    html = html.replace('{{product8Size}}', product8Size);
+    html = html.replace('{{product8Material}}', product8Material);
+    html = html.replace('{{product8PriceOld}}', product8PriceOld);
+    html = html.replace('{{product8Price}}', product8Price);
+    html = html.replace('{{product8ColorCircles}}', productColorCircles);
+
+    const product9Name = (options.product9Name && options.product9Name.trim()) ? options.product9Name : (dataObj.product9Name || '');
+    const product9Color = autoGeneratedColors || ((options.product9Color && options.product9Color.trim()) ? options.product9Color : (dataObj.product9Color || ''));
+    const product9ColorHex = autoGeneratedColorHex || ((options.product9ColorHex && options.product9ColorHex.trim()) ? options.product9ColorHex : (dataObj.product9ColorHex || ''));
+    const product9Size = autoGeneratedSizes || ((options.product9Size && options.product9Size.trim()) ? options.product9Size : (dataObj.product9Size || ''));
+    const product9Material = (options.product9Material && options.product9Material.trim()) ? options.product9Material : (dataObj.product9Material || '');
+    const product9PriceOld = (options.product9PriceOld && options.product9PriceOld.trim()) ? options.product9PriceOld : (dataObj.product9PriceOld || '');
+    const product9Price = (options.product9Price && options.product9Price.trim()) ? options.product9Price : (dataObj.product9Price || '');
+
+    html = html.replace('{{product9Name}}', product9Name);
+    html = html.replace('{{product9Color}}', product9Color);
+    html = html.replace('{{product9ColorHex}}', product9ColorHex);
+    html = html.replace('{{product9Size}}', product9Size);
+    html = html.replace('{{product9Material}}', product9Material);
+    html = html.replace('{{product9PriceOld}}', product9PriceOld);
+    html = html.replace('{{product9Price}}', product9Price);
+    html = html.replace('{{product9ColorCircles}}', productColorCircles);
+
+    // Генерувати слайди для product8 та product9
+    const product8Images = options.product8Images || dataObj.product8Images || [];
+    const slides8 = generateSlides(product8Images);
+    html = html.replace('{{product8Slides}}', slides8);
+
+    const product9Images = options.product9Images || dataObj.product9Images || [];
+    const slides9 = generateSlides(product9Images);
+    html = html.replace('{{product9Slides}}', slides9);
+
+    // Видалити продукт блоки якщо вимкнено (product8, product9)
+    if (options.enableProduct8 !== 'on' && options.enableProduct8 !== true) {
+      html = html.replace(new RegExp(`<!--product8-->\\s*[\\s\\S]*?<!--\\/product8-->\\s*`, 'g'), '');
+    }
+    if (options.enableProduct9 !== 'on' && options.enableProduct9 !== true) {
+      html = html.replace(new RegExp(`<!--product9-->\\s*[\\s\\S]*?<!--\\/product9-->\\s*`, 'g'), '');
+    }
+
+    // Замінити How to Buy секцію
+    const howLabel = (options.howLabel && options.howLabel.trim()) ? options.howLabel : (dataObj.howLabel || dataObj.how_to_buy?.label || 'Як придбати футболки?');
+    const howTitle = (options.howTitle && options.howTitle.trim()) ? options.howTitle : (dataObj.howTitle || dataObj.how_to_buy?.title || 'Лише декілька простих кроків');
+    const howStep1 = (options.howStep1 && options.howStep1.trim()) ? options.howStep1 : (dataObj.howStep1 || dataObj.how_to_buy?.steps?.[0] || 'Залиште заявку на обрані Вами футболки');
+    const howStep2 = (options.howStep2 && options.howStep2.trim()) ? options.howStep2 : (dataObj.howStep2 || dataObj.how_to_buy?.steps?.[1] || 'Ми Вам швидко зателефонуємо');
+    const howStep3 = (options.howStep3 && options.howStep3.trim()) ? options.howStep3 : (dataObj.howStep3 || dataObj.how_to_buy?.steps?.[2] || 'Доставимо за 1-2 дні');
+    const howStep4 = (options.howStep4 && options.howStep4.trim()) ? options.howStep4 : (dataObj.howStep4 || dataObj.how_to_buy?.steps?.[3] || 'Сплачуйте при отриманні');
+
+    html = html.replace('{{howLabel}}', howLabel);
+    html = html.replace('{{howTitle}}', howTitle);
+    html = html.replace('{{howStep1}}', howStep1);
+    html = html.replace('{{howStep2}}', howStep2);
+    html = html.replace('{{howStep3}}', howStep3);
+    html = html.replace('{{howStep4}}', howStep4);
+
+    // Замінити Request Form поля
+    const requestInfoTitle = (options.requestInfoTitle && options.requestInfoTitle.trim()) ? options.requestInfoTitle : (dataObj.requestInfoTitle || dataObj.request?.info_title || 'Залиште заявку');
+    const requestInfoDescription = (options.requestInfoDescription && options.requestInfoDescription.trim()) ? options.requestInfoDescription : (dataObj.requestInfoDescription || dataObj.request?.info_description || 'Якщо бажаєте замовити або потрібна наша допомога');
+    const requestButtonText = (options.requestButtonText && options.requestButtonText.trim()) ? options.requestButtonText : (dataObj.requestButtonText || 'ЗАЛИШИТИ ЗАЯВКУ');
+    const requestNamePlaceholder = (options.requestNamePlaceholder && options.requestNamePlaceholder.trim()) ? options.requestNamePlaceholder : (dataObj.requestNamePlaceholder || 'Введіть Ваше ім`я');
+    const requestPhonePlaceholder = (options.requestPhonePlaceholder && options.requestPhonePlaceholder.trim()) ? options.requestPhonePlaceholder : (dataObj.requestPhonePlaceholder || 'Введіть Ваш телефон');
+
+    html = html.replaceAll('{{requestInfoTitle}}', requestInfoTitle);
+    html = html.replaceAll('{{requestInfoDescription}}', requestInfoDescription);
+    html = html.replaceAll('{{requestButtonText}}', requestButtonText);
+    html = html.replaceAll('{{requestNamePlaceholder}}', requestNamePlaceholder);
+    html = html.replaceAll('{{requestPhonePlaceholder}}', requestPhonePlaceholder);
+
+    // Замінити Popup поля
+    html = html.replaceAll('{{popupLabel}}', popupLabel);
+    html = html.replaceAll('{{popupTitle}}', popupTitle);
+    html = html.replaceAll('{{popupButtonText}}', popupButtonText);
+    html = html.replaceAll('{{popupNamePlaceholder}}', popupNamePlaceholder);
+    html = html.replaceAll('{{popupPhonePlaceholder}}', popupPhonePlaceholder);
+
+    // Замінити Footer copyright
+    const footerCopyright = (options.footerCopyright && options.footerCopyright.trim()) ? options.footerCopyright : (dataObj.footerCopyright || dataObj.footer?.copyright || '© 2022 «KOPO»');
+    html = html.replace('{{footerCopyright}}', footerCopyright);
+
+    // Замінити Footer links
+    const footerLink1 = (options.footerLink1 && options.footerLink1.trim()) ? options.footerLink1 : (dataObj.footerLink1 || 'Обмін та повернення');
+    const footerLink2 = (options.footerLink2 && options.footerLink2.trim()) ? options.footerLink2 : (dataObj.footerLink2 || 'Політика конфіденційності');
+    const footerLink3 = (options.footerLink3 && options.footerLink3.trim()) ? options.footerLink3 : (dataObj.footerLink3 || 'Угода користувача');
+    html = html.replace('{{footerLink1}}', footerLink1);
+    html = html.replace('{{footerLink2}}', footerLink2);
+    html = html.replace('{{footerLink3}}', footerLink3);
+
+    // =========================================================================
+    // Integrations: Salesdrive CRM + Meta Pixel
+    // =========================================================================
+    const metaPixelId = (options.metaPixelId && options.metaPixelId.trim()) ? options.metaPixelId : (dataObj.metaPixelId || '');
+    const salesdriveEndpoint = (options.salesdriveEndpoint && options.salesdriveEndpoint.trim()) ? options.salesdriveEndpoint : (dataObj.salesdriveEndpoint || '');
+    const salesdriveApiKey = (options.salesdriveApiKey && options.salesdriveApiKey.trim()) ? options.salesdriveApiKey : (dataObj.salesdriveApiKey || '');
+    const salesdriveFunnelId = (options.salesdriveFunnelId && options.salesdriveFunnelId.trim()) ? options.salesdriveFunnelId : (dataObj.salesdriveFunnelId || '1');
+    const metaAccessToken = (options.metaAccessToken && options.metaAccessToken.trim()) ? options.metaAccessToken : (dataObj.metaAccessToken || '');
+    const metaTestEventCode = (options.metaTestEventCode && options.metaTestEventCode.trim()) ? options.metaTestEventCode : (dataObj.metaTestEventCode || '');
+    const productId = (options.productId && options.productId.trim()) ? options.productId : (dataObj.productId || 'PRODUCT-001');
+    const sku = (options.sku && options.sku.trim()) ? options.sku : (dataObj.sku || 'SKU-001');
+    const website = (options.website && options.website.trim()) ? options.website : (dataObj.website || 'example.com');
+
+    // =========================================================================
+    // Popup Configuration
+    // =========================================================================
+    const enableAutoPopup = options.enableAutoPopup !== undefined ? options.enableAutoPopup : (dataObj.enableAutoPopup || false);
+    const autoPopupDelay = options.autoPopupDelay || dataObj.autoPopupDelay || 350;
+    const popupLabel = (options.popupLabel && options.popupLabel.trim()) ? options.popupLabel : (dataObj.popupLabel || 'Сьогодні діє акційна ціна!');
+    const popupTitle = (options.popupTitle && options.popupTitle.trim()) ? options.popupTitle : (dataObj.popupTitle || 'Бажаєте замовити або потрібна консультація?');
+    const popupButtonText = (options.popupButtonText && options.popupButtonText.trim()) ? options.popupButtonText : (dataObj.popupButtonText || 'ЗАМОВИТИ');
+    const popupSuccessMessage = (options.popupSuccessMessage && options.popupSuccessMessage.trim()) ? options.popupSuccessMessage : (dataObj.popupSuccessMessage || 'Дякуємо за замовлення! Наш менеджер зв\'яжеться з Вами найближчим часом.');
+    const popupNamePlaceholder = (options.popupNamePlaceholder && options.popupNamePlaceholder.trim()) ? options.popupNamePlaceholder : (dataObj.popupNamePlaceholder || 'Введіть Ваше ім\'я');
+    const popupPhonePlaceholder = (options.popupPhonePlaceholder && options.popupPhonePlaceholder.trim()) ? options.popupPhonePlaceholder : (dataObj.popupPhonePlaceholder || 'Введіть Ваш телефон');
+
+    // Generate Meta Pixel Code
+    let metaPixelCode = '';
+    if (metaPixelId) {
+      metaPixelCode = `
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '${metaPixelId}');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1" /></noscript>
+`;
+    }
+
+    // Generate Integration Scripts
+    let integrationScripts = `
+<script>
+// Meta Pixel - ViewContent при завантаженні
+function initializeMetaPixel() {
+  if (window.fbq) {
+    // Collect enabled products
+    const products = [];
+    ${options.enableProduct1 === 'on' ? `products.push({ id: '${productId}', name: 'Product 1', price: parseFloat('${options.product1Price}'.replace(/[^0-9.-]+/g,"")) || 0 });` : ''}
+    ${options.enableProduct2 === 'on' ? `products.push({ id: '${productId}-2', name: 'Product 2', price: parseFloat('${options.product2Price}'.replace(/[^0-9.-]+/g,"")) || 0 });` : ''}
+    ${options.enableProduct8 === 'on' ? `products.push({ id: '${productId}-8', name: 'Product 8', price: parseFloat('${options.product8Price}'.replace(/[^0-9.-]+/g,"")) || 0 });` : ''}
+
+    if (products.length > 0) {
+      fbq('track', 'ViewContent', {
+        content_ids: products.map(p => p.id),
+        content_name: 'Product Catalog',
+        content_type: 'product_group',
+        value: Math.min(...products.map(p => p.price)) || 0,
+        currency: 'UAH'
+      });
+    }
+  }
+}
+
+// Meta Pixel - InitiateCheckout при кліку на кнопку
+function handleOrderClick(event) {
+  const button = event.currentTarget;
+  const productName = button.getAttribute('data-product') || 'Товар';
+  const productPrice = parseFloat(button.getAttribute('data-price')) || 0;
+
+  if (window.fbq) {
+    fbq('track', 'InitiateCheckout', {
+      content_name: productName,
+      content_ids: ['${productId}'],
+      value: productPrice,
+      currency: 'UAH'
+    });
+  }
+
+  // Зберегти дані товару для пізнішої відправки
+  window.selectedProduct = {
+    product_id: '${productId}',
+    sku: '${sku}',
+    product_name: productName,
+    price: productPrice,
+    quantity: 1,
+    website: '${website}'
+  };
+
+  console.log('Order initiated:', productName, productPrice);
+}
+
+${salesdriveEndpoint ? `
+// Salesdrive CRM - відправка замовлення
+function sendToSalesdrive(orderData) {
+  const payload = {
+    funnel_id: '${salesdriveFunnelId}',
+    customer: {
+      phone: orderData.customer_phone || '+380',
+      first_name: orderData.customer_name || 'Customer',
+      email: 'contact@example.com'
+    },
+    products: [{
+      id: orderData.product_id,
+      sku: orderData.sku,
+      name: orderData.product_name,
+      price: orderData.price,
+      quantity: orderData.quantity
+    }],
+    utm_source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
+    utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || 'organic',
+    utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || 'landing',
+    website: orderData.website || '${website}'
+  };
+
+  fetch('${salesdriveEndpoint}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${salesdriveApiKey}'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Order sent to Salesdrive:', data);
+
+    // Meta Pixel - Purchase ЛИШЕ після успішної відправки
+    if (window.fbq) {
+      fbq('track', 'Purchase', {
+        value: orderData.price,
+        currency: 'UAH',
+        content_name: orderData.product_name,
+        content_ids: [orderData.product_id]
+      });
+    }
+  })
+  .catch(error => {
+    console.error('Error sending to Salesdrive:', error);
+    localStorage.setItem('orderFailed', JSON.stringify({
+      ...orderData,
+      timestamp: new Date().toISOString(),
+      error: error.message
+    }));
+  });
+}
+` : ''}
+
+// Ініціалізація при завантаженні
+document.addEventListener('DOMContentLoaded', function() {
+  ${metaPixelId ? 'initializeMetaPixel();' : ''}
+
+  // Додати обробники на всі кнопки "Замовити"
+  document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+    if (btn.textContent.includes('Замовити') || btn.textContent.includes('ЗАМОВИТИ')) {
+      // Get price from nearby element or button data
+      const priceText = btn.getAttribute('data-price') || '0';
+      btn.setAttribute('data-product', btn.textContent);
+      btn.setAttribute('data-price', priceText);
+      btn.addEventListener('click', handleOrderClick);
+    }
+  });
+
+${salesdriveEndpoint ? `
+  // Обробники submit для форм замовлення
+  const forms = ['form-popup1', 'form-popup2'];
+  forms.forEach(formId => {
+    const form = document.getElementById(formId);
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = form.querySelector('input[name="name"]').value;
+        const phone = form.querySelector('input[name="phone"]').value;
+        const product = form.querySelector('input[name="product"]').value;
+
+        // Отримати дані обраного товару
+        const productData = window.selectedProduct || {
+          product_id: '${productId}',
+          sku: '${sku}',
+          product_name: product,
+          price: 0,
+          quantity: 1,
+          website: '${website}'
+        };
+
+        // Додати дані клієнта
+        const orderData = {
+          ...productData,
+          customer_name: name,
+          customer_phone: phone
+        };
+
+        console.log('Submitting order:', orderData);
+        sendToSalesdrive(orderData);
+
+        // Показати повідомлення успіху
+        alert('${popupSuccessMessage || "Дякуємо за замовлення! Наш менеджер зв\\'яжеться з Вами найближчим часом."}');
+
+        // Закрити popup
+        document.querySelector('.popup-order')?.style.display = 'none';
+        form.reset();
+      });
+    }
+  });
+` : ''}
+
+// Auto-popup logic
+${enableAutoPopup ? `setTimeout(function () {
+  $('.popup-order').fadeIn();
+}, ${autoPopupDelay * 1000});` : '// Auto-popup вимкнено'}
+});
+</script>
+`;
+
+    // Замінити плейсхолдери
+    html = html.replace('{{metaPixelCode}}', metaPixelCode);
+    html = html.replace('{{integrationScripts}}', integrationScripts);
+
+    // Замінити переваги (простій текстовий заміни плейсхолдерів)
+    if (options.benefits && Array.isArray(options.benefits)) {
+      options.benefits.forEach((benefit) => {
+        const num = benefit.id;
+        html = html.replace(`{{benefit${num}Title}}`, benefit.title);
+        html = html.replace(`{{benefit${num}Description}}`, benefit.description);
+      });
+    }
+
+    // Замінити tabs section header
+    const tabsLabel = (options.tabsLabel && options.tabsLabel.trim()) ? options.tabsLabel : (dataObj.tabsLabel || 'Основні переваги футболок');
+    const tabsTitle = (options.tabsTitle && options.tabsTitle.trim()) ? options.tabsTitle : (dataObj.tabsTitle || 'Якісні матеріали + Ідеальний пошив');
+    html = html.replace('{{tabsLabel}}', tabsLabel);
+    html = html.replace('{{tabsTitle}}', tabsTitle);
+
+    // Замінити tab item 1
+    const tab1Title = (options.tab1Title && options.tab1Title.trim()) ? options.tab1Title : (dataObj.tab1Title || 'Максимальний комфорт та зручність');
+    const tab1Description = (options.tab1Description && options.tab1Description.trim()) ? options.tab1Description : (dataObj.tab1Description || 'Досконалі лекала та професійний крій - зробили наші хітові жіночі футболки оверсайз максимально універсальними, вони дуже зручні та комфортні, гарно виглядають на усіх типах фігури. Якісний пошив - кожна футболка проходить додатковий контроль якості, ми слідкуємо за кожним етапом виробництва.');
+    const tab1Image = (options.tab1Image && options.tab1Image.trim()) ? options.tab1Image : (dataObj.tab1Image || 'img/tabs/tabs-1.jpg');
+    const tab1ImageMobile = tab1Image.replace(/\.jpg$/, '_m.webp');
+    html = html.replace('{{tab1Title}}', tab1Title);
+    html = html.replace('{{tab1Description}}', tab1Description);
+    html = html.replace('{{tab1ImageDesktop}}', tab1Image);
+    html = html.replace('{{tab1ImageMobile}}', tab1ImageMobile);
+
+    // Замінити tab item 2
+    const tab2Title = (options.tab2Title && options.tab2Title.trim()) ? options.tab2Title : (dataObj.tab2Title || 'Натуральні матеріали');
+    const tab2Description = (options.tab2Description && options.tab2Description.trim()) ? options.tab2Description : (dataObj.tab2Description || 'Футболки виконані з турецької тканини високої якості. Вони дуже приємні до тіла, утеплені якісним флісом, що дарує максимальний комфорт в холодну пору року. Натуральний склад тканини: 95% бавовна, 5% еластан.');
+    const tab2Image = (options.tab2Image && options.tab2Image.trim()) ? options.tab2Image : (dataObj.tab2Image || 'img/tabs/tabs-2.jpg');
+    const tab2ImageMobile = tab2Image.replace(/\.jpg$/, '_m.webp');
+    html = html.replace('{{tab2Title}}', tab2Title);
+    html = html.replace('{{tab2Description}}', tab2Description);
+    html = html.replace('{{tab2ImageDesktop}}', tab2Image);
+    html = html.replace('{{tab2ImageMobile}}', tab2ImageMobile);
+
+    // Замінити tab item 3
+    const tab3Title = (options.tab3Title && options.tab3Title.trim()) ? options.tab3Title : (dataObj.tab3Title || 'Універсальність та практичність');
+    const tab3Description = (options.tab3Description && options.tab3Description.trim()) ? options.tab3Description : (dataObj.tab3Description || 'Завжди актуальні базові кольори - пасують під все! Чудово витримують багаторазові прання - зберігають форму та колір. Прослужать не один сезон.');
+    const tab3Image = (options.tab3Image && options.tab3Image.trim()) ? options.tab3Image : (dataObj.tab3Image || 'img/tabs/tabs-3.jpg');
+    const tab3ImageMobile = tab3Image.replace(/\.jpg$/, '_m.webp');
+    html = html.replace('{{tab3Title}}', tab3Title);
+    html = html.replace('{{tab3Description}}', tab3Description);
+    html = html.replace('{{tab3ImageDesktop}}', tab3Image);
+    html = html.replace('{{tab3ImageMobile}}', tab3ImageMobile);
+
+    // Замінити FAQ section header та фото
+    const faqLabel = (options.faqLabel && options.faqLabel.trim()) ? options.faqLabel : (dataObj.faqLabel || 'Доставка і оплата');
+    const faqTitle = (options.faqTitle && options.faqTitle.trim()) ? options.faqTitle : (dataObj.faqTitle || 'Швидка доставка + Зручна оплата');
+    const faqImage = (options.faqImage && options.faqImage.trim()) ? options.faqImage : (dataObj.faqImage || 'img/faq/faq-1.png');
+    const faqImageMobile = faqImage.replace(/\.png$/, '_m.webp');
+    html = html.replace('{{faqLabel}}', faqLabel);
+    html = html.replace('{{faqTitle}}', faqTitle);
+    html = html.replace('{{faqImageDesktop}}', faqImage);
+    html = html.replace('{{faqImageMobile}}', faqImageMobile);
+
+    // Замінити FAQ item 1
+    const faqItem1Title = (options.faqItem1Title && options.faqItem1Title.trim()) ? options.faqItem1Title : (dataObj.faqItem1Title || 'Доставка');
+    const faqItem1Description = (options.faqItem1Description && options.faqItem1Description.trim()) ? options.faqItem1Description : (dataObj.faqItem1Description || 'Отримуйте своє замовлення максимально швидко. Вже через 1-2 дні після замовлення ви зможете його отримати в поштовому відділенні.');
+    html = html.replace('{{faqItem1Title}}', faqItem1Title);
+    html = html.replace('{{faqItem1Description}}', faqItem1Description);
+
+    // Замінити FAQ item 2
+    const faqItem2Title = (options.faqItem2Title && options.faqItem2Title.trim()) ? options.faqItem2Title : (dataObj.faqItem2Title || 'Оплата');
+    const faqItem2Description = (options.faqItem2Description && options.faqItem2Description.trim()) ? options.faqItem2Description : (dataObj.faqItem2Description || 'Сплачуйте за товар після перегляду на пошті (накладний платіж) або на картку, як забажаєте.');
+    html = html.replace('{{faqItem2Title}}', faqItem2Title);
+    html = html.replace('{{faqItem2Description}}', faqItem2Description);
+
+    // Замінити FAQ item 3
+    const faqItem3Title = (options.faqItem3Title && options.faqItem3Title.trim()) ? options.faqItem3Title : (dataObj.faqItem3Title || 'Надійність');
+    const faqItem3Description = (options.faqItem3Description && options.faqItem3Description.trim()) ? options.faqItem3Description : (dataObj.faqItem3Description || 'Перед відправкою всі посилки проходять ретельну перевірку, щоб Ви отримали замовлення в найкращому вигляді.');
+    html = html.replace('{{faqItem3Title}}', faqItem3Title);
+    html = html.replace('{{faqItem3Description}}', faqItem3Description);
+
+    // Замінити FAQ item 4
+    const faqItem4Title = (options.faqItem4Title && options.faqItem4Title.trim()) ? options.faqItem4Title : (dataObj.faqItem4Title || 'Наші партнери');
+    const faqItem4Description = (options.faqItem4Description && options.faqItem4Description.trim()) ? options.faqItem4Description : (dataObj.faqItem4Description || 'Наші офіційні партнери Нова пошта та Укрпошта.');
+    html = html.replace('{{faqItem4Title}}', faqItem4Title);
+    html = html.replace('{{faqItem4Description}}', faqItem4Description);
+
+    // Замінити Comments section
+    const commentsLabel = (options.commentsLabel && options.commentsLabel.trim()) ? options.commentsLabel : (dataObj.commentsLabel || 'Відгуки');
+    const commentsTitle = (options.commentsTitle && options.commentsTitle.trim()) ? options.commentsTitle : (dataObj.commentsTitle || 'Піклуємось про кожного.');
+    const commentsSalesStat = (options.commentsSalesStat && options.commentsSalesStat.trim()) ? options.commentsSalesStat : (dataObj.commentsSalesStat || '> 3500');
+    const commentsSalesText = (options.commentsSalesText && options.commentsSalesText.trim()) ? options.commentsSalesText : (dataObj.commentsSalesText || 'продажів');
+    const commentsSatisfiedStat = (options.commentsSatisfiedStat && options.commentsSatisfiedStat.trim()) ? options.commentsSatisfiedStat : (dataObj.commentsSatisfiedStat || '98%');
+    const commentsSatisfiedText = (options.commentsSatisfiedText && options.commentsSatisfiedText.trim()) ? options.commentsSatisfiedText : (dataObj.commentsSatisfiedText || 'задоволених клієнтів');
+    const commentsRepeatStat = (options.commentsRepeatStat && options.commentsRepeatStat.trim()) ? options.commentsRepeatStat : (dataObj.commentsRepeatStat || '48%');
+    const commentsRepeatText = (options.commentsRepeatText && options.commentsRepeatText.trim()) ? options.commentsRepeatText : (dataObj.commentsRepeatText || 'вже повторно зробили замовлення для себе або близьких');
+    const commentsButtonText = (options.commentsButtonText && options.commentsButtonText.trim()) ? options.commentsButtonText : (dataObj.commentsButtonText || 'Дивитись відгуки');
+    html = html.replace('{{commentsLabel}}', commentsLabel);
+    html = html.replace('{{commentsTitle}}', commentsTitle);
+    html = html.replace('{{commentsSalesStat}}', commentsSalesStat);
+    html = html.replace('{{commentsSalesText}}', commentsSalesText);
+    html = html.replace('{{commentsSatisfiedStat}}', commentsSatisfiedStat);
+    html = html.replace('{{commentsSatisfiedText}}', commentsSatisfiedText);
+    html = html.replace('{{commentsRepeatStat}}', commentsRepeatStat);
+    html = html.replace('{{commentsRepeatText}}', commentsRepeatText);
+    html = html.replace('{{commentsButtonText}}', commentsButtonText);
+
+    // Generate comments slides from commentsImages
+    const commentsImages = options.commentsImages || dataObj.commentsImages || [];
+    if (commentsImages && commentsImages.length > 0) {
+      const slidesHTML = commentsImages.map(imagePath => {
+        const cleanPath = imagePath.replace('/public/', '');
+        return `                                    <div class="swiper-slide comments-slide">
+                                        <img src="${cleanPath}" alt="Comment">
+                                    </div>`;
+      }).join('\n');
+
+      // Replace the content between comments-slider swiper-wrapper
+      const commentsWrapperRegex = /(<div class="swiper comments-slider">[\s\S]*?<div class="swiper-wrapper">)([\s\S]*?)(<\/div>[\s\S]*?<div class="comments-navigation">)/;
+      html = html.replace(commentsWrapperRegex, `$1\n${slidesHTML}\n$3`);
+    }
+
+    // Замінити How To Buy section
+
+    // Clean all /public/ paths from HTML
+    html = html.replace(/\/public\//g, '');
+
+    console.log(`✅ HTML успішно згенерований (${html.length} байт)`);
+    return html;
+  } catch (err) {
+    console.error('❌ Помилка при генеруванні HTML:', err.message);
+    throw err;
+  }
+}
+
+// GET /api/data - Повернути JSON дані
+app.get('/api/data', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    console.log(`✅ JSON дані відправлені (${Object.keys(data).length} полів)`);
+    res.json(data);
+  } catch (err) {
+    console.error('❌ Помилка при читанні JSON:', err.message);
+    res.status(500).json({ error: 'Помилка при читанні даних' });
+  }
+});
+
+// GET /api/original-form-data - Отримати оригінальні дані з landing-data.json + user-config.json
+app.get('/api/original-form-data', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    // Load user-config.json and merge with landing-data.json
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    let userConfig = {};
+    if (fs.existsSync(configPath)) {
+      try {
+        userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        console.log('✅ User config завантажено для форми');
+      } catch (configErr) {
+        console.error('⚠️ Не вдалося прочитати user-config:', configErr.message);
+      }
+    }
+
+    // Flatten nested fields from landing-data.json
+    const flatData = {
+      ...data,
+      // Extract request section fields
+      requestInfoTitle: data.request?.info_title || '',
+      requestInfoDescription: data.request?.info_description || '',
+      requestButtonText: data.request?.button_text || 'ЗАЛИШИТИ ЗАЯВКУ',
+      requestNamePlaceholder: data.request?.name_placeholder || "Ваше ім'я",
+      requestPhonePlaceholder: data.request?.phone_placeholder || 'Ваш телефон'
+    };
+
+    // Merge: user-config overrides landing-data ONLY for non-empty values
+    const mergedData = { ...flatData };
+    for (const [key, value] of Object.entries(userConfig)) {
+      // Only override if value is not empty string or is boolean/number/array/object
+      if (value !== '' || typeof value !== 'string') {
+        mergedData[key] = value;
+      }
+    }
+
+    // Return merged data with proper fallbacks for nested fields
+    const formData = {
+      ...mergedData,
+      // Override specific fields that need fallbacks
+      heroPrice: mergedData.heroPrice || mergedData.hero?.price,
+      enableVideoThumbnail: (mergedData.enableVideoThumbnail !== undefined) ? mergedData.enableVideoThumbnail : true,
+      videoThumbnailDesktop: mergedData.videoThumbnailDesktop || DEFAULT_VIDEO_THUMBNAIL_DESKTOP,
+      videoThumbnailMobile: mergedData.videoThumbnailMobile || DEFAULT_VIDEO_THUMBNAIL_MOBILE,
+      benefits: mergedData.benefits || []
+    };
+
+    console.log(`✅ Оригінальні дані форми отримані`);
+    res.json(formData);
+  } catch (err) {
+    console.error('❌ Помилка при читанні оригінальних даних:', err.message);
+    res.status(500).json({ error: 'Помилка при читанні даних' });
+  }
+});
+
+// GET /api/get-user-config - Отримати збережену конфігурацію користувача
+app.get('/api/get-user-config', (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+
+    // Якщо файл не існує, повертаємо порожні дані
+    if (!fs.existsSync(configPath)) {
+      return res.json({
+        headerText: '',
+        heroTitle: '',
+        heroPrice: 'від 330 грн',
+        enableTimer: true,
+        enableStock: true,
+        heroImage: '',
+        enableImage: true,
+        imageUrl: '',
+        enableVideo: true,
+        videoUrl: '',
+        benefits: [],
+        // Product data defaults
+        product1Name: '', product1Color: '', product1ColorHex: '', product1Size: '', product1Material: '', product1PriceOld: '', product1Price: '', enableProduct1: true,
+        product2Name: '', product2Color: '', product2ColorHex: '', product2Size: '', product2Material: '', product2PriceOld: '', product2Price: '', enableProduct2: true,
+        product3Name: '', product3Color: '', product3ColorHex: '', product3Size: '', product3Material: '', product3PriceOld: '', product3Price: '', enableProduct3: true,
+        product4Name: '', product4Color: '', product4ColorHex: '', product4Size: '', product4Material: '', product4PriceOld: '', product4Price: '', enableProduct4: true,
+        product5Name: '', product5Color: '', product5ColorHex: '', product5Size: '', product5Material: '', product5PriceOld: '', product5Price: '', enableProduct5: true,
+        product8Name: '', product8Color: '', product8ColorHex: '', product8Size: '', product8Material: '', product8PriceOld: '', product8Price: '', enableProduct8: false,
+        product9Name: '', product9Color: '', product9ColorHex: '', product9Size: '', product9Material: '', product9PriceOld: '', product9Price: '', enableProduct9: false
+      });
+    }
+
+    // Читати з явним UTF-8 кодуванням
+    const fileContent = fs.readFileSync(configPath, { encoding: 'utf8' });
+    const config = JSON.parse(fileContent);
+    console.log(`✅ Збережена конфігурація отримана:`, config);
+    res.json(config);
+  } catch (err) {
+    console.error('❌ Помилка при читанні конфігурації:', err.message);
+    res.status(500).json({ error: 'Помилка при читанні даних' });
+  }
+});
+
+// POST /api/save-config - Зберегти конфігурацію користувача
+app.post('/api/save-config', express.json(), (req, res) => {
+  try {
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    const configData = req.body;
+
+    // Записати з явним UTF-8 кодуванням
+    const jsonContent = JSON.stringify(configData, null, 2);
+    fs.writeFileSync(configPath, jsonContent, { encoding: 'utf8' });
+    console.log(`✅ Конфігурація збережена на сервері:`, configData);
+    res.json({ success: true, message: 'Конфігурація збережена' });
+  } catch (err) {
+    console.error('❌ Помилка при збереженні конфігурації:', err.message);
+    res.status(500).json({ error: 'Помилка при збереженні даних' });
+  }
+});
+
+// POST /upload-image - Завантажити нове фото для plus-logo блоку
+app.post('/upload-image', uploadImage.single('imageUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n🖼️ ФОТО PLUS-LOGO ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `image-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити та оптимізувати для десктопу (1200x600 - cover)
+    const desktopPath = path.join(imageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1200, 600, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (1200x600, 85% quality)`);
+
+    // Пересохранити та оптимізувати для мобільного (600x400 - cover)
+    const mobilePath = path.join(imageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(600, 400, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (600x400, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/image/${basename}.jpg`,
+      message: 'Фото успішно оптимізовано та завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    // Спробуємо видалити файл якщо сталася помилка
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-video - Завантажити нове відео для відео блоку
+app.post('/upload-video', uploadVideo.single('videoUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n🎬 ВІДЕО ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const timestamp = Date.now();
+    const basename = `video-${timestamp}`;
+    const relativePath = `/video/${req.file.filename}`;
+
+    res.json({
+      success: true,
+      filename: relativePath,
+      message: 'Відео успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні відео:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // cleanup при помилці
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-video-thumbnail - Завантажити прев'ю для відео блоку
+app.post('/upload-video-thumbnail', uploadVideoThumbnail.single('videoThumbnailUpload'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажено' });
+    }
+
+    const timestamp = Date.now();
+    const basename = `video-thumb-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    const desktopPath = path.join(videoThumbnailDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1280, 720, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+
+    const mobilePath = path.join(videoThumbnailDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, 360, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+
+    fs.unlinkSync(uploadedPath);
+
+    res.json({
+      success: true,
+      desktop: `/public/img/video/${basename}.jpg`,
+      mobile: `/public/img/video/${basename}_m.webp`,
+      message: "Прев'ю відео збережено"
+    });
+  } catch (err) {
+    console.error("Помилка під час обробки прев'ю відео:", err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // ignore cleanup errors
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-hero-image - Завантажити нове фото для hero блоку
+app.post('/upload-hero-image', upload.single('heroImage'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n🖼️ ФОТО ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `hero-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити та оптимізувати для десктопу (1200x600 - cover)
+    const desktopPath = path.join(heroImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .resize(1200, 600, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .jpeg({ quality: 85 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (1200x600, 85% quality)`);
+
+    // Пересохранити та оптимізувати для мобільного (600x400 - cover)
+    const mobilePath = path.join(heroImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(600, 400, {
+        fit: 'cover',
+        position: 'center'
+      })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (600x400, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/hero/${basename}_m.webp`,
+      message: 'Фото успішно оптимізовано та завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    // Спробуємо видалити файл якщо сталася помилка
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product1-image - Завантажити фото для продукту 1
+app.post('/upload-product1-image', uploadProductImage.single('product1Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 1 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product2-image - Завантажити фото для продукту 2
+app.post('/upload-product2-image', uploadProductImage.single('product2Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 2 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product3-image - Завантажити фото для продукту 3
+app.post('/upload-product3-image', uploadProductImage.single('product3Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 3 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product4-image - Завантажити фото для продукту 4
+app.post('/upload-product4-image', uploadProductImage.single('product4Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 4 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product5-image - Завантажити фото для продукту 5
+app.post('/upload-product5-image', uploadProductImage.single('product5Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 5 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product8-image - Завантажити фото для продукту 8
+app.post('/upload-product8-image', uploadProductImage.single('product8Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 8 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-product9-image - Завантажити фото для продукту 9
+app.post('/upload-product9-image', uploadProductImage.single('product9Image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ПРОДУКТУ 9 ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `product-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, JPEG 90%)
+    const desktopPath = path.join(productImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(productImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/products/${basename}.jpg`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-size-chart-image - Завантажити фото розмірної сітки
+app.post('/upload-size-chart-image', uploadSizeChartImage.single('sizeChartImage'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📏 ФОТО РОЗМІРНОЇ СІТКИ ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    // Отримати базову назву без розширення
+    const timestamp = Date.now();
+    const basename = `size-chart-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Пересохранити для десктопу (оригінальний розмір, PNG)
+    const desktopPath = path.join(sizeChartImageDir, `${basename}.png`);
+    await sharp(uploadedPath)
+      .png({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.png (PNG 90% quality)`);
+
+    // Пересохранити для мобільного (640px width, WebP 80%)
+    const mobilePath = path.join(sizeChartImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      filename: `/public/img/info/${basename}.png`,
+      message: 'Фото успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-tab-image/:itemNum - Завантажити фото для табів (створює обидві версії)
+app.post('/upload-tab-image/:itemNum', uploadTabImage.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    const { itemNum } = req.params;
+
+    if (!['1', '2', '3'].includes(itemNum)) {
+      return res.status(400).json({ error: 'Невірний номер табу' });
+    }
+
+    console.log(`\n📸 ФОТО ТАБУ ${itemNum} ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const timestamp = Date.now();
+    const basename = `tabs-${itemNum}-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Створити десктоп версію - JPG оригінального розміру
+    const desktopPath = path.join(tabsImageDir, `${basename}.jpg`);
+    await sharp(uploadedPath)
+      .jpeg({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.jpg (JPG 90% quality)`);
+
+    // Створити мобільну версію - WebP 640px
+    const mobilePath = path.join(tabsImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, WebP 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      path: `/public/img/tabs/${basename}.jpg`,
+      message: 'Фото успішно завантажено (desktop + mobile)'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /upload-faq-image - Завантажити фото для FAQ секції (створює обидві версії)
+app.post('/upload-faq-image', uploadTabImage.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📷 ФОТО FAQ ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const timestamp = Date.now();
+    const basename = `faq-1-${timestamp}`;
+    const uploadedPath = req.file.path;
+    const faqImageDir = path.join(__dirname, 'public', 'img', 'faq');
+
+    // Створити десктоп версію - PNG
+    const desktopPath = path.join(faqImageDir, `${basename}.png`);
+    await sharp(uploadedPath)
+      .png({ quality: 90 })
+      .toFile(desktopPath);
+    console.log(`✅ Десктоп: ${basename}.png (PNG 90% quality)`);
+
+    // Створити мобільну версію - WebP 640px
+    const mobilePath = path.join(faqImageDir, `${basename}_m.webp`);
+    await sharp(uploadedPath)
+      .resize(640, null, { fit: 'inside' })
+      .webp({ quality: 80 })
+      .toFile(mobilePath);
+    console.log(`✅ Мобільний: ${basename}_m.webp (640px, WebP 80% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      path: `/public/img/faq/${basename}.png`,
+      message: 'Фото успішно завантажено (desktop + mobile)'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 📸 Upload Comment Image
+app.post('/api/upload-comment-image', uploadCommentImage.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не завантажений' });
+    }
+
+    console.log(`\n📸 ФОТО ВІДГУКУ ЗАВАНТАЖЕНО`);
+    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
+    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
+
+    const timestamp = Date.now();
+    const basename = `comment-${timestamp}`;
+    const uploadedPath = req.file.path;
+
+    // Створити WebP версію зі зберіганням пропорцій
+    const webpPath = path.join(commentsImageDir, `${basename}.webp`);
+    await sharp(uploadedPath)
+      .resize(220, 440, { fit: 'cover', position: 'center' })
+      .webp({ quality: 85 })
+      .toFile(webpPath);
+    console.log(`✅ WebP: ${basename}.webp (220×440px, WebP 85% quality)`);
+
+    // Видалити оригінальний завантажений файл
+    fs.unlinkSync(uploadedPath);
+    console.log(`✅ Оригінальний файл видалено\n`);
+
+    res.json({
+      success: true,
+      path: `/public/img/comments/${basename}.webp`,
+      message: 'Фото відгуку успішно завантажено'
+    });
+  } catch (err) {
+    console.error('❌ Помилка при завантаженні:', err.message);
+    if (req.file && req.file.path) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (e) {
+        // Ігноруємо помилку видалення
+      }
+    }
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /generate - Генерувати та відправити HTML з параметрами
+app.get('/generate', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    if (fs.existsSync(configPath)) {
+      try {
+        const userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        data = { ...data, ...userConfig };
+      } catch (configErr) {
+        console.error('Failed to read user config:', configErr.message);
+      }
+    }
+
+
+    // Отримати параметри з query string
+    const options = {
+      headerText: req.query.headerText,
+      heroTitle: req.query.heroTitle,
+      heroPrice: req.query.heroPrice,
+      enableTimer: req.query.enableTimer,
+      enableStock: req.query.enableStock,
+      heroImage: req.query.heroImage,
+      enableImage: req.query.enableImage,
+      imageUrl: req.query.imageUrl,
+      enableVideo: req.query.enableVideo,
+      videoUrl: req.query.videoUrl,
+      enableVideoThumbnail: req.query.enableVideoThumbnail,
+      videoThumbnailDesktop: req.query.videoThumbnailDesktop,
+      videoThumbnailMobile: req.query.videoThumbnailMobile,
+      sizeChartImage: req.query.sizeChartImage,
+      // Info list params
+      infoEnableBrand: req.query.infoEnableBrand,
+      infoBrandLabel: req.query.infoBrandLabel,
+      infoBrandValue: req.query.infoBrandValue,
+      infoEnableModel: req.query.infoEnableModel,
+      infoModelLabel: req.query.infoModelLabel,
+      infoModelValue: req.query.infoModelValue,
+      infoEnableQuantity: req.query.infoEnableQuantity,
+      infoQuantityLabel: req.query.infoQuantityLabel,
+      infoQuantityValue: req.query.infoQuantityValue,
+      infoEnableColors: req.query.infoEnableColors,
+      infoColorsLabel: req.query.infoColorsLabel,
+      infoEnableSizes: req.query.infoEnableSizes,
+      infoSizesLabel: req.query.infoSizesLabel,
+      infoSizesValue: req.query.infoSizesValue,
+      infoEnableMaterial: req.query.infoEnableMaterial,
+      infoMaterialLabel: req.query.infoMaterialLabel,
+      infoMaterialValue: req.query.infoMaterialValue,
+      infoEnablePackaging: req.query.infoEnablePackaging,
+      infoPackagingLabel: req.query.infoPackagingLabel,
+      infoPackagingValue: req.query.infoPackagingValue,
+      product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
+      product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
+      product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
+      product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || []),
+      enableProduct1: req.query.enableProduct1,
+      enableProduct2: req.query.enableProduct2,
+      enableProduct3: req.query.enableProduct3,
+      enableProduct4: req.query.enableProduct4,
+      enableProduct5: req.query.enableProduct5,
+
+      // Product 8 & 9 params
+      product8Name: req.query.product8Name,
+      product8Color: req.query.product8Color,
+      product8ColorHex: req.query.product8ColorHex,
+      product8Size: req.query.product8Size,
+      product8Material: req.query.product8Material,
+      product8PriceOld: req.query.product8PriceOld,
+      product8Price: req.query.product8Price,
+      enableProduct8: req.query.enableProduct8,
+      product8Images: parseArrayParam(req.query.product8Images, data.product8Images || []),
+
+      product9Name: req.query.product9Name,
+      product9Color: req.query.product9Color,
+      product9ColorHex: req.query.product9ColorHex,
+      product9Size: req.query.product9Size,
+      product9Material: req.query.product9Material,
+      product9PriceOld: req.query.product9PriceOld,
+      product9Price: req.query.product9Price,
+      enableProduct9: req.query.enableProduct9,
+      product9Images: parseArrayParam(req.query.product9Images, data.product9Images || [])
+    };
+
+    // Парсити benefits якщо передано як JSON string
+    if (req.query.benefits) {
+      try {
+        options.benefits = JSON.parse(decodeURIComponent(req.query.benefits));
+      } catch (e) {
+        console.error('❌ Помилка при парсингу benefits:', e.message);
+      }
+    }
+
+    console.log(`\n🎨 ГЕНЕРУВАННЯ САЙТУ...`);
+    console.log(`📝 Параметри:`, options);
+    const html = generateHTML(data, options);
+
+    console.log(`✅ Сайт успішно згенерований`);
+    console.log(`📏 Розмір: ${(html.length / 1024).toFixed(2)} KB\n`);
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Помилка:', err.message);
+    res.status(500).send(`<h1>Помилка при генеруванні</h1><p>${err.message}</p>`);
+  }
+});
+
+// POST /generate - те саме що GET, але через POST для уникнення HTTP 431
+app.post('/generate', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    if (fs.existsSync(configPath)) {
+      try {
+        const userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        data = { ...data, ...userConfig };
+      } catch (configErr) {
+        console.error('Failed to read user config:', configErr.message);
+      }
+    }
+
+
+    // Отримати параметри з req.body (замість req.query)
+    const options = {
+      headerText: req.body.headerText,
+      heroTitle: req.body.heroTitle,
+      heroPrice: req.body.heroPrice,
+      enableTimer: req.body.enableTimer,
+      enableStock: req.body.enableStock,
+      heroImage: req.body.heroImage,
+      enableImage: req.body.enableImage,
+      imageUrl: req.body.imageUrl,
+      enableVideo: req.body.enableVideo,
+      videoUrl: req.body.videoUrl,
+      enableVideoThumbnail: req.body.enableVideoThumbnail,
+      videoThumbnailDesktop: req.body.videoThumbnailDesktop,
+      videoThumbnailMobile: req.body.videoThumbnailMobile,
+      sizeChartImage: req.body.sizeChartImage,
+      // Info list params
+      infoEnableBrand: req.body.infoEnableBrand,
+      infoBrandLabel: req.body.infoBrandLabel,
+      infoBrandValue: req.body.infoBrandValue,
+      infoEnableModel: req.body.infoEnableModel,
+      infoModelLabel: req.body.infoModelLabel,
+      infoModelValue: req.body.infoModelValue,
+      infoEnableQuantity: req.body.infoEnableQuantity,
+      infoQuantityLabel: req.body.infoQuantityLabel,
+      infoQuantityValue: req.body.infoQuantityValue,
+      infoEnableColors: req.body.infoEnableColors,
+      infoColorsLabel: req.body.infoColorsLabel,
+      infoEnableSizes: req.body.infoEnableSizes,
+      infoSizesLabel: req.body.infoSizesLabel,
+      infoSizesValue: req.body.infoSizesValue,
+      infoEnableMaterial: req.body.infoEnableMaterial,
+      infoMaterialLabel: req.body.infoMaterialLabel,
+      infoMaterialValue: req.body.infoMaterialValue,
+      infoEnablePackaging: req.body.infoEnablePackaging,
+      infoPackagingLabel: req.body.infoPackagingLabel,
+      infoPackagingValue: req.body.infoPackagingValue,
+      product1Images: parseArrayParam(req.body.product1Images, data.product1Images || []),
+      product2Images: parseArrayParam(req.body.product2Images, data.product2Images || []),
+      product3Images: parseArrayParam(req.body.product3Images, data.product3Images || []),
+      product4Images: parseArrayParam(req.body.product4Images, data.product4Images || []),
+      product5Images: parseArrayParam(req.body.product5Images, data.product5Images || []),
+      enableProduct1: req.body.enableProduct1,
+      enableProduct2: req.body.enableProduct2,
+      enableProduct3: req.body.enableProduct3,
+      enableProduct4: req.body.enableProduct4,
+      enableProduct5: req.body.enableProduct5,
+
+      // Product 8 & 9 params
+      product8Name: req.body.product8Name,
+      product8Color: req.body.product8Color,
+      product8ColorHex: req.body.product8ColorHex,
+      product8Size: req.body.product8Size,
+      product8Material: req.body.product8Material,
+      product8PriceOld: req.body.product8PriceOld,
+      product8Price: req.body.product8Price,
+      enableProduct8: req.body.enableProduct8,
+      product8Images: parseArrayParam(req.body.product8Images, data.product8Images || []),
+
+      product9Name: req.body.product9Name,
+      product9Color: req.body.product9Color,
+      product9ColorHex: req.body.product9ColorHex,
+      product9Size: req.body.product9Size,
+      product9Material: req.body.product9Material,
+      product9PriceOld: req.body.product9PriceOld,
+      product9Price: req.body.product9Price,
+      enableProduct9: req.body.enableProduct9,
+      product9Images: parseArrayParam(req.body.product9Images, data.product9Images || [])
+    };
+
+    // Парсити benefits якщо передано як JSON string
+    if (req.body.benefits) {
+      try {
+        options.benefits = JSON.parse(decodeURIComponent(req.body.benefits));
+      } catch (e) {
+        console.error('❌ Помилка при парсингу benefits:', e.message);
+      }
+    }
+
+    console.log(`\n🎨 ГЕНЕРУВАННЯ САЙТУ (POST)...`);
+    console.log(`📝 Параметри:`, options);
+    const html = generateHTML(data, options);
+
+    console.log(`✅ Сайт успішно згенерований`);
+    console.log(`📏 Розмір: ${(html.length / 1024).toFixed(2)} KB\n`);
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Помилка:', err.message);
+    res.status(500).send(`<h1>Помилка при генеруванні</h1><p>${err.message}</p>`);
+  }
+});
+
+// GET /export - Генерувати та скачати ZIP архів зі статичним сайтом
+app.get('/export', (req, res) => {
+  try {
+    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
+    let data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+
+    const configPath = path.join(__dirname, 'data', 'user-config.json');
+    if (fs.existsSync(configPath)) {
+      try {
+        const userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        data = { ...data, ...userConfig };
+      } catch (configErr) {
+        console.error('Failed to read user config:', configErr.message);
+      }
+    }
+
+
+    // Отримати параметри з query string
+    const options = {
+      headerText: req.query.headerText,
+      heroTitle: req.query.heroTitle,
+      heroPrice: req.query.heroPrice,
+      enableTimer: req.query.enableTimer,
+      enableStock: req.query.enableStock,
+      heroImage: req.query.heroImage,
+      enableImage: req.query.enableImage,
+      imageUrl: req.query.imageUrl,
+      enableVideo: req.query.enableVideo,
+      videoUrl: req.query.videoUrl,
+      enableVideoThumbnail: req.query.enableVideoThumbnail,
+      videoThumbnailDesktop: req.query.videoThumbnailDesktop,
+      videoThumbnailMobile: req.query.videoThumbnailMobile,
+      sizeChartImage: req.query.sizeChartImage,
+      // Info list params
+      infoEnableBrand: req.query.infoEnableBrand,
+      infoBrandLabel: req.query.infoBrandLabel,
+      infoBrandValue: req.query.infoBrandValue,
+      infoEnableModel: req.query.infoEnableModel,
+      infoModelLabel: req.query.infoModelLabel,
+      infoModelValue: req.query.infoModelValue,
+      infoEnableQuantity: req.query.infoEnableQuantity,
+      infoQuantityLabel: req.query.infoQuantityLabel,
+      infoQuantityValue: req.query.infoQuantityValue,
+      infoEnableColors: req.query.infoEnableColors,
+      infoColorsLabel: req.query.infoColorsLabel,
+      infoEnableSizes: req.query.infoEnableSizes,
+      infoSizesLabel: req.query.infoSizesLabel,
+      infoSizesValue: req.query.infoSizesValue,
+      infoEnableMaterial: req.query.infoEnableMaterial,
+      infoMaterialLabel: req.query.infoMaterialLabel,
+      infoMaterialValue: req.query.infoMaterialValue,
+      infoEnablePackaging: req.query.infoEnablePackaging,
+      infoPackagingLabel: req.query.infoPackagingLabel,
+      infoPackagingValue: req.query.infoPackagingValue,
+      product1Images: parseArrayParam(req.query.product1Images, data.product1Images || []),
+      product2Images: parseArrayParam(req.query.product2Images, data.product2Images || []),
+      product3Images: parseArrayParam(req.query.product3Images, data.product3Images || []),
+      product4Images: parseArrayParam(req.query.product4Images, data.product4Images || []),
+      product5Images: parseArrayParam(req.query.product5Images, data.product5Images || []),
+      enableProduct1: req.query.enableProduct1,
+      enableProduct2: req.query.enableProduct2,
+      enableProduct3: req.query.enableProduct3,
+      enableProduct4: req.query.enableProduct4,
+      enableProduct5: req.query.enableProduct5,
+
+      // Product 8 & 9 params
+      product8Name: req.query.product8Name,
+      product8Color: req.query.product8Color,
+      product8ColorHex: req.query.product8ColorHex,
+      product8Size: req.query.product8Size,
+      product8Material: req.query.product8Material,
+      product8PriceOld: req.query.product8PriceOld,
+      product8Price: req.query.product8Price,
+      enableProduct8: req.query.enableProduct8,
+      product8Images: parseArrayParam(req.query.product8Images, data.product8Images || []),
+
+      product9Name: req.query.product9Name,
+      product9Color: req.query.product9Color,
+      product9ColorHex: req.query.product9ColorHex,
+      product9Size: req.query.product9Size,
+      product9Material: req.query.product9Material,
+      product9PriceOld: req.query.product9PriceOld,
+      product9Price: req.query.product9Price,
+      enableProduct9: req.query.enableProduct9,
+      product9Images: parseArrayParam(req.query.product9Images, data.product9Images || [])
+    };
+
+    // Парсити benefits якщо передано як JSON string
+    if (req.query.benefits) {
+      try {
+        options.benefits = JSON.parse(decodeURIComponent(req.query.benefits));
+      } catch (e) {
+        console.error('❌ Помилка при парсингу benefits:', e.message);
+      }
+    }
+
+    console.log(`\n📦 ЕКСПОРТ - СТВОРЕННЯ ZIP АРХІВУ...`);
+    console.log(`📝 Параметри:`, options);
+
+    // Генерувати HTML
+    let html = generateHTML(data, options);
+
+    // Видалити "public/" з усіх шляхів для експорту (бо в ZIP немає папки public/)
+    html = html.replace(/public\//g, '');
+
+    // Створити ZIP архів
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // 9 = максимальне стиснення
+    });
+
+    // Обробка помилок
+    archive.on('error', (err) => {
+      console.error('❌ Помилка при створенні ZIP:', err.message);
+      res.status(500).send('Помилка при створенні архіву');
+    });
+
+    // Встановити заголовок для скачування
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', 'attachment; filename=landing-kopo.zip');
+
+    // Додати HTML файл
+    archive.append(html, { name: 'index.html' });
+
+    // Додати статичні папки
+    const dirs = ['css', 'js', 'img', 'fonts', 'icons', 'video'];
+    for (const dir of dirs) {
+      const dirPath = path.join(__dirname, dir);
+      if (fs.existsSync(dirPath)) {
+        archive.directory(dirPath, dir);
+        console.log(`✅ Додано папку: ${dir}`);
+      }
+    }
+
+    // Додати завантажене фото якщо існує
+    if (options.heroImage) {
+      // Витягти ім'я файлу без розширення (hero-123456_m -> hero-123456)
+      const filename = path.basename(options.heroImage, '.webp').replace('_m', '');
+
+      // Додати десктоп версію (jpg)
+      const heroDesktopPath = path.join(heroImageDir, `${filename}.jpg`);
+      if (fs.existsSync(heroDesktopPath)) {
+        archive.file(heroDesktopPath, { name: `img/hero/${filename}.jpg` });
+        console.log(`✅ Додано десктоп фото: img/hero/${filename}.jpg`);
+      }
+
+      // Додати мобільну версію (webp)
+      const heroMobilePath = path.join(heroImageDir, `${filename}_m.webp`);
+      if (fs.existsSync(heroMobilePath)) {
+        archive.file(heroMobilePath, { name: `img/hero/${filename}_m.webp` });
+        console.log(`✅ Додано мобільне фото: img/hero/${filename}_m.webp`);
+      }
+    }
+
+    // Додати product images (products 1-5, 8-9)
+    const productKeys = ['product1Images', 'product2Images', 'product3Images', 'product4Images', 'product5Images', 'product8Images', 'product9Images'];
+    for (const key of productKeys) {
+      const images = options[key] || data[key] || [];
+      if (Array.isArray(images) && images.length > 0) {
+        for (const imagePath of images) {
+          // Отримати базове ім'я без розширення (product-123456.jpg -> product-123456)
+          const filename = path.basename(imagePath, '.jpg');
+
+          // Додати десктоп версію (jpg)
+          const desktopPath = path.join(productImageDir, `${filename}.jpg`);
+          if (fs.existsSync(desktopPath)) {
+            archive.file(desktopPath, { name: `img/products/${filename}.jpg` });
+            console.log(`✅ Додано десктоп product: img/products/${filename}.jpg`);
+          }
+
+          // Додати мобільну версію (webp)
+          const mobilePath = path.join(productImageDir, `${filename}_m.webp`);
+          if (fs.existsSync(mobilePath)) {
+            archive.file(mobilePath, { name: `img/products/${filename}_m.webp` });
+            console.log(`✅ Додано мобільний product: img/products/${filename}_m.webp`);
+          }
+        }
+      }
+    }
+
+    // Додати size chart image якщо існує
+    if (options.sizeChartImage || data.sizeChartImage) {
+      const sizeChartPath = options.sizeChartImage || data.sizeChartImage;
+      // Видалити /public/ та отримати чистий шлях
+      const cleanPath = sizeChartPath.replace(/^\/public\//, '').replace(/^public\//, '');
+      // Витягти ім'я файлу (size-chart-1762721756678.png -> size-chart-1762721756678)
+      const ext = path.extname(cleanPath);
+      const filename = path.basename(cleanPath, ext);
+
+      // Перевірити чи це PNG/JPG, який конвертується в WebP
+      if (ext === '.png' || ext === '.jpg') {
+        const webpPath = path.join(sizeChartImageDir, `${filename}_m.webp`);
+        if (fs.existsSync(webpPath)) {
+          archive.file(webpPath, { name: `img/info/${filename}_m.webp` });
+          console.log(`✅ Додано розмірну сітку: img/info/${filename}_m.webp`);
+        } else {
+          console.warn(`⚠️  Size chart WebP не знайдено: ${webpPath}`);
+        }
+      } else if (ext === '.webp') {
+        // Якщо це вже WebP
+        const fullPath = path.join(sizeChartImageDir, `${filename}.webp`);
+        if (fs.existsSync(fullPath)) {
+          archive.file(fullPath, { name: `img/info/${filename}.webp` });
+          console.log(`✅ Додано розмірну сітку: img/info/${filename}.webp`);
+        }
+      }
+    }
+
+    // Додати tabs images якщо існують
+    const tabImages = [
+      { key: 'tab1Image', dir: 'tabs' },
+      { key: 'tab2Image', dir: 'tabs' },
+      { key: 'tab3Image', dir: 'tabs' }
+    ];
+
+    for (const tab of tabImages) {
+      const tabImagePath = options[tab.key] || data[tab.key];
+      if (tabImagePath) {
+        const cleanPath = tabImagePath.replace(/^\/public\//, '').replace(/^public\//, '');
+        const ext = path.extname(cleanPath);
+        const filename = path.basename(cleanPath, ext);
+        const tabsDir = path.join(__dirname, 'public', 'img', tab.dir);
+
+        // Додати desktop версію (.jpg/.png)
+        const desktopPath = path.join(tabsDir, `${filename}${ext}`);
+        if (fs.existsSync(desktopPath)) {
+          archive.file(desktopPath, { name: `img/${tab.dir}/${filename}${ext}` });
+          console.log(`✅ Додано ${tab.key} desktop: img/${tab.dir}/${filename}${ext}`);
+        }
+
+        // Додати мобільну версію (_m.webp)
+        const mobilePath = path.join(tabsDir, `${filename}_m.webp`);
+        if (fs.existsSync(mobilePath)) {
+          archive.file(mobilePath, { name: `img/${tab.dir}/${filename}_m.webp` });
+          console.log(`✅ Додано ${tab.key} mobile: img/${tab.dir}/${filename}_m.webp`);
+        }
+      }
+    }
+
+    // Додати FAQ image якщо існує
+    const faqImagePath = options.faqImage || data.faqImage;
+    if (faqImagePath) {
+      const cleanPath = faqImagePath.replace(/^\/public\//, '').replace(/^public\//, '');
+      const ext = path.extname(cleanPath);
+      const filename = path.basename(cleanPath, ext);
+      const faqDir = path.join(__dirname, 'public', 'img', 'faq');
+
+      // Додати desktop версію (.jpg/.png)
+      const desktopPath = path.join(faqDir, `${filename}${ext}`);
+      if (fs.existsSync(desktopPath)) {
+        archive.file(desktopPath, { name: `img/faq/${filename}${ext}` });
+        console.log(`✅ Додано FAQ desktop: img/faq/${filename}${ext}`);
+      }
+
+      // Додати мобільну версію (_m.webp)
+      const mobilePath = path.join(faqDir, `${filename}_m.webp`);
+      if (fs.existsSync(mobilePath)) {
+        archive.file(mobilePath, { name: `img/faq/${filename}_m.webp` });
+        console.log(`✅ Додано FAQ mobile: img/faq/${filename}_m.webp`);
+      }
+    }
+
+    // Додати commentsImages якщо існують
+    const commentsImages = options.commentsImages || data.commentsImages || [];
+    if (Array.isArray(commentsImages) && commentsImages.length > 0) {
+      for (const imagePath of commentsImages) {
+        // Видалити /public/ та отримати чистий шлях
+        const cleanPath = imagePath.replace(/^\/public\//, '').replace(/^public\//, '');
+        const filename = path.basename(cleanPath);
+
+        // Знайти файл в public/img/comments/
+        const fullPath = path.join(__dirname, 'public', 'img', 'comments', filename);
+        if (fs.existsSync(fullPath)) {
+          archive.file(fullPath, { name: `img/comments/${filename}` });
+          console.log(`✅ Додано фото відгук: img/comments/${filename}`);
+        } else {
+          console.warn(`⚠️  Comment image не знайдено: ${fullPath}`);
+        }
+      }
+    }
+
+    // Додати файл даних
+    archive.append(JSON.stringify(data, null, 2), { name: 'data.json' });
+
+    // Додати .htaccess для Apache (якщо потрібно)
+    const htaccess = `<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.html [L]
+</IfModule>`;
+    archive.append(htaccess, { name: '.htaccess' });
+
+    // Финалізувати архів
+    archive.finalize();
+
+    // Передати в response
+    archive.pipe(res);
+
+    console.log(`✅ ZIP архів успішно створений и відправлений`);
+    console.log(`📏 Розмір сайту: ${(html.length / 1024).toFixed(2)} KB\n`);
+
+  } catch (err) {
+    console.error('❌ Помилка при експорті:', err.message);
+    res.status(500).send(`Помилка при експорті: ${err.message}`);
+  }
+});
+
+// Статичні файли (CSS, JS, фото, шрифти) - МАЮТЬ БУТИ В КІНЦІ!
+app.use(express.static(path.join(__dirname)));
+
+// Запуск сервера
+app.listen(PORT, () => {
+  console.log('\n╔═════════════════════════════════════════╗');
+  console.log('║  🚀  КОНСТРУКТОР ЛЕНДІНГІВ - ЗАПУЩЕНО  ║');
+  console.log('╚═════════════════════════════════════════╝\n');
+  console.log(`✅ Сервер працює на порту: ${PORT}`);
+  console.log(`🔗 Головна сторінка: http://localhost:${PORT}/`);
+  console.log(`📊 API дані: http://localhost:${PORT}/api/data`);
+  console.log(`🎨 Генерувати сайт: http://localhost:${PORT}/generate\n`);
+  console.log('⏹️  Для зупинки натисніть CTRL+C\n');
+});

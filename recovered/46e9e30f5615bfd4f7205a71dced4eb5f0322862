@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+
+<!-- Mirrored from oversized.kopo.ua/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Nov 2025 21:47:27 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no">
+ <title><%= data.metadata.title %></title>
+ <meta name="theme-color" content="#FFFFFF">
+ <meta name="description" content="<%= data.metadata.description %>">
+ <meta property="og:url" content="index.html">
+ <!--open graph-->
+ <meta property="og:title" content="Kopo">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="Kopo">
+ <meta property="og:description" content="<%= data.metadata.description %>">
+ <meta property="og:image" content="https://ibb.co/dQwFRQY">
+ <meta property="og:url" content="index.html">
+ <!--favicon-->
+ <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+ <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+ <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+ <link rel="manifest" href="favicon/site.html">
+ <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+ <meta name="msapplication-TileColor" content="#da532c">
+ <meta name="theme-color" content="#ffffff">
+ <!--preload-->
+ <link rel="preload" href="fonts/GoogleSans-Regular.woff" as="font" type="font/woff" crossorigin>
+ <link rel="preload" href="fonts/GoogleSans-Medium.woff" as="font" type="font/woff" crossorigin>
+ <link rel="preload" href="fonts/GoogleSans-Bold.woff" as="font" type="font/woff" crossorigin>
+ <link rel="preload" href="css/plugins.css" as="style">
+ <link rel="preload" href="css/main.css" as="style">
+ <link rel="preload" href="js/plugins.js" as="script">
+ <link rel="preload" href="js/main.js" as="script">
+ <!--style-->
+ <link rel="stylesheet" href="css/plugins.css">
+ <link rel="stylesheet" href="css/main.css">
+
+
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'../connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1217177219438590');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1217177219438590&amp;ev=PageView&amp;noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code --> 
+
+
+
+ 
+ 
+</head>
+
+<body>
+ <!--wrapper-->
+ <div class="wrapper">
+
+
+  <!--header-->
+  <header class="header">
+   <div class="container">
+    <div class="header-wrap">
+     <span class="header-descr">
+      <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <g clip-path="url(#header-descr)">
+        <path
+         d="M1.75008 0.000305176H9.02364C9.5048 0.000305176 10.1773 0.279056 10.5173 0.618765L20.4893 10.5908C21.1702 11.2709 21.1702 12.386 20.4893 13.0653L13.0643 20.4901C12.3849 21.1702 11.2709 21.1702 10.5905 20.4893L0.618471 10.5188C0.278812 10.1792 1.14441e-05 9.50561 1.14441e-05 9.02547V1.75038C1.14441e-05 0.788056 0.787813 0.000305176 1.75008 0.000305176ZM5.25028 7.00034C6.21681 7.00034 7.00035 6.21597 7.00035 5.25027C7.00035 4.28297 6.21681 3.50019 5.25028 3.50019C4.28375 3.50019 3.49995 4.28297 3.49995 5.25027C3.4999 6.21597 4.28375 7.00034 5.25028 7.00034Z"
+         fill="#0D78F1" />
+       </g>
+       <defs>
+        <clipPath id="header-descr">
+         <rect width="21" height="21" fill="white" transform="matrix(-1 0 0 1 21 0)" />
+        </clipPath>
+       </defs>
+      </svg>
+      <%= data.header.text %>
+     </span>
+    </div>
+   </div>
+  </header>
+  <!--/header-->
+  <!--main-->
+  <main class="main">
+   <!--start-->
+   <section class="section start">
+    <div class="container">
+     <div class="start-wrap">
+      <div class="start-text">
+       <div class="swiper start-tabs">
+        <div class="swiper-wrapper">
+
+        </div>
+       </div>
+       <h1 class="start-title title-xl"><%= data.hero.title %></h1>
+       <div class="start-info">
+        <div class="start-price price">
+         <span class="price-total">від <%= data.hero.price %> <%= data.hero.currency %></span>
+        </div>
+        <a href="#products" class="start-btn btn-one btn-scroll">ВИБРАТИ<span></span></a>
+       </div>
+       <div class="start-timer timer">
+        <span class="timer-descr">До кінця акції залишилося</span>
+        <ul class="timer-list">
+         <li class="timer-list_point timer-list_hours"></li>
+         <li class="timer-list_point timer-list_minutes"></li>
+         <li class="timer-list_point timer-list_seconds"></li>
+        </ul>
+       </div>
+       <span class="start-numbers">Залишилось <b><%= data.hero.count %></b> <%= data.hero.count_unit %></span>
+      </div>
+      <div class="swiper start-slider">
+       <div class="swiper-wrapper">
+        <div class="swiper-slide start-slide">
+         <picture>
+          <source srcset="img/start/start-1.png" media="(min-width: 800px)">
+          <img src="img/start/start-1_m.webp" alt="img">
+         </picture>
+        </div>
+       </div>
+      </div>
+      <div class="start-navigation">
+       <button class="start-arrow start-prev">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+         <path d="M15 7.5H2M2 7.5L8.5 1M2 7.5L8.5 14" stroke-width="2" />
+        </svg>
+       </button>
+       <div class="swiper-pagination start-fraction"></div>
+       <button class="start-arrow start-next">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+         <path d="M0 7.5H13M13 7.5L6.5 1M13 7.5L6.5 14" stroke-width="2" />
+        </svg>
+       </button>
+      </div>
+     </div>
+    </div>
+   </section>
+   <!--/start-->
+   <div class="main-wrap">
+    <!--action-->
+    <div class="action">
+     <div class="container">
+      <div class="action-wrap">
+       <div class="action-text">
+        <div class="action-price">
+         <span class="action-total"><%= data.action_block.title %></span>
+        </div>
+        <span class="action-descr"><%= data.action_block.subtitle %></span>
+       </div>
+       <a href="#products" class="action-btn btn-one btn-scroll">ВИБРАТИ<span></span></a>
+      </div>
+     </div>
+    </div>
+    <!--/action-->
+  <!--plus-->
+  <div class="section plus">
+    <div class="container">
+     <ul class="plus-list">
+      <% data.advantages.forEach((adv, index) => { %>
+      <li class="plus-list_point">
+       <img class="plus-list_icon" src="<%= adv.icon %>" alt="img">
+       <span class="plus-list_descr text-l"><b><%= adv.title %></b> <br><%= adv.description %></span>
+      </li>
+      <% }) %>
+     </ul>
+     <div class="plus-logo">
+      <img src="img/plus/plus-1.png" alt="img">
+     </div>
+    </div>
+   </div>
+   <!--/plus-->
+
+   <!--promo-->
+    <div class="section promo">
+     <div class="container">
+      <div class="section-top">
+       <span class="section-label"><%= data.promo.label %></span>
+       <h2 class="title-x"><%= data.promo.title %></h2>
+      </div>
+      <a href="<%= data.promo.video %>" data-fancybox class="promo-video">
+       <picture>
+        <source srcset="img/promo/promo-1.jpg" media="(min-width: 800px)">
+        <img src="img/promo/promo-1_m.webp" alt="img">
+       </picture>
+       <span class="promo-btn">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+         <path
+          d="M133,440a35.37,35.37,0,0,1-17.5-4.67c-12-6.8-19.46-20-19.46-34.33V111c0-14.37,7.46-27.53,19.46-34.33a35.13,35.13,0,0,1,35.77.45L399.12,225.48a36,36,0,0,1,0,61L151.23,434.88A35.5,35.5,0,0,1,133,440Z" />
+        </svg>
+       </span>
+      </a>
+     </div>
+    </div>
+    <!--/promo-->
+
+    <!--products-->
+    <section class="section products" id="products">
+     <div class="container">
+      <div class="section-top">
+       <span class="section-label"><%= data.products.label %></span>
+       <h2 class="title-x"><%= data.products.title %></h2>
+      </div>
+            <div class="products-list">
+       <% data.products.items.forEach((product, index) => { %>
+       <div class="products-list_point">
+        <div class="swiper products-slider">
+         <div class="swiper-wrapper">
+          <div class="swiper-slide products-slide">
+           <picture>
+            <source srcset="img/products/product_<%= index + 1 %>.jpg" media="(min-width: 800px)">
+            <img src="img/products/product_<%= index + 1 %>_m.webp" alt="img">
+           </picture>
+          </div>
+         </div>
+         <div class="products-navigation">
+          <span class="products-arrow products-prev">
+           <svg width="10" height="15" viewBox="0 0 10 15" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.4375 1.25L1.96875 7.71875L8.4375 14.1875" stroke-width="2" />
+           </svg>
+          </span>
+          <div class="swiper-pagination products-pagination"></div>
+          <span class="products-arrow products-next">
+           <svg width="10" height="15" viewBox="0 0 10 15" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.5625 13.75L8.03125 7.28125L1.5625 0.8125" stroke-width="2" />
+           </svg>
+          </span>
+         </div>
+        </div>
+        <div class="products-text">
+         <h3 class="products-text_title">
+          <%= product.name %><br> <%= product.subtitle %>         </h3>
+         <ul class="products-text_list">
+          <% if (product.specs && product.specs.length > 0) { %>
+            <% product.specs.forEach((spec) => { %>
+            <li class="info-list_point">
+             <span><%= spec.name %>:</span>
+             <span><%= spec.value %></span>
+            </li>
+            <% }) %>
+          <% } %>
+         </ul>
+         <div class="products-text_price price">
+          <span class="price-discount">
+           <%= product.price_old %> <%= product.currency %>          </span>
+          <span class="price-total">
+           <%= product.price_new %> <%= product.currency %>
+          </span>
+         </div>
+         <button class="products-text_btn btn-one btn-modal" data-id="product<%= index + 1 %>">ЗАМОВИТИ<span></span></button>
+        </div>
+       </div>
+       <% }) %>
+      </div>
+    
+
+    <!--info-->
+    <section class="section info">
+     <div class="container">
+      <div class="section-top">
+       <span class="section-label">Розмірна сітка</span>
+       <h2 class="title-x">Вагаєтесь з розміром?<br> Ми допоможемо.</h2>
+      </div>
+      <div class="info-wrap">
+       <img class="info-img" src="img/info/info-1.webp" alt="img">
+       <span class="info-descr text-l">*Великі розміри: 2XL-5XL - додається до вартості +10%</span>
+       <ul class="info-list">
+        <li class="info-list_point">
+         <span>Бренд</span>
+         <span>Kopo™ (Україна)</span>
+        </li>
+        <li class="info-list_point">
+         <span>Модель</span>
+         <span>Жіноча</span>
+        </li>
+        <li class="info-list_point">
+         <span>Кількість</span>
+         <span>Одна футболка або набір</span>
+        </li>
+        <li class="info-list_point">
+         <span>Кольори</span>
+         <span>
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="13" cy="13" r="13" fill="#131215" />
+          </svg>
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="13" cy="13" r="13" fill="#f0f1f4" />
+          </svg>
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <circle cx="13" cy="13" r="13" fill="#f8dfc8" />
+          </svg>
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="13" cy="13" r="13" fill="#fc678f" />
+           </svg>
+           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="13" cy="13" r="13" fill="#f91029" />
+           </svg> 
+           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="13" cy="13" r="13" fill="#e7c0cd" />
+           </svg> 
+           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="13" cy="13" r="13" fill="#fc325a" />
+           </svg>  
+         </span>
+        </li>
+        <li class="info-list_point">
+         <span>Розміри</span>
+         <span>від S до 5XL</span>
+        </li>
+        <li class="info-list_point">
+         <span>Матеріал</span>
+         <span>Бавовна 95%, еластан 5%</span>
+        </li>
+        <li class="info-list_point">
+         <span>Упаковка</span>
+         <span>Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.</span>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </section>
+    <!--/info-->
+
+    <!--review-->
+    <div class="section review" hidden>
+     <div class="container">
+      <div class="review-video">
+       <video muted playsinline loop class="review-video_wrap review-video_two active">
+        <source src="video/review-2.html" type="video/mp4">
+       </video>
+      </div>
+     </div>
+    </div>
+    <!--/review-->
+
+    <!--tabs-->
+    <section class="section tabs">
+     <div class="container">
+      <div class="tabs-wrap">
+       <div class="tabs-text">
+        <div class="section-top two">
+         <span class="section-label">Основні переваги футболок</span>
+         <h2 class="title-l">Якісні матеріали + Ідеальний пошив</h2>
+        </div>
+        <ul class="tabs-list">
+         <li class="tabs-list_point">
+          <div class="tabs-list_top">
+           <h3 class="tabs-list_title title-md">Максимальний комфорт та зручність</h3>
+           <span class="tabs-list_arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="16" cy="16" r="16" />
+             <path d="M12 15L16.5 19.5L21 15" stroke-width="2" />
+            </svg>
+           </span>
+          </div>
+          <div class="tabs-list_bottom">
+           <div class="tabs-list_img">
+            <picture>
+             <source srcset="<%= tab1Image.replace('/public/', '') %>" media="(min-width: 800px)">
+             <img src="<%= tab1Image.replace('/public/', '').replace('.jpg', '_m.webp').replace('.png', '_m.webp') %>" alt="img">
+            </picture>
+           </div>
+           <p class="text-l"><%= tab1Description %></p>
+          </div>
+         </li>
+         <li class="tabs-list_point">
+          <div class="tabs-list_top">
+           <h3 class="tabs-list_title title-md">Натуральні матеріали</h3>
+           <span class="tabs-list_arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="16" cy="16" r="16" />
+             <path d="M12 15L16.5 19.5L21 15" stroke-width="2" />
+            </svg>
+           </span>
+          </div>
+          <div class="tabs-list_bottom">
+           <div class="tabs-list_img">
+            <picture>
+             <source srcset="<%= tab2Image.replace('/public/', '') %>" media="(min-width: 800px)">
+             <img src="<%= tab2Image.replace('/public/', '').replace('.jpg', '_m.webp').replace('.png', '_m.webp') %>" alt="img">
+            </picture>
+           </div>
+           <p class="text-l"><%= tab2Description %>
+           </p>
+          </div>
+         </li>
+         <li class="tabs-list_point">
+          <div class="tabs-list_top">
+           <h3 class="tabs-list_title title-md">Універсальність та практичність</h3>
+           <span class="tabs-list_arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="16" cy="16" r="16" />
+             <path d="M12 15L16.5 19.5L21 15" stroke-width="2" />
+            </svg>
+           </span>
+          </div>
+          <div class="tabs-list_bottom">
+           <div class="tabs-list_img">
+            <picture>
+             <source srcset="<%= tab3Image.replace('/public/', '') %>" media="(min-width: 800px)">
+             <img src="<%= tab3Image.replace('/public/', '').replace('.jpg', '_m.webp').replace('.png', '_m.webp') %>" alt="img">
+            </picture>
+           </div>
+           <p class="text-l"><%= tab3Description %> </p>
+          </div>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </section>
+    <!--/tabs-->
+
+  <!--image-->
+  <div class="section image" hidden>
+   <div class="container">
+    <div class="image-wrap">
+     <picture>
+      <source srcset="img/image/image_1.webp" media="(min-width: 800px)">
+      <img src="img/image/image_1_m.html" alt="img">
+     </picture>
+    </div>
+   </div>
+  </div>
+  <!--/image-->    
+
+    <!--comments-->
+    <section class="section comments">
+     <div class="container">
+      <div class="comments-wrap">
+       <div class="comments-text">
+        <div class="section-top two">
+         <span class="section-label">Відгуки</span>
+         <h2 class="title-x">Піклуємось про кожного.</h2>
+        </div>
+        <ul class="comments-list">
+          <li class="text-l"><b>> 3500</b> продажів</li>
+          <li class="text-l"><b>98%</b> задоволених клієнтів</li>
+          <li class="text-l"><b>48%</b> вже повторно зробили замовлення для себе або близьких</li>
+         </ul>
+        <div class="swiper comments-slider">
+         <div class="swiper-wrapper">
+          <% if (commentsImages && commentsImages.length > 0) { %>
+            <% commentsImages.forEach(function(imagePath) { %>
+          <div class="swiper-slide comments-slide">
+           <img src="<%= imagePath.replace('/public/', '') %>" alt="Comment">
+          </div>
+            <% }); %>
+          <% } else { %>
+          <div class="swiper-slide comments-slide">
+           <img src="img/comments/comments-1.webp" alt="img">
+          </div>
+          <div class="swiper-slide comments-slide">
+           <img src="img/comments/comments-2.webp" alt="img">
+          </div>
+          <div class="swiper-slide comments-slide">
+           <img src="img/comments/comments-3.webp" alt="img">
+          </div>
+          <% } %>
+         </div>
+         <div class="comments-navigation">
+          <span class="comments-arrow comments-prev">
+           <svg width="10" height="15" viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.4375 1.25L1.96875 7.71875L8.4375 14.1875" stroke-width="2" />
+           </svg>
+          </span>
+          <span class="comments-arrow comments-next">
+           <svg width="10" height="15" viewBox="0 0 10 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.5625 13.75L8.03125 7.28125L1.5625 0.8125" stroke-width="2" />
+           </svg>
+          </span>
+         </div>
+        </div>
+        <button class="comments-btn btn-one">ЗАЛИШИТИ ВІДГУК<span></span></button>
+       </div>
+      </div>
+     </div>
+    </section>
+    <!--/comments-->
+    <!--faq-->
+    <section class="section faq">
+     <div class="container">
+      <div class="faq-wrap">
+       <div class="faq-text">
+        <div class="section-top two">
+         <span class="section-label">Доставка і оплата</span>
+         <h2 class="title-l">Швидко, зручно, надійно.</h2>
+        </div>
+        <div class="faq-img">
+         <picture>
+          <source srcset="<%= faqImage.replace('/public/', '') %>" media="(min-width: 800px)">
+          <img src="<%= faqImage.replace('/public/', '').replace('.png', '_m.webp').replace('.jpg', '_m.webp') %>" alt="img">
+         </picture>
+        </div>
+        <ul class="faq-list">
+         <li class="faq-list_point">
+          <div class="faq-list_top">
+           <h3 class="faq-list_title title-md">Доставка</h3>
+           <span class="faq-list_arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="16" cy="16" r="16" />
+             <path d="M12 15L16.5 19.5L21 15" stroke-width="2" />
+            </svg>
+           </span>
+          </div>
+          <div class="faq-list_bottom">
+           <p class="text-l">Отримуйте своє замовлення максимально швидно. Вже через 1-2 дні після замовлення ви зможете
+            його отримати в поштовому відділенні.</p>
+          </div>
+         </li>
+         <li class="faq-list_point">
+          <div class="faq-list_top">
+           <h3 class="faq-list_title title-md">Оплата</h3>
+           <span class="faq-list_arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="16" cy="16" r="16" />
+             <path d="M12 15L16.5 19.5L21 15" stroke-width="2" />
+            </svg>
+           </span>
+          </div>
+          <div class="faq-list_bottom">
+           <p class="text-l">Сплачуйте за товар після перегляду на пошті (накладний платіж) або на картку, як забажаєте.
+           </p>
+          </div>
+         </li>
+         <li class="faq-list_point">
+          <div class="faq-list_top">
+           <h3 class="faq-list_title title-md">Надійність</h3>
+           <span class="faq-list_arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="16" cy="16" r="16" />
+             <path d="M12 15L16.5 19.5L21 15" stroke-width="2" />
+            </svg>
+           </span>
+          </div>
+          <div class="faq-list_bottom">
+           <p class="text-l">Перед відправкою всі посилки проходять ретельну перевірку, щоб Ви отримали замовлення в
+            найкращому вигляді.</p>
+          </div>
+         </li>
+         <li class="faq-list_point">
+          <div class="faq-list_top">
+           <h3 class="faq-list_title title-md">Наші партнери</h3>
+           <span class="faq-list_arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="16" cy="16" r="16" />
+             <path d="M12 15L16.5 19.5L21 15" stroke-width="2" />
+            </svg>
+           </span>
+          </div>
+          <div class="faq-list_bottom">
+           <p class="text-l">Наші офіційні партнери Нова пошта та Укрпошта. </p>
+          </div>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </section>
+    <!--/faq-->
+    <!--how-->
+    <section class="section how">
+     <div class="container">
+      <div class="section-top">
+       <span class="section-label">Як придбати футболки?</span>
+       <h2 class="title-x">Лише декілька простих кроків</h2>
+      </div>
+      <ol class="how-list">
+       <li class="text-l">Залиште заявку на обрані Вами футболки</li>
+       <li class="text-l">Ми Вам швидко зателефонуємо</li>
+       <li class="text-l">Доставимо за 1-2 дні</li>
+       <li class="text-l">Сплачуйте при отриманні</li>
+      </ol>
+     </div>
+    </section>
+    <!--/how-->
+   </div>
+   <!--request-->
+   <section class="request" id="request">
+    <div class="container">
+     <div class="request-wrap">
+      <div class="request-img">
+       <picture>
+        <source srcset="img/start/start-1.png" media="(min-width: 800px)">
+        <img src="img/start/start-1_m.webp" alt="img">
+       </picture>
+      </div>
+      <div class="request-text">
+       <h1 class="request-title title-xl">Професійні 3D принтери</h1>
+       <div class="request-timer timer">
+        <span class="timer-descr">До кінця акції залишилося</span>
+        <ul class="timer-list">
+         <li class="timer-list_point timer-list_hours"></li>
+         <li class="timer-list_point timer-list_minutes"></li>
+         <li class="timer-list_point timer-list_seconds"></li>
+        </ul>
+       </div>
+      </div>
+      <div class="request-info" id="orderForm">
+       
+         <span class="request-info_title">Залиште заявку</span>
+         <span class="request-info_descr">Якщо бажаєте замовити або потрібна наша допомога</span>
+         <form id="form-popup1" class="request-form" action="#" method="post" autocomplete="off">
+          <input class="request-input input" type="text" pattern="^[A-Za-zА-Яа-яЁёІіЇїЄє\s]+$" name="name"
+            placeholder="Введіть Ваше ім`я" required>
+			<span class="popup-format">Формат телефона: <b>380999999999</b></span>
+          <input class="request-input input" type="tel" pattern="[0-9]{9,15}" maxlength="15" name="phone" placeholder="Введіть Ваш телефон" required>
+           <input class="popup-input input" type="hidden" maxlength="10" name="product" value="product" required>
+          <button class="request-btn btn-one btn" type="submit">ЗАЛИШИТИ ЗАЯВКУ<span></span></button>
+         </form>
+         <span class="request-numbers">Залишилось <b>12</b> принтерів за акційною ціною</span>
+                </div>
+     </div>
+    </div>
+   </section>
+   <!--/request-->
+   <!--popup comments-->
+   <div class="popup popup-comments">
+    <div class="popup-wrap">
+     <div class="popup-info">
+      <svg class="popup-close" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+       y="0px" viewBox="0 0 378.303 378.303" style="enable-background:new 0 0 378.303 378.303;" xml:space="preserve">
+       <polygon points="378.303,28.285 350.018,0 189.151,160.867 28.285,0 0,28.285 160.867,189.151 0,350.018 
+28.285,378.302 189.151,217.436 350.018,378.302 378.303,350.018 217.436,189.151 " />
+      </svg>
+      <div class="popup-content">
+       <div class="popup-text">
+        <span class="popup-label">Залиште Ваш відгук</span>
+        <span class="popup-title">Ми цінуємо думку кожного клієнта</span>
+        <form class="popup-form" action="https://oversized.kopo.ua/php/review.php" method="post" autocomplete="off">
+         <input class="popup-input input" type="text" pattern="^[A-Za-zА-Яа-яЁёІіЇїЄє\s]+$" name="name"
+          placeholder="Введіть Ваше ім`я" required>
+         <span class="popup-format">Формат телефона: <b>380999999999</b></span>
+         <input class="popup-input input" type="tel" pattern="[0-9]{9,15}" maxlength="15" name="phone"
+          placeholder="Введіть Ваш телефон" required>
+         <textarea class="popup-textarea textarea" name="review" placeholder="Ваш відгук"></textarea>
+         <div class="popup-rating">
+         </div>
+         <button class="popup-btn btn-one btn" type="submit">Залишити<span></span></button>
+        </form>
+        <span class="popup-label two">Або у соціальних мережах</span>
+        <ul class="popup-socials">
+         <li>
+          <a href="#" target="_blank">
+           <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="9" fill="white" />
+            <path
+             d="M18 10.6265C20.3855 10.6265 20.7108 10.6265 21.6867 10.6265C22.5542 10.6265 22.988 10.8434 23.3133 10.9518C23.747 11.1687 24.0723 11.2771 24.3976 11.6024C24.7229 11.9277 24.9398 12.253 25.0482 12.6867C25.1566 13.012 25.2651 13.4458 25.3735 14.3133C25.3735 15.2892 25.3735 15.506 25.3735 18C25.3735 20.494 25.3735 20.7108 25.3735 21.6867C25.3735 22.5542 25.1566 22.988 25.0482 23.3133C24.8313 23.747 24.7229 24.0723 24.3976 24.3976C24.0723 24.7229 23.747 24.9398 23.3133 25.0482C22.988 25.1566 22.5542 25.2651 21.6867 25.3735C20.7108 25.3735 20.494 25.3735 18 25.3735C15.506 25.3735 15.2892 25.3735 14.3133 25.3735C13.4458 25.3735 13.012 25.1566 12.6867 25.0482C12.253 24.8313 11.9277 24.7229 11.6024 24.3976C11.2771 24.0723 11.0602 23.747 10.9518 23.3133C10.8434 22.988 10.7349 22.5542 10.6265 21.6867C10.6265 20.7108 10.6265 20.494 10.6265 18C10.6265 15.506 10.6265 15.2892 10.6265 14.3133C10.6265 13.4458 10.8434 13.012 10.9518 12.6867C11.1687 12.253 11.2771 11.9277 11.6024 11.6024C11.9277 11.2771 12.253 11.0602 12.6867 10.9518C13.012 10.8434 13.4458 10.7349 14.3133 10.6265C15.2892 10.6265 15.6145 10.6265 18 10.6265ZM18 9C15.506 9 15.2892 9 14.3133 9C13.3374 9 12.6867 9.21687 12.1446 9.43374C11.6024 9.6506 11.0602 9.9759 10.5181 10.5181C9.9759 11.0602 9.75904 11.494 9.43374 12.1446C9.21687 12.6867 9.10843 13.3374 9 14.3133C9 15.2892 9 15.6145 9 18C9 20.494 9 20.7108 9 21.6867C9 22.6627 9.21687 23.3133 9.43374 23.8554C9.6506 24.3976 9.9759 24.9398 10.5181 25.4819C11.0602 26.0241 11.494 26.241 12.1446 26.5663C12.6867 26.7831 13.3374 26.8916 14.3133 27C15.2892 27 15.6145 27 18 27C20.3855 27 20.7108 27 21.6867 27C22.6627 27 23.3133 26.7831 23.8554 26.5663C24.3976 26.3494 24.9398 26.0241 25.4819 25.4819C26.0241 24.9398 26.241 24.506 26.5663 23.8554C26.7831 23.3133 26.8916 22.6627 27 21.6867C27 20.7108 27 20.3855 27 18C27 15.6145 27 15.2892 27 14.3133C27 13.3374 26.7831 12.6867 26.5663 12.1446C26.3494 11.6024 26.0241 11.0602 25.4819 10.5181C24.9398 9.9759 24.506 9.75904 23.8554 9.43374C23.3133 9.21687 22.6627 9.10843 21.6867 9C20.7108 9 20.494 9 18 9Z"
+             fill="#3C4043" />
+            <path
+             d="M18 13.3373C15.3976 13.3373 13.3373 15.3976 13.3373 18C13.3373 20.6024 15.3976 22.6627 18 22.6627C20.6024 22.6627 22.6627 20.6024 22.6627 18C22.6627 15.3976 20.6024 13.3373 18 13.3373ZM18 21.0361C16.3735 21.0361 14.9639 19.7349 14.9639 18C14.9639 16.3735 16.2651 14.9639 18 14.9639C19.6265 14.9639 21.0361 16.2651 21.0361 18C21.0361 19.6265 19.6265 21.0361 18 21.0361Z"
+             fill="#3C4043" />
+            <path
+             d="M22.7711 14.3133C23.3699 14.3133 23.8554 13.8278 23.8554 13.2289C23.8554 12.6301 23.3699 12.1446 22.7711 12.1446C22.1722 12.1446 21.6867 12.6301 21.6867 13.2289C21.6867 13.8278 22.1722 14.3133 22.7711 14.3133Z"
+             fill="#3C4043" />
+           </svg>
+          </a>
+         </li>
+         <li>
+          <a href="#" target="_blank">
+           <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="9" fill="white" />
+            <path
+             d="M19.4913 18.3283H22.8413L23.3673 14.9045H19.4907V13.0332C19.4907 11.6109 19.9526 10.3497 21.275 10.3497H23.4V7.36176C23.0266 7.31104 22.237 7.2 20.7449 7.2C17.6293 7.2 15.8028 8.85537 15.8028 12.6267V14.9045H12.6V18.3283H15.8028V27.7389C16.4371 27.8349 17.0795 27.9 17.739 27.9C18.3352 27.9 18.917 27.8452 19.4913 27.767V18.3283Z"
+             fill="#3C4043" />
+           </svg>
+          </a>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!--/popup comments-->
+   <!--popup order-->
+   <div class="popup popup-order">
+    <div class="popup-wrap">
+     <div class="popup-info">
+      <svg class="popup-close" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+       y="0px" viewBox="0 0 378.303 378.303" style="enable-background:new 0 0 378.303 378.303;" xml:space="preserve">
+       <polygon points="378.303,28.285 350.018,0 189.151,160.867 28.285,0 0,28.285 160.867,189.151 0,350.018 
+28.285,378.302 189.151,217.436 350.018,378.302 378.303,350.018 217.436,189.151 " />
+      </svg>
+      <div class="popup-content">
+       <div class="popup-text">
+        
+        <span class="popup-label">Сьогодні діє акційна ціна!</span>
+        <span class="popup-title">Бажаєте замовити або потрібна консультація? </span>
+        <div class="popup-timer timer">
+         <span class="timer-descr">До кінця акції залишилось</span>
+         <ul class="timer-list">
+          <li class="timer-list_point timer-list_hours"></li>
+          <li class="timer-list_point timer-list_minutes"></li>
+          <li class="timer-list_point timer-list_seconds"></li>
+         </ul>
+        </div>
+        <div class="popup-price price">
+         <span class="price-discount"></span>
+         <span class="price-total">Залиште заявку</span>
+        </div>
+        <form id="form-popup2" class="popup-form" action="#" method="post" autocomplete="off">
+         <input class="popup-input input" type="text" pattern="^[A-Za-zА-Яа-яЁёІіЇїЄє\s]+$" name="name"
+          placeholder="Введіть Ваше ім`я" required>
+		  <span class="popup-format">Формат телефона: <b>380999999999</b></span>
+         <input class="popup-input input" type="tel" pattern="[0-9]{9,15}" maxlength="15" name="phone" placeholder="Введіть Ваш телефон" required>
+         <input class="popup-input input" type="hidden" maxlength="10" name="product" value="product">
+         <button class="popup-btn btn-one btn" type="submit">ЗАМОВИТИ<span></span></button>
+        </form>
+        <span class="popup-numbers">Залишилось <b>12</b> принтерів за акційною ціною</span>
+       </div>
+       <div class="popup-img">
+        <img src="img/popup/popup-1.png" alt="img">
+       </div>
+                 </div>
+      </div>
+     </div>
+    </div>
+    <!--/popup order-->
+  </main>
+  <!--/main-->
+  <!--footer-->
+  <footer class="footer">
+   <div class="container">
+    <div class="footer-wrap">
+     <span class="footer-descr">© 2022 «KOPO»</span>
+     <svg class="footer-icon" width="149" height="19" viewBox="0 0 149 19" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path d="M13.4331 13.8704H10.9219L12.4926 5.1582H15.0037L13.4331 13.8704Z" fill="#8E8E8E" />
+      <path
+       d="M22.5369 5.37091C22.0415 5.19463 21.2559 5 20.2845 5C17.8046 5 16.0583 6.18629 16.0476 7.88232C16.027 9.13364 17.2979 9.82866 18.2484 10.2459C19.22 10.6722 19.5502 10.9505 19.5502 11.3306C19.5404 11.9142 18.7652 12.1832 18.0422 12.1832C17.0396 12.1832 16.5024 12.0445 15.686 11.7198L15.3553 11.5806L15.0039 13.5363C15.5929 13.777 16.678 13.9906 17.8046 14C20.4395 14 22.155 12.8321 22.1753 11.0247C22.1853 10.0329 21.5142 9.27297 20.0674 8.65199C19.1891 8.25335 18.6512 7.98456 18.6512 7.57669C18.6615 7.2059 19.1061 6.82612 20.0976 6.82612C20.914 6.80751 21.5138 6.98355 21.9682 7.1597L22.1954 7.25222L22.5369 5.37091Z"
+       fill="#8E8E8E" />
+      <path
+       d="M25.8745 10.784C26.0813 10.2835 26.8771 8.34639 26.8771 8.34639C26.8667 8.36499 27.0835 7.83665 27.2075 7.5123L27.383 8.26299C27.383 8.26299 27.8586 10.3484 27.9618 10.784C27.5694 10.784 26.3705 10.784 25.8745 10.784ZM28.9743 5.1582H27.0319C26.4329 5.1582 25.9778 5.31564 25.7193 5.88106L21.9893 13.8703H24.6242C24.6242 13.8703 25.058 12.795 25.1512 12.5634C25.4403 12.5634 28.0036 12.5634 28.3754 12.5634C28.4475 12.8693 28.6751 13.8703 28.6751 13.8703H31.0002L28.9743 5.1582Z"
+       fill="#8E8E8E" />
+      <path
+       d="M8.82498 5.1582L6.36567 11.0991L6.09693 9.89423C5.64225 8.50395 4.21629 6.99344 2.625 6.24237L4.87764 13.8612H7.53318L11.4804 5.1582H8.82498Z"
+       fill="#8E8E8E" />
+      <path
+       d="M4.08164 5.1582H0.0413339L0 5.33424C3.15169 6.05722 5.23899 7.79994 6.09657 9.8946L5.21826 5.89055C5.07366 5.33411 4.62928 5.17656 4.08164 5.1582Z"
+       fill="#C0C0C0" />
+      <path
+       d="M50.35 18.9583V17.6973C50.35 17.215 50.0618 16.8992 49.567 16.8992C49.3196 16.8992 49.0506 16.9824 48.8656 17.2566C48.7215 17.0265 48.5149 16.8992 48.2051 16.8992C47.9985 16.8992 47.792 16.9628 47.6286 17.193V16.9408H47.1963V18.9583H47.6286V17.8443C47.6286 17.4868 47.8136 17.3178 48.1018 17.3178C48.39 17.3178 48.5342 17.5064 48.5342 17.8443V18.9583H48.9665V17.8443C48.9665 17.4868 49.1731 17.3178 49.4397 17.3178C49.7279 17.3178 49.872 17.5064 49.872 17.8443V18.9583H50.35ZM56.7631 16.9408H56.0618V16.3311H55.6294V16.9408H55.2379V17.3399H55.6294V18.2654C55.6294 18.7281 55.8144 18.9999 56.3092 18.9999C56.4941 18.9999 56.7007 18.9363 56.8448 18.853L56.7199 18.4735C56.595 18.5568 56.4509 18.5788 56.3476 18.5788C56.141 18.5788 56.0594 18.4515 56.0594 18.2434V17.3399H56.7607V16.9408H56.7631ZM60.4333 16.8967C60.1859 16.8967 60.0201 17.024 59.9169 17.1905V16.9383H59.4845V18.9559H59.9169V17.8198C59.9169 17.4843 60.061 17.2934 60.33 17.2934C60.4117 17.2934 60.5149 17.3154 60.599 17.335L60.7239 16.9138C60.6374 16.8967 60.5149 16.8967 60.4333 16.8967ZM54.8872 17.1073C54.6807 16.9604 54.3924 16.8967 54.0826 16.8967C53.5878 16.8967 53.2587 17.1489 53.2587 17.548C53.2587 17.8834 53.5061 18.0744 53.9385 18.1356L54.145 18.1577C54.3708 18.1993 54.4957 18.2629 54.4957 18.3682C54.4957 18.5151 54.33 18.6204 54.0418 18.6204C53.7535 18.6204 53.5254 18.5151 53.3812 18.4098L53.1747 18.7453C53.4005 18.9142 53.7103 18.9975 54.0201 18.9975C54.5966 18.9975 54.9281 18.7232 54.9281 18.3462C54.9281 17.9887 54.6591 17.8002 54.2483 17.7365L54.0418 17.7145C53.8568 17.6924 53.7127 17.6508 53.7127 17.526C53.7127 17.379 53.8568 17.2958 54.085 17.2958C54.3324 17.2958 54.5798 17.4011 54.7047 17.4647L54.8872 17.1073ZM66.39 16.8967C66.1426 16.8967 65.9769 17.024 65.8736 17.1905V16.9383H65.4413V18.9559H65.8736V17.8198C65.8736 17.4843 66.0177 17.2934 66.2868 17.2934C66.3684 17.2934 66.4717 17.3154 66.5558 17.335L66.6807 16.9187C66.5966 16.8967 66.4741 16.8967 66.39 16.8967ZM60.8656 17.9495C60.8656 18.5592 61.2788 18.9999 61.9177 18.9999C62.2059 18.9999 62.4125 18.9363 62.619 18.7698L62.4125 18.4123C62.2467 18.5396 62.0834 18.6008 61.896 18.6008C61.5454 18.6008 61.298 18.3486 61.298 17.9495C61.298 17.57 61.5454 17.3178 61.896 17.2982C62.081 17.2982 62.2467 17.3619 62.4125 17.4868L62.619 17.1293C62.4125 16.9604 62.2059 16.8992 61.9177 16.8992C61.2788 16.8967 60.8656 17.3399 60.8656 17.9495ZM64.8648 17.9495V16.9408H64.4325V17.193C64.2884 17.0044 64.0818 16.8992 63.8128 16.8992C63.2555 16.8992 62.8232 17.3399 62.8232 17.9495C62.8232 18.5592 63.2555 18.9999 63.8128 18.9999C64.101 18.9999 64.3076 18.8946 64.4325 18.7061V18.9583H64.8648V17.9495ZM63.2772 17.9495C63.2772 17.5921 63.5029 17.2982 63.8752 17.2982C64.2259 17.2982 64.4733 17.5725 64.4733 17.9495C64.4733 18.307 64.2259 18.6008 63.8752 18.6008C63.5053 18.5788 63.2772 18.3046 63.2772 17.9495ZM58.1034 16.8967C57.527 16.8967 57.1138 17.3178 57.1138 17.9471C57.1138 18.5788 57.527 18.9975 58.125 18.9975C58.4133 18.9975 58.7015 18.9142 58.9297 18.7232L58.7231 18.4074C58.5574 18.5347 58.3508 18.618 58.1467 18.618C57.8776 18.618 57.611 18.4906 57.5486 18.1356H59.0113C59.0113 18.072 59.0113 18.0303 59.0113 17.9667C59.0306 17.3178 58.6583 16.8967 58.1034 16.8967ZM58.1034 17.2762C58.3724 17.2762 58.5574 17.4452 58.5982 17.7586H57.5678C57.6086 17.4868 57.7936 17.2762 58.1034 17.2762ZM68.8448 17.9495V16.1426H68.4125V17.193C68.2683 17.0044 68.0618 16.8992 67.7928 16.8992C67.2355 16.8992 66.8032 17.3399 66.8032 17.9495C66.8032 18.5592 67.2355 18.9999 67.7928 18.9999C68.081 18.9999 68.2876 18.8946 68.4125 18.7061V18.9583H68.8448V17.9495ZM67.2571 17.9495C67.2571 17.5921 67.4829 17.2982 67.8552 17.2982C68.2059 17.2982 68.4533 17.5725 68.4533 17.9495C68.4533 18.307 68.2059 18.6008 67.8552 18.6008C67.4829 18.5788 67.2571 18.3046 67.2571 17.9495ZM52.7832 17.9495V16.9408H52.3508V17.193C52.2067 17.0044 52.0001 16.8992 51.7311 16.8992C51.1739 16.8992 50.7415 17.3399 50.7415 17.9495C50.7415 18.5592 51.1739 18.9999 51.7311 18.9999C52.0193 18.9999 52.2259 18.8946 52.3508 18.7061V18.9583H52.7832V17.9495ZM51.1763 17.9495C51.1763 17.5921 51.4021 17.2982 51.7744 17.2982C52.125 17.2982 52.3724 17.5725 52.3724 17.9495C52.3724 18.307 52.125 18.6008 51.7744 18.6008C51.4021 18.5788 51.1763 18.3046 51.1763 17.9495Z"
+       fill="#A0A0A0" />
+      <path d="M61.238 1.61816H54.7432V13.5128H61.238V1.61816Z" fill="#3E3E3E" />
+      <path
+       d="M55.1753 7.56572C55.1753 5.1491 56.2898 3.00425 58 1.61843C56.7414 0.609665 55.1537 0 53.4219 0C49.3195 0 46 3.38376 46 7.56572C46 11.7477 49.3195 15.1314 53.4219 15.1314C55.1537 15.1314 56.7414 14.5218 58 13.513C56.2874 12.1468 55.1753 9.98235 55.1753 7.56572Z"
+       fill="#8C8C8C" />
+      <path
+       d="M70 7.56572C70 11.7477 66.6805 15.1314 62.5781 15.1314C60.8463 15.1314 59.2586 14.5218 58 13.513C59.7318 12.1247 60.8247 9.98235 60.8247 7.56572C60.8247 5.1491 59.7102 3.00425 58 1.61843C59.2562 0.609665 60.8439 0 62.5757 0C66.6805 0 70 3.4058 70 7.56572Z"
+       fill="#585858" />
+      <path
+       d="M102.155 14.2119C101.599 14.2119 101.075 14.1158 100.581 13.9254C100.107 13.7435 99.69 13.4842 99.3319 13.1467C98.9808 12.8118 98.71 12.4259 98.5214 11.9881C98.3275 11.5384 98.2305 10.8813 98.2305 10.0151C98.2305 9.14891 98.3275 8.49179 98.5214 8.04213C98.71 7.60434 98.9808 7.21841 99.3319 6.88349C100.088 6.17368 101.03 5.81836 102.155 5.81836C102.71 5.81836 103.235 5.91442 103.729 6.10568C104.206 6.28759 104.615 6.54091 104.956 6.86561C105.322 7.21244 105.6 7.60434 105.789 8.04213C105.983 8.49179 106.08 9.14891 106.08 10.0151C106.08 10.8804 105.983 11.5384 105.789 11.9881C105.6 12.4259 105.322 12.8178 104.956 13.1646C104.216 13.8625 103.283 14.2119 102.155 14.2119ZM99.9145 10.0151C99.9145 11.0266 100.154 11.7246 100.633 12.1096C101.056 12.4471 101.564 12.6154 102.156 12.6154C102.8 12.6154 103.329 12.4275 103.745 12.0519C104.182 11.66 104.401 10.9807 104.401 10.0143C104.401 9.04771 104.182 8.37024 103.745 7.98009C103.33 7.60265 102.8 7.41309 102.156 7.41309C101.564 7.41309 101.056 7.58139 100.633 7.91883C100.154 8.3056 99.9145 9.00356 99.9145 10.0151Z"
+       fill="#D1D1D1" />
+      <path
+       d="M114.782 5.98535L111.464 14.2343H109.766L106.448 5.98535H108.435L110.617 11.6774L112.795 5.98535H114.782Z"
+       fill="#D1D1D1" />
+      <path
+       d="M148.671 6.06934L143.209 19.0004H141.333L143.551 13.7955L140.338 6.06934H142.214L144.502 11.5718L146.799 6.06934H148.671Z"
+       fill="#D1D1D1" />
+      <path
+       d="M122.09 8.10626C121.98 7.69226 121.8 7.33524 121.552 7.03346C120.899 6.22507 119.889 5.82129 118.523 5.82129C117.557 5.82129 116.682 5.91565 115.895 6.10436V7.75093C116.684 7.5095 117.56 7.38879 118.523 7.38879C118.98 7.38879 119.375 7.46613 119.706 7.62172C120.008 7.76538 120.22 7.99404 120.344 8.30685H118.921C117.859 8.30685 116.974 8.56357 116.264 9.07787C115.93 9.32441 115.673 9.60746 115.493 9.92792C115.312 10.251 115.221 10.6947 115.221 11.2591C115.221 11.8235 115.312 12.2681 115.493 12.5937C115.672 12.9167 115.929 13.199 116.264 13.4404C116.974 13.9589 117.859 14.2182 118.921 14.2182C119.541 14.2182 120.106 14.1433 120.621 13.9997V14.168H122.222V13.1998V10.4431V9.12545C122.223 8.76163 122.179 8.4216 122.09 8.10626ZM120.468 12.314C119.913 12.5367 119.398 12.6473 118.921 12.6473C118.335 12.6473 117.878 12.5555 117.546 12.371C117.165 12.1585 116.975 11.7683 116.975 11.2013C116.975 10.6343 117.164 10.2595 117.542 10.075C117.82 9.94322 118.28 9.8778 118.921 9.8778H120.468V12.314Z"
+       fill="#D1D1D1" />
+      <path
+       d="M130.298 6.89458C129.957 6.5554 129.56 6.29443 129.108 6.11251C128.639 5.92125 128.137 5.8252 127.604 5.8252C126.87 5.8252 126.175 5.93485 125.522 6.15502C125.5 6.16267 125.479 6.17202 125.457 6.17967V5.99266H123.855V7.06203V9.4949V18.9603H125.61V13.684C126.161 14.0359 126.825 14.211 127.604 14.211C128.137 14.211 128.639 14.1167 129.108 13.928C129.56 13.7435 129.957 13.4834 130.298 13.1459C130.634 12.8084 130.891 12.4259 131.069 11.9983C131.257 11.5367 131.352 10.7453 131.352 9.62411C131.352 8.50288 131.001 7.59247 130.298 6.89458ZM129.034 12.0204C128.648 12.408 128.172 12.6019 127.604 12.6019C127.172 12.6019 126.806 12.5381 126.506 12.4115C126.275 12.3162 125.976 12.1267 125.61 11.8445V7.95967C126.129 7.6103 126.794 7.43604 127.604 7.43604C128.172 7.43604 128.649 7.62988 129.034 8.01665C129.41 8.39409 129.598 9.06138 129.598 10.0185C129.598 10.9757 129.411 11.6421 129.034 12.0204Z"
+       fill="#D1D1D1" />
+      <path
+       d="M139.714 8.10626C139.604 7.69226 139.424 7.33524 139.176 7.03346C138.523 6.22507 137.513 5.82129 136.147 5.82129C135.181 5.82129 134.306 5.91565 133.519 6.10436V7.75093C134.308 7.5095 135.184 7.38879 136.147 7.38879C136.604 7.38879 136.999 7.46613 137.33 7.62172C137.632 7.76538 137.844 7.99404 137.968 8.30685H136.545C135.483 8.30685 134.598 8.56357 133.888 9.07787C133.554 9.32441 133.297 9.60746 133.117 9.92792C132.936 10.251 132.845 10.6947 132.845 11.2591C132.845 11.8235 132.936 12.2681 133.117 12.5937C133.296 12.9167 133.553 13.199 133.888 13.4404C134.598 13.9589 135.483 14.2182 136.545 14.2182C137.165 14.2182 137.73 14.1433 138.245 13.9997V14.168H139.846V13.1998V10.4431V9.12545C139.847 8.76163 139.803 8.4216 139.714 8.10626ZM138.092 12.314C137.537 12.5367 137.021 12.6473 136.545 12.6473C135.959 12.6473 135.502 12.5555 135.17 12.371C134.789 12.1585 134.599 11.7683 134.599 11.2013C134.599 10.6343 134.788 10.2595 135.166 10.075C135.444 9.94322 135.904 9.8778 136.545 9.8778H138.092V12.314Z"
+       fill="#D1D1D1" />
+      <path
+       d="M118.127 18.4126H87.7818C87.4054 18.4126 87.0647 18.263 86.8158 18.0216C86.5669 17.7793 86.414 17.4469 86.414 17.0814V2.73412C86.414 2.36775 86.5677 2.03622 86.8158 1.79396C87.0647 1.55169 87.4063 1.40293 87.7818 1.40293H122.669C123.046 1.40293 123.387 1.55254 123.635 1.79396C123.884 2.03622 124.037 2.3686 124.037 2.73412V3.8443H124.45V2.73412C124.45 2.25724 124.25 1.82286 123.927 1.50919C123.606 1.19551 123.159 1 122.669 1H87.7818C87.2918 1 86.8455 1.19551 86.5232 1.50919C86.2009 1.82286 86 2.25724 86 2.73412V17.0806C86 17.5575 86.2009 17.9918 86.5232 18.3055C86.8455 18.6192 87.2918 18.8147 87.7818 18.8147H118.127V18.4126Z"
+       fill="#D1D1D1" />
+      <path
+       d="M96.813 9.26793C96.7449 8.30909 96.3999 7.51681 95.7736 6.89458C95.432 6.5554 95.0355 6.29443 94.583 6.11251C94.114 5.92125 93.6127 5.8252 93.0789 5.8252C92.3444 5.8252 91.65 5.93485 90.9966 6.15502C90.9748 6.16267 90.9538 6.17202 90.932 6.17967V5.99266H89.3301V7.06203V9.4949V14.2178H91.0849V13.6832V11.8428V9.61049V7.95967C91.6037 7.6103 92.2684 7.43604 93.0789 7.43604C93.6467 7.43604 94.1236 7.62988 94.5088 8.01749C94.8285 8.33879 95.011 8.87182 95.0591 9.61218H95.073V13.6806V14.2187H96.8278V9.26793H96.813Z"
+       fill="#D1D1D1" />
+     </svg>
+     <ul class="footer-links">
+      <li><a href="exchange.html">Обмін та повернення</a></li>
+      <li><a href="politics.html">Політика конфіденційності</a></li>
+      <li><a href="agrement.html">Угода користувача</a></li>
+     </ul>
+    </div>
+   </div>
+  </footer>
+  <!--/footer-->
+ </div>
+ <!--/wrapper-->
+ <script src="js/plugins.js"></script>
+ <script src="js/main.js"></script>
+</body>
+</html>

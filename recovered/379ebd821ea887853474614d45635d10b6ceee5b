@@ -1,0 +1,265 @@
+# Salesdrive CRM + Meta Pixel - Імплементація
+
+Опис як реалізовано в Landing Constructor.
+
+---
+
+## 1. Поля форми
+
+Додати в `formData`:
+
+```javascript
+{
+  // Salesdrive CRM
+  salesdriveApiKey: '',
+  salesdriveEndpoint: '',
+  salesdriveFunnelId: '1',
+
+  // Meta Pixel
+  metaPixelId: '',
+  metaAccessToken: '',
+  metaTestEventCode: '',
+
+  // Для замовлень
+  productId: 'PRODUCT-001',
+  sku: 'SKU-001',
+  website: 'example.com'
+}
+```
+
+UI форми:
+
+```jsx
+<input name="salesdriveApiKey" placeholder="Ycxui0h7tq..." />
+<input name="salesdriveEndpoint" placeholder="https://comoyo.salesdrive.me/handler/" />
+<input name="salesdriveFunnelId" placeholder="1" />
+
+<input name="metaPixelId" placeholder="1141211104122952" />
+<input name="metaAccessToken" placeholder="EAA..." />
+<input name="metaTestEventCode" placeholder="TEST12345" />
+```
+
+Референс: `landing-constructor/src/components/ModernLandingForm.jsx:876-972`
+
+---
+
+## 2. Meta Pixel в HTML
+
+Додати в `<head>`:
+
+```html
+${metaPixelId ? `
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '${metaPixelId}');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1" /></noscript>
+` : ''}
+```
+
+Референс: `landing-constructor/src/templates/modernLandingTemplate.js:385-400`
+
+---
+
+## 3. JavaScript з інтеграціями
+
+```javascript
+// Meta Pixel - ViewContent при завантаженні
+function initializeMetaPixel() {
+  if (window.fbq) {
+    const products = ${JSON.stringify(products)};
+
+    if (products.length > 0) {
+      fbq('track', 'ViewContent', {
+        content_ids: products.map(p => p.id),
+        content_name: 'Product Catalog',
+        content_type: 'product_group',
+        value: Math.min(...products.map(p => p.price)) || 0,
+        currency: 'UAH'
+      });
+    }
+  }
+}
+
+// Meta Pixel - InitiateCheckout при кліку на "Замовити"
+function handleOrderClick(button) {
+  const orderData = {
+    product_id: '${productId}',
+    sku: '${sku}',
+    product_name: 'Товар',
+    price: 890,
+    quantity: 1,
+    customer_phone: '+380',
+    website: '${website}'
+  };
+
+  if (window.fbq) {
+    fbq('track', 'InitiateCheckout', {
+      content_name: orderData.product_name,
+      content_ids: [orderData.product_id],
+      value: orderData.price,
+      currency: 'UAH'
+    });
+  }
+
+  // Відправити в Salesdrive
+  ${salesdriveEndpoint ? `sendToSalesdrive(orderData);` : ''}
+
+  localStorage.setItem('order', JSON.stringify(orderData));
+}
+
+// Salesdrive CRM - відправка замовлення
+${salesdriveEndpoint ? `
+function sendToSalesdrive(orderData) {
+  const payload = {
+    funnel_id: '${salesdriveFunnelId}',
+    customer: {
+      phone: orderData.customer_phone || '+380',
+      first_name: 'Customer',
+      email: 'contact@example.com'
+    },
+    products: [{
+      id: orderData.product_id,
+      sku: orderData.sku,
+      name: orderData.product_name,
+      price: orderData.price,
+      quantity: orderData.quantity
+    }],
+    utm_source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
+    utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || 'organic',
+    utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || 'landing'
+  };
+
+  fetch('${salesdriveEndpoint}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${salesdriveApiKey}'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Order sent to Salesdrive:', data);
+
+    // Meta Pixel - Purchase ЛИШЕ після успішної відправки
+    if (window.fbq) {
+      fbq('track', 'Purchase', {
+        value: orderData.price,
+        currency: 'UAH',
+        content_name: orderData.product_name,
+        content_ids: [orderData.product_id]
+      });
+    }
+  })
+  .catch(error => {
+    console.error('Error sending to Salesdrive:', error);
+    localStorage.setItem('orderFailed', JSON.stringify({
+      ...orderData,
+      timestamp: new Date().toISOString(),
+      error: error.message
+    }));
+  });
+}
+` : ''}
+
+// Meta Pixel - Subscribe при підписці
+function handleNewsletterSubscription(email) {
+  if (!email || !email.includes('@')) return;
+
+  if (window.fbq) {
+    fbq('track', 'Subscribe', {
+      content_name: 'Newsletter',
+      currency: 'UAH'
+    });
+  }
+
+  localStorage.setItem('newsletter', JSON.stringify({
+    email: email,
+    timestamp: new Date().toISOString()
+  }));
+}
+
+// Ініціалізація при завантаженні
+document.addEventListener('DOMContentLoaded', function() {
+  initializeMetaPixel();
+
+  // Додати обробники на кнопки "Замовити"
+  document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+    if (btn.textContent.includes('Замовити')) {
+      btn.addEventListener('click', handleOrderClick);
+    }
+  });
+});
+```
+
+Референс: `landing-constructor/src/templates/modernJsTemplate.js`
+
+---
+
+## 4. Meta Pixel Events
+
+| Event | Коли | Параметри |
+|-------|------|-----------|
+| `PageView` | Завантаження сторінки | - |
+| `ViewContent` | Відображення товарів | `content_ids`, `value`, `currency` |
+| `InitiateCheckout` | Клік на "Замовити" | `content_name`, `content_ids`, `value` |
+| `Purchase` | Успішна відправка в Salesdrive | `value`, `currency`, `content_name` |
+| `Subscribe` | Підписка на newsletter | `content_name` |
+
+---
+
+## 5. Salesdrive API
+
+**Endpoint:** `POST {salesdriveEndpoint}`
+
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer {salesdriveApiKey}
+```
+
+**Body:**
+```json
+{
+  "funnel_id": "1",
+  "customer": {
+    "phone": "+380501234567",
+    "first_name": "Customer",
+    "email": "customer@example.com"
+  },
+  "products": [{
+    "id": "PRODUCT-001",
+    "sku": "SKU-001",
+    "name": "Товар",
+    "price": 890,
+    "quantity": 1
+  }],
+  "utm_source": "direct",
+  "utm_medium": "organic",
+  "utm_campaign": "landing"
+}
+```
+
+---
+
+## 6. Важливі моменти
+
+- Meta Pixel код генерується ТІЛЬКИ якщо `metaPixelId` заповнений
+- `sendToSalesdrive()` функція генерується ТІЛЬКИ якщо `salesdriveEndpoint` заповнений
+- `Purchase` event спрацьовує ТІЛЬКИ після успішної відповіді від Salesdrive (200 OK)
+- UTM параметри беруться автоматично з URL
+- Fallback: якщо Salesdrive недоступний - зберігається в localStorage
+
+---
+
+Реалізовано в Landing Constructor (референс).
+Код вище - готовий для копіювання в новий проект.

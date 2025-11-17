@@ -1,0 +1,129 @@
+
+╔═════════════════════════════════════════╗
+║  🚀  КОНСТРУКТОР ЛЕНДІНГІВ - ЗАПУЩЕНО  ║
+╚═════════════════════════════════════════╝
+
+✅ Сервер працює на порту: 6614
+🔗 Головна сторінка: http://localhost:6614/
+📊 API дані: http://localhost:6614/api/data
+🎨 Генерувати сайт: http://localhost:6614/generate
+
+⏹️  Для зупинки натисніть CTRL+C
+
+
+📦 ЕКСПОРТ - СТВОРЕННЯ ZIP АРХІВУ...
+📝 Параметри: {
+  headerText: undefined,
+  heroTitle: undefined,
+  heroPrice: undefined,
+  enableTimer: undefined,
+  enableStock: undefined,
+  heroImage: undefined,
+  enableImage: undefined,
+  imageUrl: undefined,
+  enableVideo: undefined,
+  videoUrl: undefined,
+  enableVideoThumbnail: undefined,
+  videoThumbnailDesktop: undefined,
+  videoThumbnailMobile: undefined,
+  sizeChartImage: undefined,
+  infoEnableBrand: undefined,
+  infoBrandLabel: undefined,
+  infoBrandValue: undefined,
+  infoEnableModel: undefined,
+  infoModelLabel: undefined,
+  infoModelValue: undefined,
+  infoEnableQuantity: undefined,
+  infoQuantityLabel: undefined,
+  infoQuantityValue: undefined,
+  infoEnableColors: undefined,
+  infoColorsLabel: undefined,
+  infoEnableSizes: undefined,
+  infoSizesLabel: undefined,
+  infoSizesValue: undefined,
+  infoEnableMaterial: undefined,
+  infoMaterialLabel: undefined,
+  infoMaterialValue: undefined,
+  infoEnablePackaging: undefined,
+  infoPackagingLabel: undefined,
+  infoPackagingValue: undefined,
+  product1Images: [
+    '/public/img/products/product-1762701318946.jpg',
+    '/public/img/products/product-1762701318987.jpg',
+    '/public/img/products/product-1762701319031.jpg',
+    '/public/img/products/product-1762701319053.jpg'
+  ],
+  product2Images: [
+    '/public/img/products/product-1762701339436.jpg',
+    '/public/img/products/product-1762701339448.jpg',
+    '/public/img/products/product-1762701339476.jpg',
+    '/public/img/products/product-1762701339488.jpg'
+  ],
+  product3Images: [],
+  product4Images: [],
+  product5Images: [],
+  enableProduct1: undefined,
+  enableProduct2: undefined,
+  enableProduct3: undefined,
+  enableProduct4: undefined,
+  enableProduct5: undefined,
+  product8Name: undefined,
+  product8Color: undefined,
+  product8ColorHex: undefined,
+  product8Size: undefined,
+  product8Material: undefined,
+  product8PriceOld: undefined,
+  product8Price: undefined,
+  enableProduct8: undefined,
+  product8Images: [ '/public/img/products/product-1762712878681.jpg' ],
+  product9Name: undefined,
+  product9Color: undefined,
+  product9ColorHex: undefined,
+  product9Size: undefined,
+  product9Material: undefined,
+  product9PriceOld: undefined,
+  product9Price: undefined,
+  enableProduct9: undefined,
+  product9Images: []
+}
+✅ HTML успішно згенерований (59625 байт)
+✅ Додано папку: css
+✅ Додано папку: js
+✅ Додано папку: img
+✅ Додано папку: fonts
+✅ Додано папку: icons
+✅ Додано папку: video
+✅ Додано десктоп product: img/products/product-1762701318946.jpg
+✅ Додано мобільний product: img/products/product-1762701318946_m.webp
+✅ Додано десктоп product: img/products/product-1762701318987.jpg
+✅ Додано мобільний product: img/products/product-1762701318987_m.webp
+✅ Додано десктоп product: img/products/product-1762701319031.jpg
+✅ Додано мобільний product: img/products/product-1762701319031_m.webp
+✅ Додано десктоп product: img/products/product-1762701319053.jpg
+✅ Додано мобільний product: img/products/product-1762701319053_m.webp
+✅ Додано десктоп product: img/products/product-1762701339436.jpg
+✅ Додано мобільний product: img/products/product-1762701339436_m.webp
+✅ Додано десктоп product: img/products/product-1762701339448.jpg
+✅ Додано мобільний product: img/products/product-1762701339448_m.webp
+✅ Додано десктоп product: img/products/product-1762701339476.jpg
+✅ Додано мобільний product: img/products/product-1762701339476_m.webp
+✅ Додано десктоп product: img/products/product-1762701339488.jpg
+✅ Додано мобільний product: img/products/product-1762701339488_m.webp
+✅ Додано десктоп product: img/products/product-1762712878681.jpg
+✅ Додано мобільний product: img/products/product-1762712878681_m.webp
+✅ Додано розмірну сітку: img/info/size-chart-1762721756678_m.webp
+✅ Додано tab1Image desktop: img/tabs/tabs-1-1763056873944.jpg
+✅ Додано tab1Image mobile: img/tabs/tabs-1-1763056873944_m.webp
+✅ Додано tab2Image desktop: img/tabs/tabs-2-1763056889511.jpg
+✅ Додано tab2Image mobile: img/tabs/tabs-2-1763056889511_m.webp
+✅ Додано tab3Image desktop: img/tabs/tabs-3-1763056904020.jpg
+✅ Додано tab3Image mobile: img/tabs/tabs-3-1763056904020_m.webp
+✅ Додано FAQ desktop: img/faq/faq-1-1763056943639.png
+✅ Додано FAQ mobile: img/faq/faq-1-1763056943639_m.webp
+✅ Додано фото відгук: img/comments/comment-1763064742961.webp
+✅ Додано фото відгук: img/comments/comment-1763064743133.webp
+✅ Додано фото відгук: img/comments/comment-1763064743311.webp
+✅ Додано фото відгук: img/comments/comment-1763064743448.webp
+✅ ZIP архів успішно створений и відправлений
+📏 Розмір сайту: 58.22 KB
+

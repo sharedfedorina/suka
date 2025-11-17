@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Конструктор - Генерування Лендінгу</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Конструктор Лендінгів</h1>
+    <p class="subtitle">Налаштуй текст и функції твого сайту</p>
+
+    <!-- Кнопки керування збереженням (закріплені при скролінгу) -->
+    <div class="buttons-management">
+      <button type="button" class="button button-secondary" onclick="saveFormToServer()" style="flex: 1;">
+        💾 Зберегти
+      </button>
+      <button type="button" class="button button-secondary" onclick="loadOriginalValues()" style="flex: 1;">
+        🔄 Оригінал
+      </button>
+      <button type="button" class="button button-secondary" onclick="loadSavedValues()" style="flex: 1;">
+        📂 Збережене
+      </button>
+    </div>
+
+    <form id="constructorForm">
+      <!-- Hidden inputs for tab image paths -->
+      <input type="hidden" id="tab1Image" value="" />
+      <input type="hidden" id="tab2Image" value="" />
+      <input type="hidden" id="tab3Image" value="" />
+      <!-- Hidden inputs for FAQ image paths -->
+      <input type="hidden" id="faqImage" value="" />
+
+      <div class="form-group">
+        <label for="headerText">Текст у хедері (анонс)</label>
+        <input
+          type="text"
+          id="headerText"
+          name="headerText"
+          value="РОЗПРОДАЖ футболок!"
+          placeholder="Напр.: РОЗПРОДАЖ футболок!"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="heroTitle">Заголовок сайту (назва товару)</label>
+        <input
+          type="text"
+          id="heroTitle"
+          name="heroTitle"
+          value="Жіночі футболки оверсайз"
+          placeholder="Напр.: Жіночі футболки оверсайз"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="heroPrice">Ціна (повна фраза)</label>
+        <input
+          type="text"
+          id="heroPrice"
+          name="heroPrice"
+          value="від 330 грн"
+          placeholder="Напр.: від 330 грн"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="heroImage">🖼️ Завантажити фото для hero блоку:</label>
+        <input
+          type="file"
+          id="heroImage"
+          name="heroImage"
+          accept="image/*"
+          style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 100%; cursor: pointer;"
+        />
+        <small style="color: #666; display: block; margin-top: 5px;">JPG, PNG або WebP (максимум 5MB)</small>
+
+        <!-- Прев'ю завантаженого фото -->
+        <div id="imagePreview" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e0e0e0;">
+          <div style="text-align: center; margin-bottom: 10px;">
+            <img id="previewImg" src="" alt="Прев'ю фото" style="max-width: 100%; max-height: 200px; border-radius: 6px;">
+          </div>
+          <div style="font-size: 0.9em; color: #333;">
+            <p id="fileName" style="margin: 5px 0; font-weight: 500;"></p>
+            <p id="fileSize" style="margin: 5px 0; color: #666;"></p>
+            <p id="uploadStatus" style="margin: 5px 0; color: #27ae60; font-weight: 500;"></p>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="form-group">
+        <div class="checkbox-group">
+          <label for="enableTimer">
+            <input
+              type="checkbox"
+              id="enableTimer"
+              name="enableTimer"
+              checked
+            />
+            ⏱️ Включити таймер відліку акції
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="checkbox-group">
+          <label for="enableStock">
+            <input
+              type="checkbox"
+              id="enableStock"
+              name="enableStock"
+              checked
+            />
+            📦 Показувати "Залишилось 19 футболок по акції"
+          </label>
+        </div>
+      </div>
+
+      <!-- Блок переваг -->
+      <div class="form-group">
+        <h3 style="margin-top: 20px; margin-bottom: 15px;">⭐ Переваги (5 пунктів)</h3>
+        <div id="benefitsContainer"></div>
+      </div>
+        <div class="form-group">
+            <label for="imageUpload">🖼️ Завантажити фото для plus-logo блоку:</label>
+            <input
+                    type="file"
+                    id="imageUpload"
+                    name="imageUpload"
+                    accept="image/*"
+                    style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 100%; cursor: pointer;"
+            />
+            <small style="color: #666; display: block; margin-top: 5px;">JPG, PNG або WebP (максимум 5MB)</small>
+
+            <!-- Прев'ю завантаженого фото -->
+            <div id="imageUploadPreview" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e0e0e0;">
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <img id="previewImageUpload" src="" alt="Прев'ю фото" style="max-width: 100%; max-height: 200px; border-radius: 6px;">
+                </div>
+                <div style="font-size: 0.9em; color: #333;">
+                    <p id="uploadStatus" style="margin: 5px 0; color: #27ae60; font-weight: 500;"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox-group">
+                <label for="enableImage">
+                    <input
+                            type="checkbox"
+                            id="enableImage"
+                            name="enableImage"
+                    />
+                    🖼️ Показувати plus-logo блок (фото сбоку)
+                </label>
+            </div>
+        </div>
+
+      <!-- video block -->
+
+      <div class="form-group" style="margin-top: 30px;">
+
+        <h3 style="margin-bottom: 10px;">Промо-відео для блоку</h3>
+
+
+
+        <p style="color: #555; margin-bottom: 12px;">Додайте MP4/WebM до 30 МБ. Після збереження відео з'явиться у промо-секції.</p>
+
+
+
+        <div class="checkbox-group" style="margin-bottom: 12px;">
+
+
+
+          <label for="enableVideo">
+
+
+
+            <input type="checkbox" id="enableVideo" name="enableVideo" checked/>
+
+
+
+            Увімкнути відео-блок
+
+
+
+          </label>
+
+
+
+        </div>
+
+
+
+        <label for="videoUpload" style="font-weight: 600;">Завантажити відео</label>
+
+
+
+        <input type="file" id="videoUpload" name="videoUpload" accept="video/*"
+
+
+
+               style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 100%; cursor: pointer;"/>
+
+
+
+        <small style="color: #666; display: block; margin-top: 5px;">MP4/WebM, до 30 МБ, без звуку або зі звуком.</small>
+
+
+
+      </div>
+
+
+
+      <div class="form-group" style="margin-top: 20px;">
+
+        <div class="checkbox-group" style="margin-bottom: 12px;">
+
+          <label for="enableVideoThumbnail">
+
+            <input type="checkbox" id="enableVideoThumbnail" name="enableVideoThumbnail" checked/>
+
+            Увімкнути прев'ю відео
+
+          </label>
+
+        </div>
+
+        <label for="videoThumbnailUpload" style="font-weight: 600;">Завантажити прев'ю</label>
+
+        <input type="file" id="videoThumbnailUpload" name="videoThumbnailUpload" accept="image/*"
+
+               style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 100%; cursor: pointer;"/>
+
+        <small style="color: #666; display: block; margin-top: 5px;">JPEG/PNG/WebP, до 5 МБ.</small>
+
+      </div>
+
+      <div class="form-group" id="videoThumbnailPreview" style="display: none; margin-top: 12px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e0e0e0;">
+
+        <label style="font-weight: 600; display: block; margin-bottom: 8px;">Попередній перегляд прев'ю</label>
+
+        <img id="previewVideoThumbnail" src="" alt="video thumbnail"
+
+             style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 6px; background: #fff;"/>
+
+        <p id="videoThumbnailStatus" style="margin: 8px 0 0; font-size: 0.9em; color: #2c3e50;"></p>
+
+      </div>
+
+
+      <div class="form-group" id="videoUploadPreview" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e0e0e0;">
+
+
+
+        <label style="font-weight: 600; display: block; margin-bottom: 8px;">Попередній перегляд відео</label>
+
+
+
+        <video id="previewVideoUpload" controls muted playsinline preload="metadata"
+
+               style="width: 100%; max-height: 260px; border-radius: 6px; background: #000;"></video>
+
+        <p id="videoUploadStatus" style="margin: 8px 0 0; font-size: 0.9em; color: #2c3e50;"></p>
+
+      </div>
+
+      <!-- Розмірна сітка -->
+      <div class="form-group">
+        <h3 style="margin-top: 20px; margin-bottom: 15px;">📏 Розмірна сітка</h3>
+
+        <label for="sizeChartImageInput">Фото розмірної сітки:</label>
+        <input type="file" id="sizeChartImageInput" accept="image/*" />
+        <button type="button" onclick="handleSizeChartImageUpload()" style="margin-top: 8px;">📤 Завантажити фото</button>
+
+        <div id="sizeChartImagePreview" style="margin-top: 12px; display: none;">
+          <label style="font-weight: 600; display: block; margin-bottom: 8px;">Попередній перегляд:</label>
+          <img id="previewSizeChartImage" src="" alt="Size Chart Preview"
+               style="max-width: 100%; max-height: 300px; border-radius: 6px; border: 2px solid #e0e0e0;" />
+          <p id="sizeChartUploadStatus" style="margin: 8px 0 0; font-size: 0.9em; color: #2c3e50;"></p>
+        </div>
+      </div>
+
+      <!-- Інформація про товар (список характеристик) -->
+      <div class="form-group">
+        <h3 style="margin-top: 20px; margin-bottom: 15px;">📋 Інформація про товар</h3>
+        <p style="font-size: 0.9em; color: #7f8c8d; margin-bottom: 15px;">
+          ℹ️ <strong>Кольори</strong> генеруються автоматично з увімкнених продуктів
+        </p>
+
+        <!-- Бренд -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableBrand" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoBrandLabel" value="Бренд" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoBrandValue" value="Kopo™ (Україна)" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Модель -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableModel" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoModelLabel" value="Модель" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoModelValue" value="Жіноча" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Кількість -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableQuantity" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoQuantityLabel" value="Кількість" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoQuantityValue" value="Одна футболка або набір" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Кольори (автогенерація) -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px; background: #f9f9f9;">
+          <input type="checkbox" id="infoEnableColors" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoColorsLabel" value="Кольори" style="width: 100%; margin-bottom: 8px;" />
+            <p style="font-size: 0.85em; color: #95a5a6; margin: 0;">
+              🎨 Автоматично: кружечки з ColorHex увімкнених продуктів
+            </p>
+          </div>
+        </div>
+
+        <!-- Розміри -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableSizes" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoSizesLabel" value="Розміри" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoSizesValue" value="від S до 5XL" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Матеріал -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnableMaterial" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoMaterialLabel" value="Матеріал" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <input type="text" id="infoMaterialValue" value="Бавовна 95%, еластан 5%" style="width: 100%;" />
+          </div>
+        </div>
+
+        <!-- Упаковка -->
+        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+          <input type="checkbox" id="infoEnablePackaging" checked style="margin-top: 8px;" />
+          <div style="flex: 1;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Назва поля:</label>
+            <input type="text" id="infoPackagingLabel" value="Упаковка" style="width: 100%; margin-bottom: 8px;" />
+            <label style="display: block; font-weight: 600; margin-bottom: 4px;">Значення:</label>
+            <textarea id="infoPackagingValue" style="width: 100%; min-height: 60px;">Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Блок для 5 продуктів -->
+      <div class="form-group">
+        <h3 style="margin-top: 20px; margin-bottom: 15px;">🛍️ 5 Продуктів (динамічні назва і ціна)</h3>
+      </div>
+
+      <!-- Product 1 - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible1" style="border: 2px solid #3498db; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(1)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #ecf4ff; cursor: pointer; border-bottom: 2px solid #3498db; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron1" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">📦 Продукт 1</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent1" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct1">
+                <input type="checkbox" id="enableProduct1" name="enableProduct1" checked/>
+                Показувати Продукт 1
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product1Name">Назва:</label>
+            <input type="text" id="product1Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product1Color">Колір:</label>
+            <input type="text" id="product1Color" placeholder="Чорний" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product1ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product1ColorHex" value="#19161a" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product1ColorHexDisplay" value="#19161a" placeholder="#19161a" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product1SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product1-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product1Material">Матеріал:</label>
+            <input type="text" id="product1Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product1PriceOld">Стара ціна:</label>
+            <input type="text" id="product1PriceOld" placeholder="585 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product1Price">Нова ціна:</label>
+            <input type="text" id="product1Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 1 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 1</h4>
+
+            <!-- Список загружених фото з preview -->
+            <div id="product1ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 50px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product1ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct1ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2 - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible2" style="border: 2px solid #3498db; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(2)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #ecf4ff; cursor: pointer; border-bottom: 2px solid #3498db; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron2" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">📦 Продукт 2</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent2" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct2">
+                <input type="checkbox" id="enableProduct2" name="enableProduct2" checked/>
+                Показувати Продукт 2
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product2Name">Назва:</label>
+            <input type="text" id="product2Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product2Color">Колір:</label>
+            <input type="text" id="product2Color" placeholder="Рожевий" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product2ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product2ColorHex" value="#fc5f88" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product2ColorHexDisplay" value="#fc5f88" placeholder="#fc5f88" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product2SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product2-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product2Material">Матеріал:</label>
+            <input type="text" id="product2Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product2PriceOld">Стара ціна:</label>
+            <input type="text" id="product2PriceOld" placeholder="585 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product2Price">Нова ціна:</label>
+            <input type="text" id="product2Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 2 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 2</h4>
+            <div id="product2ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product2ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct2ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3 - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible3" style="border: 2px solid #3498db; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(3)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #ecf4ff; cursor: pointer; border-bottom: 2px solid #3498db; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron3" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">📦 Продукт 3</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent3" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct3">
+                <input type="checkbox" id="enableProduct3" name="enableProduct3" checked/>
+                Показувати Продукт 3
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product3Name">Назва:</label>
+            <input type="text" id="product3Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product3Color">Колір:</label>
+            <input type="text" id="product3Color" placeholder="Пудра" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product3ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product3ColorHex" value="#e2bcc9" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product3ColorHexDisplay" value="#e2bcc9" placeholder="#e2bcc9" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product3SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product3-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product3Material">Матеріал:</label>
+            <input type="text" id="product3Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product3PriceOld">Стара ціна:</label>
+            <input type="text" id="product3PriceOld" placeholder="585 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product3Price">Нова ціна:</label>
+            <input type="text" id="product3Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 3 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 3</h4>
+            <div id="product3ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product3ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct3ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4 - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible4" style="border: 2px solid #3498db; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(4)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #ecf4ff; cursor: pointer; border-bottom: 2px solid #3498db; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron4" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">📦 Продукт 4</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent4" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct4">
+                <input type="checkbox" id="enableProduct4" name="enableProduct4" checked/>
+                Показувати Продукт 4
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product4Name">Назва:</label>
+            <input type="text" id="product4Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product4Color">Колір:</label>
+            <input type="text" id="product4Color" placeholder="Бежевий" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product4ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product4ColorHex" value="#d9cfc1" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product4ColorHexDisplay" value="#d9cfc1" placeholder="#d9cfc1" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product4SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product4-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product4Material">Матеріал:</label>
+            <input type="text" id="product4Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product4PriceOld">Стара ціна:</label>
+            <input type="text" id="product4PriceOld" placeholder="585 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product4Price">Нова ціна:</label>
+            <input type="text" id="product4Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 4 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 4</h4>
+            <div id="product4ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product4ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct4ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 5 - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible5" style="border: 2px solid #3498db; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(5)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #ecf4ff; cursor: pointer; border-bottom: 2px solid #3498db; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron5" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">📦 Продукт 5</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent5" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct5">
+                <input type="checkbox" id="enableProduct5" name="enableProduct5" checked/>
+                Показувати Продукт 5
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product5Name">Назва:</label>
+            <input type="text" id="product5Name" placeholder="Жіноча футболка оверсайз" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product5Color">Колір:</label>
+            <input type="text" id="product5Color" placeholder="Хакі" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product5ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product5ColorHex" value="#9b9c7c" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product5ColorHexDisplay" value="#9b9c7c" placeholder="#9b9c7c" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product5SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product5-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product5Material">Матеріал:</label>
+            <input type="text" id="product5Material" placeholder="95% бавовна, 5% еластан" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product5PriceOld">Стара ціна:</label>
+            <input type="text" id="product5PriceOld" placeholder="585 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product5Price">Нова ціна:</label>
+            <input type="text" id="product5Price" placeholder="390 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 5 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 5</h4>
+            <div id="product5ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product5ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct5ImageUpload()" style="padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 8 (2 товари разом) - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible8" style="border: 2px solid #e74c3c; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(8)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #ffebeb; cursor: pointer; border-bottom: 2px solid #e74c3c; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron8" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">🎁 Продукт 8 (2 товари разом)</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent8" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct8">
+                <input type="checkbox" id="enableProduct8" name="enableProduct8" checked/>
+                Показувати Продукт 8
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product8Name">Назва:</label>
+            <input type="text" id="product8Name" placeholder="2 товари разом" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8Color">Колір:</label>
+            <input type="text" id="product8Color" placeholder="Чорний" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product8ColorHex" value="#000000" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product8ColorHexDisplay" value="#000000" placeholder="#000000" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product8SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product8-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product8Material">Матеріал:</label>
+            <input type="text" id="product8Material" placeholder="50% бавовна, 50% поліестер" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8PriceOld">Стара ціна:</label>
+            <input type="text" id="product8PriceOld" placeholder="1598 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product8Price">Нова ціна:</label>
+            <input type="text" id="product8Price" placeholder="1120 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 8 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #e74c3c;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 8</h4>
+            <div id="product8ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product8ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct8ImageUpload()" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 9 (3 товари разом) - Collapsible Section -->
+      <div class="collapsible-product" id="productCollapsible9" style="border: 2px solid #e67e22; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible(9)" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #fff5e6; cursor: pointer; border-bottom: 2px solid #e67e22; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevron9" style="font-size: 18px; transition: transform 0.3s ease;">▼</span>
+            <h3 style="margin: 0; color: #2c3e50; font-size: 16px; font-weight: 600;">🎁 Продукт 9 (3 товари разом)</h3>
+          </div>
+        </div>
+        <div class="collapsible-content" id="productContent9" style="display: none; padding: 16px;">
+          <div class="form-group">
+            <div class="checkbox-group">
+              <label for="enableProduct9">
+                <input type="checkbox" id="enableProduct9" name="enableProduct9" checked/>
+                Показувати Продукт 9
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="product9Name">Назва:</label>
+            <input type="text" id="product9Name" placeholder="3 товари разом" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9Color">Колір:</label>
+            <input type="text" id="product9Color" placeholder="Чорний" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9ColorHex">Hex (вибір кольору):</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+              <input type="color" id="product9ColorHex" value="#000000" style="width: 60px; height: 40px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <input type="text" id="product9ColorHexDisplay" value="#000000" placeholder="#000000" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+            </div>
+            <label>Розміри (вибір розмірів):</label>
+            <div id="product9SizesCheckboxes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; padding: 10px; background: #f9f9f9; border-radius: 4px;">
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XS" style="margin-right: 6px;" /> XS</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="S" style="margin-right: 6px;" /> S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="M" style="margin-right: 6px;" /> M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="L" style="margin-right: 6px;" /> L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XL" style="margin-right: 6px;" /> XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XXL" style="margin-right: 6px;" /> XXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XXXL" style="margin-right: 6px;" /> XXXL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XS-S" style="margin-right: 6px;" /> XS-S</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="S-M" style="margin-right: 6px;" /> S-M</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="M-L" style="margin-right: 6px;" /> M-L</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="L-XL" style="margin-right: 6px;" /> L-XL</label>
+              <label style="display: flex; align-items: center; font-weight: normal;"><input type="checkbox" class="product9-size" value="XL-XXL" style="margin-right: 6px;" /> XL-XXL</label>
+            </div>
+            <label for="product9Material">Матеріал:</label>
+            <input type="text" id="product9Material" placeholder="50% бавовна, 50% поліестер" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9PriceOld">Стара ціна:</label>
+            <input type="text" id="product9PriceOld" placeholder="2397 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="product9Price">Нова ціна:</label>
+            <input type="text" id="product9Price" placeholder="1530 грн" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Product 9 - Управління фото -->
+          <div class="form-group" style="background: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #e67e22;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">📸 Фото Продукту 9</h4>
+            <div id="product9ImagesList" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: white; min-height: 30px;">
+              <div style="color: #999; font-size: 13px; text-align: center; padding: 20px 0;">Фото не добавлено</div>
+            </div>
+
+            <!-- File input для загрузки фото -->
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <input type="file" id="product9ImageInput" multiple accept="image/*" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" />
+              <button type="button" onclick="handleProduct9ImageUpload()" style="padding: 8px 16px; background: #e67e22; color: white; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap;">+ Завантажити</button>
+            </div>
+            <small style="color: #666; display: block;">JPG, PNG або WebP (максимум по 5MB на файл)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Переваги з фото (Tabs Section) -->
+      <div class="collapsible-product" id="productCollapsibleTabs" style="border: 2px solid #667eea; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible('tabs')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); cursor: pointer; border-bottom: 2px solid #5a67d8; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevronTabs" style="font-size: 18px; transition: transform 0.3s ease; color: white;">▼</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                <input type="checkbox" id="enableTabs" checked />
+                <span class="slider"></span>
+              </label>
+              <h3 style="margin: 0; color: white; font-size: 18px; font-weight: 600;">📋 Переваги з фото</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible-content" id="productContentTabs" style="display: none; padding: 16px;">
+          <!-- Заголовки секції -->
+          <div class="form-group" style="background: #f8f9ff; padding: 12px; border-radius: 6px; border-left: 4px solid #667eea; margin-bottom: 16px;">
+            <h4 style="margin: 0 0 12px 0; color: #5a67d8;">📌 Заголовки секції</h4>
+            <label for="tabsLabel">Мітка (Section Label):</label>
+            <input type="text" id="tabsLabel" placeholder="Основні переваги футболок" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="tabsTitle">Заголовок (Title):</label>
+            <input type="text" id="tabsTitle" placeholder="Якісні матеріали + Ідеальний пошив" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+          </div>
+
+          <!-- Tab Item 1 -->
+          <div class="tab-item-container" style="border: 2px solid #e0e7ff; border-radius: 8px; margin-bottom: 12px; overflow: hidden;">
+            <div class="tab-item-header" onclick="toggleTabItem(1)" style="background: linear-gradient(to right, #667eea, #764ba2); padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                  <input type="checkbox" id="enableTabItem1" checked />
+                  <span class="slider"></span>
+                </label>
+                <h4 style="margin: 0; color: white; font-size: 16px;">📸 Перевага 1</h4>
+              </div>
+              <span id="tabItemArrow1" style="color: white; font-size: 20px; transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="tabItemContent1" class="tab-item-content" style="display: none; background: white; padding: 16px;">
+              <div class="form-group">
+                <label for="tab1Title">Заголовок:</label>
+                <input type="text" id="tab1Title" placeholder="Максимальний комфорт та зручність" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+                <label for="tab1Description">Опис:</label>
+                <textarea id="tab1Description" placeholder="Досконалі лекала та професійний крій..." rows="4" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px; resize: vertical;"></textarea>
+
+                <!-- Image Upload -->
+                <label for="tab1ImageInput">📷 Фото (JPG):</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                  <input type="file" id="tab1ImageInput" accept="image/jpeg,image/jpg" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+                  <button type="button" onclick="handleTab1Upload()" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">Завантажити</button>
+                </div>
+                <div id="tab1Preview" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: #f9f9f9; min-height: 60px; text-align: center;">
+                  <div style="color: #999; font-size: 13px;">Фото не завантажено</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Item 2 -->
+          <div class="tab-item-container" style="border: 2px solid #e0e7ff; border-radius: 8px; margin-bottom: 12px; overflow: hidden;">
+            <div class="tab-item-header" onclick="toggleTabItem(2)" style="background: linear-gradient(to right, #667eea, #764ba2); padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                  <input type="checkbox" id="enableTabItem2" checked />
+                  <span class="slider"></span>
+                </label>
+                <h4 style="margin: 0; color: white; font-size: 16px;">📸 Перевага 2</h4>
+              </div>
+              <span id="tabItemArrow2" style="color: white; font-size: 20px; transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="tabItemContent2" class="tab-item-content" style="display: none; background: white; padding: 16px;">
+              <div class="form-group">
+                <label for="tab2Title">Заголовок:</label>
+                <input type="text" id="tab2Title" placeholder="Натуральні матеріали" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+                <label for="tab2Description">Опис:</label>
+                <textarea id="tab2Description" placeholder="Футболки виконані з турецької тканини високої якості..." rows="4" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px; resize: vertical;"></textarea>
+
+                <!-- Image Upload -->
+                <label for="tab2ImageInput">📷 Фото (JPG):</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                  <input type="file" id="tab2ImageInput" accept="image/jpeg,image/jpg" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+                  <button type="button" onclick="handleTab2Upload()" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">Завантажити</button>
+                </div>
+                <div id="tab2Preview" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: #f9f9f9; min-height: 60px; text-align: center;">
+                  <div style="color: #999; font-size: 13px;">Фото не завантажено</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Item 3 -->
+          <div class="tab-item-container" style="border: 2px solid #e0e7ff; border-radius: 8px; margin-bottom: 12px; overflow: hidden;">
+            <div class="tab-item-header" onclick="toggleTabItem(3)" style="background: linear-gradient(to right, #667eea, #764ba2); padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                  <input type="checkbox" id="enableTabItem3" checked />
+                  <span class="slider"></span>
+                </label>
+                <h4 style="margin: 0; color: white; font-size: 16px;">📸 Перевага 3</h4>
+              </div>
+              <span id="tabItemArrow3" style="color: white; font-size: 20px; transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="tabItemContent3" class="tab-item-content" style="display: none; background: white; padding: 16px;">
+              <div class="form-group">
+                <label for="tab3Title">Заголовок:</label>
+                <input type="text" id="tab3Title" placeholder="Універсальність та практичність" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+                <label for="tab3Description">Опис:</label>
+                <textarea id="tab3Description" placeholder="Завжди актуальні базові кольори - пасують під все!..." rows="4" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px; resize: vertical;"></textarea>
+
+                <!-- Image Upload -->
+                <label for="tab3ImageInput">📷 Фото (JPG):</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                  <input type="file" id="tab3ImageInput" accept="image/jpeg,image/jpg" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+                  <button type="button" onclick="handleTab3Upload()" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">Завантажити</button>
+                </div>
+                <div id="tab3Preview" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: #f9f9f9; min-height: 60px; text-align: center;">
+                  <div style="color: #999; font-size: 13px;">Фото не завантажено</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Доставка і оплата (FAQ Section) -->
+      <div class="collapsible-product" id="productCollapsibleFaq" style="border: 2px solid #e67e22; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible('faq')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); cursor: pointer; border-bottom: 2px solid #d35400; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevronFaq" style="font-size: 18px; transition: transform 0.3s ease; color: white;">▼</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                <input type="checkbox" id="enableFaq" checked />
+                <span class="slider"></span>
+              </label>
+              <h3 style="margin: 0; color: white; font-size: 18px; font-weight: 600;">🚚 Доставка і оплата</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible-content" id="productContentFaq" style="display: none; padding: 16px;">
+          <!-- Section headers -->
+          <div class="form-group" style="background: #fef5e7; padding: 12px; border-radius: 6px; border-left: 4px solid #e67e22; margin-bottom: 16px;">
+            <h4 style="margin: 0 0 12px 0; color: #d35400;">📌 Заголовки секції</h4>
+            <label for="faqLabel">Мітка (Section Label):</label>
+            <input type="text" id="faqLabel" placeholder="Доставка і оплата" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="faqTitle">Заголовок (Title):</label>
+            <input type="text" id="faqTitle" placeholder="Швидка доставка + Зручна оплата" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+
+            <!-- FAQ Image Upload -->
+            <label>📷 Фото секції (PNG):</label>
+            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+              <input type="file" id="faqImageInput" accept="image/png,image/jpg,image/jpeg" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
+              <button type="button" onclick="handleFaqUpload()" style="padding: 8px 16px; background: #e67e22; color: white; border: none; border-radius: 4px; cursor: pointer;">Завантажити</button>
+            </div>
+            <div id="faqPreview" style="margin-bottom: 12px; border: 1px dashed #bdc3c7; padding: 10px; border-radius: 4px; background: #f9f9f9; min-height: 60px; text-align: center;">
+              <div style="color: #999; font-size: 13px;">Фото не завантажено</div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 1 -->
+          <div class="tab-item-container" style="border: 2px solid #ffe4cc; border-radius: 8px; margin-bottom: 12px; overflow: hidden;">
+            <div class="tab-item-header" onclick="toggleFaqItem(1)" style="background: linear-gradient(to right, #e67e22, #d35400); padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                  <input type="checkbox" id="enableFaqItem1" checked />
+                  <span class="slider"></span>
+                </label>
+                <h4 style="margin: 0; color: white; font-size: 16px;">📦 Пункт 1</h4>
+              </div>
+              <span id="faqItemArrow1" style="color: white; font-size: 20px; transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="faqItemContent1" class="tab-item-content" style="display: none; background: white; padding: 16px;">
+              <div class="form-group">
+                <label for="faqItem1Title">Заголовок:</label>
+                <input type="text" id="faqItem1Title" placeholder="Доставка" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+                <label for="faqItem1Description">Опис:</label>
+                <textarea id="faqItem1Description" placeholder="Отримуйте своє замовлення максимально швидко..." rows="3" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="tab-item-container" style="border: 2px solid #ffe4cc; border-radius: 8px; margin-bottom: 12px; overflow: hidden;">
+            <div class="tab-item-header" onclick="toggleFaqItem(2)" style="background: linear-gradient(to right, #e67e22, #d35400); padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                  <input type="checkbox" id="enableFaqItem2" checked />
+                  <span class="slider"></span>
+                </label>
+                <h4 style="margin: 0; color: white; font-size: 16px;">💳 Пункт 2</h4>
+              </div>
+              <span id="faqItemArrow2" style="color: white; font-size: 20px; transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="faqItemContent2" class="tab-item-content" style="display: none; background: white; padding: 16px;">
+              <div class="form-group">
+                <label for="faqItem2Title">Заголовок:</label>
+                <input type="text" id="faqItem2Title" placeholder="Оплата" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+                <label for="faqItem2Description">Опис:</label>
+                <textarea id="faqItem2Description" placeholder="Сплачуйте за товар після перегляду..." rows="3" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="tab-item-container" style="border: 2px solid #ffe4cc; border-radius: 8px; margin-bottom: 12px; overflow: hidden;">
+            <div class="tab-item-header" onclick="toggleFaqItem(3)" style="background: linear-gradient(to right, #e67e22, #d35400); padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                  <input type="checkbox" id="enableFaqItem3" checked />
+                  <span class="slider"></span>
+                </label>
+                <h4 style="margin: 0; color: white; font-size: 16px;">✅ Пункт 3</h4>
+              </div>
+              <span id="faqItemArrow3" style="color: white; font-size: 20px; transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="faqItemContent3" class="tab-item-content" style="display: none; background: white; padding: 16px;">
+              <div class="form-group">
+                <label for="faqItem3Title">Заголовок:</label>
+                <input type="text" id="faqItem3Title" placeholder="Надійність" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+                <label for="faqItem3Description">Опис:</label>
+                <textarea id="faqItem3Description" placeholder="Перед відправкою всі посилки проходять ретельну перевірку..." rows="3" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="tab-item-container" style="border: 2px solid #ffe4cc; border-radius: 8px; margin-bottom: 12px; overflow: hidden;">
+            <div class="tab-item-header" onclick="toggleFaqItem(4)" style="background: linear-gradient(to right, #e67e22, #d35400); padding: 12px 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                  <input type="checkbox" id="enableFaqItem4" checked />
+                  <span class="slider"></span>
+                </label>
+                <h4 style="margin: 0; color: white; font-size: 16px;">🤝 Пункт 4</h4>
+              </div>
+              <span id="faqItemArrow4" style="color: white; font-size: 20px; transition: transform 0.3s;">▼</span>
+            </div>
+            <div id="faqItemContent4" class="tab-item-content" style="display: none; background: white; padding: 16px;">
+              <div class="form-group">
+                <label for="faqItem4Title">Заголовок:</label>
+                <input type="text" id="faqItem4Title" placeholder="Наші партнери" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+                <label for="faqItem4Description">Опис:</label>
+                <textarea id="faqItem4Description" placeholder="Наші офіційні партнери..." rows="3" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Як придбати? (How To Buy Section) -->
+      <div class="collapsible-product" id="productCollapsibleHow" style="border: 2px solid #27ae60; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible('how')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); cursor: pointer; border-bottom: 2px solid #229954; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevronHow" style="font-size: 18px; transition: transform 0.3s ease; color: white;">▼</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <label class="switch" style="margin: 0;" onclick="event.stopPropagation();">
+                <input type="checkbox" id="enableHow" checked />
+                <span class="slider"></span>
+              </label>
+              <h3 style="margin: 0; color: white; font-size: 18px; font-weight: 600;">🛒 Як придбати?</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible-content" id="productContentHow" style="display: none; padding: 16px;">
+          <!-- Section headers -->
+          <div class="form-group" style="background: #e8f8f5; padding: 12px; border-radius: 6px; border-left: 4px solid #27ae60; margin-bottom: 16px;">
+            <h4 style="margin: 0 0 12px 0; color: #229954;">📌 Заголовки секції</h4>
+            <label for="howLabel">Мітка (Section Label):</label>
+            <input type="text" id="howLabel" placeholder="Як придбати футболки?" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+            <label for="howTitle">Заголовок (Title):</label>
+            <input type="text" id="howTitle" placeholder="Лише декілька простих кроків" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+
+          <!-- Step 1 -->
+          <div class="form-group" style="background: #f0f9ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #27ae60;">
+            <label for="howStep1" style="font-weight: 600; color: #229954;">Крок 1:</label>
+            <textarea id="howStep1" placeholder="Залиште заявку на обрані Вами футболки" rows="2" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="form-group" style="background: #f0f9ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #27ae60;">
+            <label for="howStep2" style="font-weight: 600; color: #229954;">Крок 2:</label>
+            <textarea id="howStep2" placeholder="Ми Вам швидко зателефонуємо" rows="2" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="form-group" style="background: #f0f9ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #27ae60;">
+            <label for="howStep3" style="font-weight: 600; color: #229954;">Крок 3:</label>
+            <textarea id="howStep3" placeholder="Доставимо за 1-2 дні" rows="2" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="form-group" style="background: #f0f9ff; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #27ae60;">
+            <label for="howStep4" style="font-weight: 600; color: #229954;">Крок 4:</label>
+            <textarea id="howStep4" placeholder="Сплачуйте при отриманні" rows="2" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Форма заявки (Request Form Section) -->
+      <div class="collapsible-product" id="productCollapsibleRequest" style="border: 2px solid #e67e22; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible('request')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); cursor: pointer; border-bottom: 2px solid #d35400; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevronRequest" style="font-size: 18px; transition: transform 0.3s ease; color: white;">▼</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <h3 style="margin: 0; color: white; font-size: 18px; font-weight: 600;">📋 Форма заявки</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible-content" id="productContentRequest" style="display: none; padding: 16px;">
+          <!-- Request form content -->
+          <div class="form-group" style="background: #fef5e7; padding: 12px; border-radius: 6px; border-left: 4px solid #e67e22; margin-bottom: 16px;">
+            <h4 style="margin: 0 0 12px 0; color: #d35400;">📝 Поля форми заявки</h4>
+
+            <label for="requestInfoTitle">Заголовок форми:</label>
+            <input type="text" id="requestInfoTitle" placeholder="Залиште заявку" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+
+            <label for="requestInfoDescription">Опис:</label>
+            <input type="text" id="requestInfoDescription" placeholder="Якщо бажаєте замовити або потрібна наша допомога" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+
+            <label for="requestButtonText">Текст кнопки:</label>
+            <input type="text" id="requestButtonText" placeholder="ЗАЛИШИТИ ЗАЯВКУ" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+
+            <label for="requestNamePlaceholder">Placeholder для імені:</label>
+            <input type="text" id="requestNamePlaceholder" placeholder="Введіть Ваше ім'я" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+
+            <label for="requestPhonePlaceholder">Placeholder для телефону:</label>
+            <input type="text" id="requestPhonePlaceholder" placeholder="Введіть Ваш телефон" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Футер (Footer Section) -->
+      <div class="collapsible-product" id="productCollapsibleFooter" style="border: 2px solid #34495e; border-radius: 8px; margin-bottom: 16px; background: white; overflow: hidden;">
+        <div class="collapsible-header" onclick="toggleProductCollapsible('footer')" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); cursor: pointer; border-bottom: 2px solid #2c3e50; user-select: none;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+            <span class="collapsible-chevron" id="chevronFooter" style="font-size: 18px; transition: transform 0.3s ease; color: white;">▼</span>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <h3 style="margin: 0; color: white; font-size: 18px; font-weight: 600;">© Футер</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible-content" id="productContentFooter" style="display: none; padding: 16px;">
+          <!-- Footer content -->
+          <div class="form-group" style="background: #ecf0f1; padding: 12px; border-radius: 6px; border-left: 4px solid #34495e; margin-bottom: 16px;">
+            <h4 style="margin: 0 0 12px 0; color: #2c3e50;">📄 Копірайт футера</h4>
+
+            <label for="footerCopyright">Текст копірайту:</label>
+            <input type="text" id="footerCopyright" placeholder="© 2022 «KOPO»" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 8px;" />
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button type="button" class="button button-secondary" onclick="previewSite()">
+          👁️ ПЕРЕГЛЯД
+        </button>
+        <button type="submit" class="button button-primary">
+          📦 ГЕНЕРУВАТИ ZIP
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/js/form.js"></script>
+</body>
+</html>

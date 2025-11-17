@@ -1,0 +1,1301 @@
+diff --git a/constructor/index.html b/constructor/index.html
+index 59a4164..fbce188 100644
+--- a/constructor/index.html
++++ b/constructor/index.html
+@@ -5,17 +5,17 @@
+ <head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no">
+-    <title>Жіночі футболки оверсайз від українскього бренду Kopo</title>
++    <title>{{pageTitle}}</title>
+     <meta name="theme-color" content="#FFFFFF">
+-    <meta name="description" content="Жіночі футболки оверсайз від українскього бренду Kopo">
+-    <meta property="og:url" content="https://oversized.kopo.ua/">
++    <meta name="description" content="{{metaDescription}}">
++    <meta property="og:url" content="{{ogUrl}}">
+     <!--open graph-->
+-    <meta property="og:title" content="Kopo">
++    <meta property="og:title" content="{{ogTitle}}">
+     <meta property="og:type" content="website">
+-    <meta property="og:site_name" content="Kopo">
+-    <meta property="og:description" content="Жіночі футболки оверсайз від українскього бренду Kopo">
+-    <meta property="og:image" content="https://ibb.co/dQwFRQY">
+-    <meta property="og:url" content="https://oversized.kopo.ua/">
++    <meta property="og:site_name" content="{{ogSiteName}}">
++    <meta property="og:description" content="{{ogDescription}}">
++    <meta property="og:image" content="{{ogImage}}">
++    <meta property="og:url" content="{{ogUrl}}">
+     <!--favicon-->
+     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+@@ -48,11 +48,11 @@
+         t.src=v;s=b.getElementsByTagName(e)[0];
+         s.parentNode.insertBefore(t,s)}(window, document,'script',
+         'https://connect.facebook.net/en_US/fbevents.js');
+-        fbq('init', '');
++        fbq('init', '{{facebookPixelId}}');
+         fbq('track', 'PageView');
+     </script>
+     <noscript><img height="1" width="1" style="display:none"
+-                   src="https://www.facebook.com/tr?id=121590&ev=PageView&noscript=1"
++                   src="https://www.facebook.com/tr?id={{facebookPixelId}}&ev=PageView&noscript=1"
+     /></noscript>
+     <!-- End Meta Pixel Code -->
+ 
+@@ -107,11 +107,11 @@
+                             <div class="start-price price">
+                                 <span class="price-total">{{heroPrice}}</span>
+                             </div>
+-                            <a href="#products" class="start-btn btn-one btn-scroll">ВИБРАТИ<span></span></a>
++                            <a href="#products" class="start-btn btn-one btn-scroll">{{heroButtonText}}<span></span></a>
+                         </div>
+                         <!--timer-->
+                         <div class="start-timer timer">
+-                            <span class="timer-descr">До кінця акції залишилося</span>
++                            <span class="timer-descr">{{timerText}}</span>
+                             <ul class="timer-list">
+                                 <li class="timer-list_point timer-list_hours"></li>
+                                 <li class="timer-list_point timer-list_minutes"></li>
+@@ -157,11 +157,11 @@
+                     <div class="action-wrap">
+                         <div class="action-text">
+                             <div class="action-price">
+-                                <span class="action-total">Обирайте колір або набір</span>
++                                <span class="action-total">{{actionChooseText}}</span>
+                             </div>
+-                            <span class="action-descr">Діють акційні ціни!</span>
++                            <span class="action-descr">{{actionPromoText}}</span>
+                         </div>
+-                        <a href="#products" class="action-btn btn-one btn-scroll">ВИБРАТИ<span></span></a>
++                        <a href="#products" class="action-btn btn-one btn-scroll">{{heroButtonText}}<span></span></a>
+                     </div>
+                 </div>
+             </div>
+@@ -192,7 +192,10 @@
+                         </li>
+                     </ul>
+                     <div class="plus-logo">
+-                        <img src="{{imageUrl}}" alt="img">
++                        <picture>
++                            <source srcset="{{imageUrlDesktop}}" media="(min-width: 800px)">
++                            <img src="{{imageUrlMobile}}" alt="img">
++                        </picture>
+                     </div>
+                 </div>
+             </div>
+@@ -203,8 +206,8 @@
+             <div class="section promo">
+                 <div class="container">
+                     <div class="section-top">
+-                        <span class="section-label">Відеоогляд</span>
+-                        <h2 class="title-x">Краще один раз побачити</h2>
++                        <span class="section-label">{{videoSectionLabel}}</span>
++                        <h2 class="title-x">{{videoSectionTitle}}</h2>
+                     </div>
+                     <a href="{{videoUrl}}" data-fancybox class="promo-video">
+                         <!--videoThumbnail-->
+@@ -229,8 +232,8 @@
+             <section class="section products" id="products">
+                 <div class="container">
+                     <div class="section-top">
+-                        <span class="section-label">Замовляйте зараз зі знижкою</span>
+-                        <h2 class="title-x">Обирайте колір або <br> Свій набір футболок</h2>
++                        <span class="section-label">{{productsSectionLabel}}</span>
++                        <h2 class="title-x">{{productsSectionTitle}}</h2>
+                     </div>
+                     <div class="products-list">
+                         <!--product1-->
+@@ -281,7 +284,7 @@
+            {{product1Price}}
+           </span>
+                                 </div>
+-                                <button class="products-text_btn btn-one btn-modal" data-id="product1">ЗАМОВИТИ<span></span></button>
++                                <button class="products-text_btn btn-one btn-modal" data-id="product1">{{productOrderButtonText}}<span></span></button>
+                             </div>
+                         </div>
+                         <!--/product1-->
+@@ -336,7 +339,7 @@
+            {{product2Price}}
+           </span>
+                                 </div>
+-                                <button class="products-text_btn btn-one btn-modal" data-id="product2">ЗАМОВИТИ<span></span></button>
++                                <button class="products-text_btn btn-one btn-modal" data-id="product2">{{productOrderButtonText}}<span></span></button>
+                             </div>
+                         </div>
+                         <!--/product2-->
+@@ -389,7 +392,7 @@
+            {{product3Price}}
+           </span>
+                                 </div>
+-                                <button class="products-text_btn btn-one btn-modal" data-id="product3">ЗАМОВИТИ<span></span></button>
++                                <button class="products-text_btn btn-one btn-modal" data-id="product3">{{productOrderButtonText}}<span></span></button>
+                             </div>
+                         </div>
+                         <!--/product3-->
+@@ -442,7 +445,7 @@
+            {{product4Price}}
+           </span>
+                                 </div>
+-                                <button class="products-text_btn btn-one btn-modal" data-id="product4">ЗАМОВИТИ<span></span></button>
++                                <button class="products-text_btn btn-one btn-modal" data-id="product4">{{productOrderButtonText}}<span></span></button>
+                             </div>
+                         </div>
+                         <!--/product4-->
+@@ -495,7 +498,7 @@
+            {{product5Price}}
+           </span>
+                                 </div>
+-                                <button class="products-text_btn btn-one btn-modal" data-id="product5">ЗАМОВИТИ<span></span></button>
++                                <button class="products-text_btn btn-one btn-modal" data-id="product5">{{productOrderButtonText}}<span></span></button>
+                             </div>
+                         </div>
+                         <!--/product5-->
+@@ -527,27 +530,7 @@
+                                     <li class="info-list_point">
+                                         <span>Кольори:</span>
+                                         <span>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-           <circle cx="13" cy="13" r="13" fill="#131215" />
+-          </svg>
+-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-           <circle cx="13" cy="13" r="13" fill="#f0f1f4" />
+-          </svg>
+-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-           <circle cx="13" cy="13" r="13" fill="#f8dfc8" />
+-          </svg>
+-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#fc678f" />
+-           </svg>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#f91029" />
+-           </svg>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#e7c0cd" />
+-           </svg>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#fc325a" />
+-           </svg>
++           {{product8ColorCircles}}
+            </span>
+                                     </li>
+                                     <li class="info-list_point">
+@@ -566,7 +549,7 @@
+            {{product8Price}}
+           </span>
+                                 </div>
+-                                <button class="products-text_btn btn-one btn-modal" data-id="product8">ЗАМОВИТИ<span></span></button>
++                                <button class="products-text_btn btn-one btn-modal" data-id="product8">{{productOrderButtonText}}<span></span></button>
+                             </div>
+                         </div>
+                         <!--/product8-->
+@@ -598,27 +581,7 @@
+                                     <li class="info-list_point">
+                                         <span>Кольори:</span>
+                                         <span>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-           <circle cx="13" cy="13" r="13" fill="#131215" />
+-          </svg>
+-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-           <circle cx="13" cy="13" r="13" fill="#f0f1f4" />
+-          </svg>
+-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-           <circle cx="13" cy="13" r="13" fill="#f8dfc8" />
+-          </svg>
+-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#fc678f" />
+-           </svg>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#f91029" />
+-           </svg>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#e7c0cd" />
+-           </svg>
+-           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+-            <circle cx="13" cy="13" r="13" fill="#fc325a" />
+-           </svg>
++           {{product9ColorCircles}}
+            </span>
+                                     </li>
+                                     <li class="info-list_point">
+@@ -637,7 +600,7 @@
+            {{product9Price}}
+           </span>
+                                 </div>
+-                                <button class="products-text_btn btn-one btn-modal" data-id="product9">ЗАМОВИТИ<span></span></button>
++                                <button class="products-text_btn btn-one btn-modal" data-id="product9">{{productOrderButtonText}}<span></span></button>
+                             </div>
+                         </div>
+                         <!--/product9-->
+@@ -652,11 +615,14 @@
+             <section class="section info">
+                 <div class="container">
+                     <div class="section-top">
+-                        <span class="section-label">Розмірна сітка</span>
+-                        <h2 class="title-x">Вагаєтесь з розміром?<br> </h2>
++                        <span class="section-label">{{sizeChartLabel}}</span>
++                        <h2 class="title-x">{{sizeChartTitle}}</h2>
+                     </div>
+                     <div class="info-wrap">
+-                        <img class="info-img" src="{{sizeChartImage}}" alt="img">
++                        <picture>
++                            <source srcset="{{sizeChartImageDesktop}}" media="(min-width: 800px)">
++                            <img class="info-img" src="{{sizeChartImageMobile}}" alt="img">
++                        </picture>
+                         <ul class="info-list">
+                             <!--infoBrand-->
+                             <li class="info-list_point">
+@@ -726,13 +692,13 @@
+                     <div class="tabs-wrap">
+                         <div class="tabs-text">
+                             <div class="section-top two">
+-                                <span class="section-label">Основні переваги футболок</span>
+-                                <h2 class="title-l">Якісні матеріали + Ідеальний пошив</h2>
++                                <span class="section-label">{{advantagesLabel}}</span>
++                                <h2 class="title-l">{{advantagesTitle}}</h2>
+                             </div>
+                             <ul class="tabs-list">
+                                 <li class="tabs-list_point">
+                                     <div class="tabs-list_top">
+-                                        <h3 class="tabs-list_title title-md">Максимальний комфорт та зручність</h3>
++                                        <h3 class="tabs-list_title title-md">{{tab1Title}}</h3>
+                                         <span class="tabs-list_arrow">
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" />
+@@ -743,16 +709,16 @@
+                                     <div class="tabs-list_bottom">
+                                         <div class="tabs-list_img">
+                                             <picture>
+-                                                <source srcset="img/tabs/tabs-1.jpg" media="(min-width: 800px)">
+-                                                <img src="img/tabs/tabs-1_m.webp" alt="img">
++                                                <source srcset="{{tab1Image}}" media="(min-width: 800px)">
++                                                <img src="{{tab1ImageMobile}}" alt="img">
+                                             </picture>
+                                         </div>
+-                                        <p class="text-l">Досконалі лекала та професійний крій - зробили наші хітові жіночі футболки оверсайз максимально універсальними, вони дуже зручні та комфортні, гарно виглядають на усіх типах фігури. Якісний пошив - кожна футболка проходить додатковий контроль якості, ми слідкуємо за кожним етапом виробництва.</p>
++                                        <p class="text-l">{{tab1Content}}</p>
+                                     </div>
+                                 </li>
+                                 <li class="tabs-list_point">
+                                     <div class="tabs-list_top">
+-                                        <h3 class="tabs-list_title title-md">Натуральні матеріали</h3>
++                                        <h3 class="tabs-list_title title-md">{{tab2Title}}</h3>
+                                         <span class="tabs-list_arrow">
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" />
+@@ -763,17 +729,16 @@
+                                     <div class="tabs-list_bottom">
+                                         <div class="tabs-list_img">
+                                             <picture>
+-                                                <source srcset="img/tabs/tabs-2.jpg" media="(min-width: 800px)">
+-                                                <img src="img/tabs/tabs-2_m.webp" alt="img">
++                                                <source srcset="{{tab2Image}}" media="(min-width: 800px)">
++                                                <img src="{{tab2ImageMobile}}" alt="img">
+                                             </picture>
+                                         </div>
+-                                        <p class="text-l">Футболки виконані з турецької тканини високої якості. Вони дуже приємні до тіла, утеплені якісним флісом, що дарує максимальний комфорт в холодну пору року. Натуральний склад тканини: 95% бавовна, 5% еластан.
+-                                        </p>
++                                        <p class="text-l">{{tab2Content}}</p>
+                                     </div>
+                                 </li>
+                                 <li class="tabs-list_point">
+                                     <div class="tabs-list_top">
+-                                        <h3 class="tabs-list_title title-md">Універсальність та практичність</h3>
++                                        <h3 class="tabs-list_title title-md">{{tab3Title}}</h3>
+                                         <span class="tabs-list_arrow">
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" />
+@@ -784,11 +749,11 @@
+                                     <div class="tabs-list_bottom">
+                                         <div class="tabs-list_img">
+                                             <picture>
+-                                                <source srcset="img/tabs/tabs-3.jpg" media="(min-width: 800px)">
+-                                                <img src="img/tabs/tabs-3_m.webp" alt="img">
++                                                <source srcset="{{tab3Image}}" media="(min-width: 800px)">
++                                                <img src="{{tab3ImageMobile}}" alt="img">
+                                             </picture>
+                                         </div>
+-                                        <p class="text-l">Завжди актуальні базові кольори - пасують під все! Чудово витримують багаторазові прання - зберігають форму та колір. Прослужать не один сезон. </p>
++                                        <p class="text-l">{{tab3Content}}</p>
+                                     </div>
+                                 </li>
+                             </ul>
+@@ -874,6 +839,46 @@
+                 </div>
+             </section>
+             <!--/comments-->
++            <!--reviews-->
++            <section class="section reviews" style="display: {{enableReviews ? 'block' : 'none'}};">
++                <div class="container">
++                    <div class="section-top two">
++                        <span class="section-label">{{reviewsLabel}}</span>
++                        <h2 class="title-x">{{reviewsTitle}}</h2>
++                    </div>
++                    <div class="reviews-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px;">
++                        <div class="review-card" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
++                            <div class="review-image" style="margin-bottom: 15px;">
++                                <img src="{{review1Image}}" alt="{{review1Name}}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;">
++                            </div>
++                            <h3 class="review-name" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">{{review1Name}}</h3>
++                            <p class="review-text" style="color: #666; line-height: 1.6;">{{review1Text}}</p>
++                        </div>
++                        <div class="review-card" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
++                            <div class="review-image" style="margin-bottom: 15px;">
++                                <img src="{{review2Image}}" alt="{{review2Name}}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;">
++                            </div>
++                            <h3 class="review-name" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">{{review2Name}}</h3>
++                            <p class="review-text" style="color: #666; line-height: 1.6;">{{review2Text}}</p>
++                        </div>
++                        <div class="review-card" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
++                            <div class="review-image" style="margin-bottom: 15px;">
++                                <img src="{{review3Image}}" alt="{{review3Name}}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;">
++                            </div>
++                            <h3 class="review-name" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">{{review3Name}}</h3>
++                            <p class="review-text" style="color: #666; line-height: 1.6;">{{review3Text}}</p>
++                        </div>
++                        <div class="review-card" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
++                            <div class="review-image" style="margin-bottom: 15px;">
++                                <img src="{{review4Image}}" alt="{{review4Name}}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;">
++                            </div>
++                            <h3 class="review-name" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">{{review4Name}}</h3>
++                            <p class="review-text" style="color: #666; line-height: 1.6;">{{review4Text}}</p>
++                        </div>
++                    </div>
++                </div>
++            </section>
++            <!--/reviews-->
+             <!--faq-->
+             <section class="section faq">
+                 <div class="container">
+@@ -892,7 +897,7 @@
+                             <ul class="faq-list">
+                                 <li class="faq-list_point">
+                                     <div class="faq-list_top">
+-                                        <h3 class="faq-list_title title-md">Доставка</h3>
++                                        <h3 class="faq-list_title title-md">{{faq1Question}}</h3>
+                                         <span class="faq-list_arrow">
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" />
+@@ -901,13 +906,12 @@
+            </span>
+                                     </div>
+                                     <div class="faq-list_bottom">
+-                                        <p class="text-l">Отримуйте своє замовлення максимально швидно. Вже через 1-2 дні після замовлення ви зможете
+-                                            його отримати в поштовому відділенні.</p>
++                                        <p class="text-l">{{faq1Answer}}</p>
+                                     </div>
+                                 </li>
+                                 <li class="faq-list_point">
+                                     <div class="faq-list_top">
+-                                        <h3 class="faq-list_title title-md">Оплата</h3>
++                                        <h3 class="faq-list_title title-md">{{faq2Question}}</h3>
+                                         <span class="faq-list_arrow">
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" />
+@@ -916,13 +920,13 @@
+            </span>
+                                     </div>
+                                     <div class="faq-list_bottom">
+-                                        <p class="text-l">Сплачуйте за товар після перегляду на пошті (накладний платіж) або на картку, як забажаєте.
++                                        <p class="text-l">{{faq2Answer}}
+                                         </p>
+                                     </div>
+                                 </li>
+                                 <li class="faq-list_point">
+                                     <div class="faq-list_top">
+-                                        <h3 class="faq-list_title title-md">Надійність</h3>
++                                        <h3 class="faq-list_title title-md">{{faq3Question}}</h3>
+                                         <span class="faq-list_arrow">
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" />
+@@ -931,13 +935,12 @@
+            </span>
+                                     </div>
+                                     <div class="faq-list_bottom">
+-                                        <p class="text-l">Перед відправкою всі посилки проходять ретельну перевірку, щоб Ви отримали замовлення в
+-                                            найкращому вигляді.</p>
++                                        <p class="text-l">{{faq3Answer}}</p>
+                                     </div>
+                                 </li>
+                                 <li class="faq-list_point">
+                                     <div class="faq-list_top">
+-                                        <h3 class="faq-list_title title-md">Наші партнери</h3>
++                                        <h3 class="faq-list_title title-md">{{faq4Question}}</h3>
+                                         <span class="faq-list_arrow">
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" />
+@@ -946,7 +949,7 @@
+            </span>
+                                     </div>
+                                     <div class="faq-list_bottom">
+-                                        <p class="text-l">Наші офіційні партнери Нова пошта та Укрпошта. </p>
++                                        <p class="text-l">{{faq4Answer}} </p>
+                                     </div>
+                                 </li>
+                             </ul>
+@@ -963,10 +966,10 @@
+                         <h2 class="title-x">{{howTitle}}</h2>
+                     </div>
+                     <ol class="how-list">
+-                        <li class="text-l">Залиште заявку на обрані Вами футболки</li>
+-                        <li class="text-l">Ми Вам швидко зателефонуємо</li>
+-                        <li class="text-l">Доставимо за 1-2 дні</li>
+-                        <li class="text-l">Сплачуйте при отриманні</li>
++                        <li class="text-l">{{howStep1}}</li>
++                        <li class="text-l">{{howStep2}}</li>
++                        <li class="text-l">{{howStep3}}</li>
++                        <li class="text-l">{{howStep4}}</li>
+                     </ol>
+                 </div>
+             </section>
+@@ -983,29 +986,33 @@
+                         </picture>
+                     </div>
+                     <div class="request-text">
+-                        <h1 class="request-title title-xl">Жіночі футболки оверсайз</h1>
++                        <h1 class="request-title title-xl">{{requestTitle}}</h1>
++                        <!--timer-->
+                         <div class="request-timer timer">
+-                            <span class="timer-descr">До кінця акції залишилося</span>
++                            <span class="timer-descr">{{requestTimerText}}</span>
+                             <ul class="timer-list">
+                                 <li class="timer-list_point timer-list_hours"></li>
+                                 <li class="timer-list_point timer-list_minutes"></li>
+                                 <li class="timer-list_point timer-list_seconds"></li>
+                             </ul>
+                         </div>
++                        <!--/timer-->
+                     </div>
+                     <div class="request-info" id="orderForm">
+ 
+                         <span class="request-info_title">{{requestInfoTitle}}</span>
+                         <span class="request-info_descr">{{requestInfoDescription}}</span>
+                         <form id="form-popup1" class="request-form" action="../php/form-popup.php" method="post" autocomplete="off">
+-                            <input class="request-input input" type="text" pattern="^[A-Za-zА-Яа-яЁёІіЇїЄє\s]+$" name="name"
++                            <input class="request-input input" type="text" pattern="^[A-Za-zА-Яа-яЁёІіЏїЄє\s]+$" name="name"
+                                    placeholder="{{requestNamePlaceholder}}" required>
+-                            <span class="popup-format">Формат телефона: <b>380999999999</b></span>
++                            <span class="popup-format">{{requestPhoneFormat}}</span>
+                             <input class="request-input input" type="tel" pattern="[0-9]{9,15}" maxlength="15" name="phone" placeholder="{{requestPhonePlaceholder}}" required>
+                             <input class="popup-input input" type="hidden" maxlength="10" name="product" value="product" required>
+                             <button class="request-btn btn-one btn" type="submit">{{requestButtonText}}<span></span></button>
+                         </form>
+-                        <span class="request-numbers">Залишилось <b>19</b> футболок по акції</span>
++                        <!--stock-->
++                        <span class="request-numbers">{{requestStockPrefix}} <b>{{stockCount}}</b> {{requestStockSuffix}}</span>
++                        <!--/stock-->
+                     </div>
+                 </div>
+             </div>
+@@ -1084,6 +1091,7 @@
+ 
+                             <span class="popup-label">Сьогодні діє акційна ціна!</span>
+                             <span class="popup-title">Бажаєте замовити або потрібна консультація? </span>
++                            <!--timer-->
+                             <div class="popup-timer timer">
+                                 <span class="timer-descr">До кінця акції залишилось</span>
+                                 <ul class="timer-list">
+@@ -1092,6 +1100,7 @@
+                                     <li class="timer-list_point timer-list_seconds"></li>
+                                 </ul>
+                             </div>
++                            <!--/timer-->
+                             <div class="popup-price price">
+                                 <span class="price-discount"></span>
+                                 <span class="price-total">Залиште заявку</span>
+@@ -1104,7 +1113,9 @@
+                                 <input class="popup-input input" type="hidden" maxlength="10" name="product" value="product">
+                                 <button class="popup-btn btn-one btn" type="submit">ЗАМОВИТИ<span></span></button>
+                             </form>
+-                            <span class="popup-numbers">Залишилось <b>19</b> футболок по акції</span>
++                            <!--stock-->
++                            <span class="popup-numbers">Залишилось <b>{{stockCount}}</b> футболок по акції</span>
++                            <!--/stock-->
+                         </div>
+                         <div class="popup-img">
+                             <img src="img/popup/popup-1.png" alt="img">
+@@ -1184,6 +1195,139 @@
+ <!--/wrapper-->
+ <script src="js/plugins.js"></script>
+ <script src="js/main.js"></script>
++
++<!-- SalesDrive CRM Integration -->
++<script>
++(function() {
++    'use strict';
++
++    // Функція для відправки замовлення
++    async function submitOrder(formData) {
++        try {
++            const response = await fetch('/api/submit-order', {
++                method: 'POST',
++                headers: {
++                    'Content-Type': 'application/json'
++                },
++                body: JSON.stringify(formData)
++            });
++
++            const data = await response.json();
++
++            if (data.success) {
++                // Facebook Pixel - відстеження Lead event
++                if (typeof fbq !== 'undefined') {
++                    fbq('track', 'Lead', {
++                        content_name: formData.productName,
++                        value: formData.productPrice,
++                        currency: 'UAH'
++                    });
++                }
++
++                // Показати повідомлення про успіх
++                alert('Дякуємо за замовлення! Наш менеджер зв\'яжеться з вами найближчим часом.');
++
++                return true;
++            } else {
++                alert('Помилка: ' + data.message);
++                return false;
++            }
++        } catch (error) {
++            console.error('Помилка відправки замовлення:', error);
++            alert('Помилка при відправці замовлення. Спробуйте пізніше.');
++            return false;
++        }
++    }
++
++    // Обробка форми #form-popup1 (Request form на головній)
++    const form1 = document.getElementById('form-popup1');
++    if (form1) {
++        form1.addEventListener('submit', async function(e) {
++            e.preventDefault();
++
++            const formData = {
++                productName: form1.querySelector('input[name="product"]').value || 'Футболка Oversize',
++                productPrice: 399, // Ціна за замовчуванням, можна взяти з конфігу
++                customerName: form1.querySelector('input[name="name"]').value,
++                customerPhone: form1.querySelector('input[name="phone"]').value
++            };
++
++            const success = await submitOrder(formData);
++            if (success) {
++                form1.reset();
++            }
++        });
++    }
++
++    // Обробка форми #form-popup2 (Popup order form)
++    const form2 = document.getElementById('form-popup2');
++    if (form2) {
++        form2.addEventListener('submit', async function(e) {
++            e.preventDefault();
++
++            // Спробувати взяти ціну з елемента .price-discount або .price-total
++            let productPrice = 399;
++            const priceElement = document.querySelector('.popup-order .price-discount');
++            if (priceElement && priceElement.textContent) {
++                const priceMatch = priceElement.textContent.match(/\d+/);
++                if (priceMatch) {
++                    productPrice = parseInt(priceMatch[0]);
++                }
++            }
++
++            const formData = {
++                productName: form2.querySelector('input[name="product"]').value || 'Футболка Oversize',
++                productPrice: productPrice,
++                customerName: form2.querySelector('input[name="name"]').value,
++                customerPhone: form2.querySelector('input[name="phone"]').value
++            };
++
++            const success = await submitOrder(formData);
++            if (success) {
++                form2.reset();
++                // Закрити popup
++                const popup = document.querySelector('.popup-order');
++                if (popup) {
++                    popup.classList.remove('_active');
++                }
++            }
++        });
++    }
++
++    // Обробка форми відгуків (popup-comments)
++    const reviewForm = document.querySelector('.popup-comments .popup-form');
++    if (reviewForm) {
++        reviewForm.addEventListener('submit', async function(e) {
++            e.preventDefault();
++
++            const formData = {
++                productName: 'Відгук клієнта',
++                productPrice: 0,
++                customerName: reviewForm.querySelector('input[name="name"]').value,
++                customerPhone: reviewForm.querySelector('input[name="phone"]').value
++            };
++
++            // Додати текст відгуку до imя продукту
++            const reviewText = reviewForm.querySelector('textarea[name="review"]');
++            if (reviewText && reviewText.value) {
++                formData.productName = 'Відгук: ' + reviewText.value.substring(0, 50);
++            }
++
++            const success = await submitOrder(formData);
++            if (success) {
++                reviewForm.reset();
++                // Закрити popup
++                const popup = document.querySelector('.popup-comments');
++                if (popup) {
++                    popup.classList.remove('_active');
++                }
++            }
++        });
++    }
++
++    console.log('✅ SalesDrive CRM інтеграція активована');
++})();
++</script>
+ </body>
+ 
+ </html>я знову
+diff --git a/constructor/server.js b/constructor/server.js
+index 98fa6bd..c29b742 100644
+--- a/constructor/server.js
++++ b/constructor/server.js
+@@ -241,31 +241,187 @@ function generateHTML(dataObj, options = {}) {
+     const templatePath = path.join(__dirname, 'index.html');
+     let html = fs.readFileSync(templatePath, 'utf8');
+ 
+-    // Замінити основні поля
+-    html = html.replace(
+-      /<title>.*?<\/title>/,
+-      `<title>${dataObj.page.title}</title>`
+-    );
++    // Замінити плейсхолдери для META тегів та Facebook Pixel
++    const pageTitle = (options.pageTitle && options.pageTitle.trim()) ? options.pageTitle : (dataObj.pageTitle || '');
++    const metaDescription = (options.metaDescription && options.metaDescription.trim()) ? options.metaDescription : (dataObj.metaDescription || '');
++    const ogTitle = (options.ogTitle && options.ogTitle.trim()) ? options.ogTitle : (dataObj.ogTitle || '');
++    const ogSiteName = (options.ogSiteName && options.ogSiteName.trim()) ? options.ogSiteName : (dataObj.ogSiteName || '');
++    const ogDescription = (options.ogDescription && options.ogDescription.trim()) ? options.ogDescription : (dataObj.ogDescription || '');
++    const ogImage = (options.ogImage && options.ogImage.trim()) ? options.ogImage : (dataObj.ogImage || '');
++    const ogUrl = (options.ogUrl && options.ogUrl.trim()) ? options.ogUrl : (dataObj.ogUrl || '');
++    const facebookPixelId = (options.facebookPixelId && options.facebookPixelId.trim()) ? options.facebookPixelId : (dataObj.facebookPixelId || '');
++
++    html = html.replace(/\{\{pageTitle\}\}/g, pageTitle);
++    html = html.replace(/\{\{metaDescription\}\}/g, metaDescription);
++    html = html.replace(/\{\{ogTitle\}\}/g, ogTitle);
++    html = html.replace(/\{\{ogSiteName\}\}/g, ogSiteName);
++    html = html.replace(/\{\{ogDescription\}\}/g, ogDescription);
++    html = html.replace(/\{\{ogImage\}\}/g, ogImage);
++    html = html.replace(/\{\{ogUrl\}\}/g, ogUrl);
++    html = html.replace(/\{\{facebookPixelId\}\}/g, facebookPixelId);
++
++    // Текстові плейсхолдери
++    const heroButtonText = (options.heroButtonText?.trim()) ? options.heroButtonText : (dataObj.heroButtonText || 'ВИБРАТИ');
++    const timerText = (options.timerText?.trim()) ? options.timerText : (dataObj.timerText || '');
++    const actionChooseText = (options.actionChooseText?.trim()) ? options.actionChooseText : (dataObj.actionChooseText || '');
++    const actionPromoText = (options.actionPromoText?.trim()) ? options.actionPromoText : (dataObj.actionPromoText || '');
++    const videoSectionLabel = (options.videoSectionLabel?.trim()) ? options.videoSectionLabel : (dataObj.videoSectionLabel || '');
++    const videoSectionTitle = (options.videoSectionTitle?.trim()) ? options.videoSectionTitle : (dataObj.videoSectionTitle || '');
++    const productsSectionLabel = (options.productsSectionLabel?.trim()) ? options.productsSectionLabel : (dataObj.productsSectionLabel || '');
++    const productsSectionTitle = (options.productsSectionTitle?.trim()) ? options.productsSectionTitle : (dataObj.productsSectionTitle || '');
++    const productOrderButtonText = (options.productOrderButtonText?.trim()) ? options.productOrderButtonText : (dataObj.productOrderButtonText || 'ЗАМОВИТИ');
++    const sizeChartLabel = (options.sizeChartLabel?.trim()) ? options.sizeChartLabel : (dataObj.sizeChartLabel || '');
++    const sizeChartTitle = (options.sizeChartTitle?.trim()) ? options.sizeChartTitle : (dataObj.sizeChartTitle || '');
++    const advantagesLabel = (options.advantagesLabel?.trim()) ? options.advantagesLabel : (dataObj.advantagesLabel || '');
++    const advantagesTitle = (options.advantagesTitle?.trim()) ? options.advantagesTitle : (dataObj.advantagesTitle || '');
++
++    html = html.replace(/\{\{heroButtonText\}\}/g, heroButtonText);
++    html = html.replace(/\{\{timerText\}\}/g, timerText);
++    html = html.replace(/\{\{actionChooseText\}\}/g, actionChooseText);
++    html = html.replace(/\{\{actionPromoText\}\}/g, actionPromoText);
++    html = html.replace(/\{\{videoSectionLabel\}\}/g, videoSectionLabel);
++    html = html.replace(/\{\{videoSectionTitle\}\}/g, videoSectionTitle);
++    html = html.replace(/\{\{productsSectionLabel\}\}/g, productsSectionLabel);
++    html = html.replace(/\{\{productsSectionTitle\}\}/g, productsSectionTitle);
++    html = html.replace(/\{\{productOrderButtonText\}\}/g, productOrderButtonText);
++    html = html.replace(/\{\{sizeChartLabel\}\}/g, sizeChartLabel);
++    html = html.replace(/\{\{sizeChartTitle\}\}/g, sizeChartTitle);
++    html = html.replace(/\{\{advantagesLabel\}\}/g, advantagesLabel);
++    html = html.replace(/\{\{advantagesTitle\}\}/g, advantagesTitle);
++
++    // Tabs section placeholders
++    const tab1Title = (options.tab1Title?.trim()) ? options.tab1Title : (dataObj.tab1Title || '');
++    const tab1Image = (options.tab1Image?.trim()) ? options.tab1Image : (dataObj.tab1Image || '');
++    const tab1Content = (options.tab1Content?.trim()) ? options.tab1Content : (dataObj.tab1Content || '');
++    const tab2Title = (options.tab2Title?.trim()) ? options.tab2Title : (dataObj.tab2Title || '');
++    const tab2Image = (options.tab2Image?.trim()) ? options.tab2Image : (dataObj.tab2Image || '');
++    const tab2Content = (options.tab2Content?.trim()) ? options.tab2Content : (dataObj.tab2Content || '');
++    const tab3Title = (options.tab3Title?.trim()) ? options.tab3Title : (dataObj.tab3Title || '');
++    const tab3Image = (options.tab3Image?.trim()) ? options.tab3Image : (dataObj.tab3Image || '');
++    const tab3Content = (options.tab3Content?.trim()) ? options.tab3Content : (dataObj.tab3Content || '');
++
++    html = html.replace(/\{\{tab1Title\}\}/g, tab1Title);
++    html = html.replace(/\{\{tab1Image\}\}/g, tab1Image);
++    html = html.replace(/\{\{tab1ImageMobile\}\}/g, tab1Image.replace(/\.jpg$/, '_m.webp'));
++    html = html.replace(/\{\{tab1Content\}\}/g, tab1Content);
++    html = html.replace(/\{\{tab2Title\}\}/g, tab2Title);
++    html = html.replace(/\{\{tab2Image\}\}/g, tab2Image);
++    html = html.replace(/\{\{tab2ImageMobile\}\}/g, tab2Image.replace(/\.jpg$/, '_m.webp'));
++    html = html.replace(/\{\{tab2Content\}\}/g, tab2Content);
++    html = html.replace(/\{\{tab3Title\}\}/g, tab3Title);
++    html = html.replace(/\{\{tab3Image\}\}/g, tab3Image);
++    html = html.replace(/\{\{tab3ImageMobile\}\}/g, tab3Image.replace(/\.jpg$/, '_m.webp'));
++    html = html.replace(/\{\{tab3Content\}\}/g, tab3Content);
++
++    // Видалити tabs блок якщо вимкнено
++    const enableTabs = (options.enableTabs !== undefined) ? (options.enableTabs === 'on' || options.enableTabs === true) : (dataObj.enableTabs === true);
++    if (!enableTabs) {
++      html = html.replace(/\s*<!--\s*tabs\s*-->[\s\S]*?<!--\s*\/tabs\s*-->\s*/g, '');
++    }
++
++    // How to Buy section placeholders
++    const howLabel = (options.howLabel?.trim()) ? options.howLabel : (dataObj.howLabel || '');
++    const howTitle = (options.howTitle?.trim()) ? options.howTitle : (dataObj.howTitle || '');
++    const howStep1 = (options.howStep1?.trim()) ? options.howStep1 : (dataObj.howStep1 || '');
++    const howStep2 = (options.howStep2?.trim()) ? options.howStep2 : (dataObj.howStep2 || '');
++    const howStep3 = (options.howStep3?.trim()) ? options.howStep3 : (dataObj.howStep3 || '');
++    const howStep4 = (options.howStep4?.trim()) ? options.howStep4 : (dataObj.howStep4 || '');
++
++    html = html.replace(/\{\{howLabel\}\}/g, howLabel);
++    html = html.replace(/\{\{howTitle\}\}/g, howTitle);
++    html = html.replace(/\{\{howStep1\}\}/g, howStep1);
++    html = html.replace(/\{\{howStep2\}\}/g, howStep2);
++    html = html.replace(/\{\{howStep3\}\}/g, howStep3);
++    html = html.replace(/\{\{howStep4\}\}/g, howStep4);
++
++    // FAQ section placeholders
++    const faqLabel = (options.faqLabel?.trim()) ? options.faqLabel : (dataObj.faqLabel || '');
++    const faqTitle = (options.faqTitle?.trim()) ? options.faqTitle : (dataObj.faqTitle || '');
++    const faq1Question = (options.faq1Question?.trim()) ? options.faq1Question : (dataObj.faq1Question || '');
++    const faq1Answer = (options.faq1Answer?.trim()) ? options.faq1Answer : (dataObj.faq1Answer || '');
++    const faq2Question = (options.faq2Question?.trim()) ? options.faq2Question : (dataObj.faq2Question || '');
++    const faq2Answer = (options.faq2Answer?.trim()) ? options.faq2Answer : (dataObj.faq2Answer || '');
++    const faq3Question = (options.faq3Question?.trim()) ? options.faq3Question : (dataObj.faq3Question || '');
++    const faq3Answer = (options.faq3Answer?.trim()) ? options.faq3Answer : (dataObj.faq3Answer || '');
++    const faq4Question = (options.faq4Question?.trim()) ? options.faq4Question : (dataObj.faq4Question || '');
++    const faq4Answer = (options.faq4Answer?.trim()) ? options.faq4Answer : (dataObj.faq4Answer || '');
++
++    html = html.replace(/\{\{faqLabel\}\}/g, faqLabel);
++    html = html.replace(/\{\{faqTitle\}\}/g, faqTitle);
++    html = html.replace(/\{\{faq1Question\}\}/g, faq1Question);
++    html = html.replace(/\{\{faq1Answer\}\}/g, faq1Answer);
++    html = html.replace(/\{\{faq2Question\}\}/g, faq2Question);
++    html = html.replace(/\{\{faq2Answer\}\}/g, faq2Answer);
++    html = html.replace(/\{\{faq3Question\}\}/g, faq3Question);
++    html = html.replace(/\{\{faq3Answer\}\}/g, faq3Answer);
++    html = html.replace(/\{\{faq4Question\}\}/g, faq4Question);
++    html = html.replace(/\{\{faq4Answer\}\}/g, faq4Answer);
++
++    // Comments section placeholders
++    const commentsLabel = (options.commentsLabel?.trim()) ? options.commentsLabel : (dataObj.commentsLabel || '');
++    const commentsTitle = (options.commentsTitle?.trim()) ? options.commentsTitle : (dataObj.commentsTitle || '');
++    const commentsSalesStat = (options.commentsSalesStat?.trim()) ? options.commentsSalesStat : (dataObj.commentsSalesStat || '');
++    const commentsSalesText = (options.commentsSalesText?.trim()) ? options.commentsSalesText : (dataObj.commentsSalesText || '');
++    const commentsSatisfiedStat = (options.commentsSatisfiedStat?.trim()) ? options.commentsSatisfiedStat : (dataObj.commentsSatisfiedStat || '');
++    const commentsSatisfiedText = (options.commentsSatisfiedText?.trim()) ? options.commentsSatisfiedText : (dataObj.commentsSatisfiedText || '');
++    const commentsRepeatStat = (options.commentsRepeatStat?.trim()) ? options.commentsRepeatStat : (dataObj.commentsRepeatStat || '');
++    const commentsRepeatText = (options.commentsRepeatText?.trim()) ? options.commentsRepeatText : (dataObj.commentsRepeatText || '');
++    const commentsButtonText = (options.commentsButtonText?.trim()) ? options.commentsButtonText : (dataObj.commentsButtonText || '');
++
++    html = html.replace(/\{\{commentsLabel\}\}/g, commentsLabel);
++    html = html.replace(/\{\{commentsTitle\}\}/g, commentsTitle);
++    html = html.replace(/\{\{commentsSalesStat\}\}/g, commentsSalesStat);
++    html = html.replace(/\{\{commentsSalesText\}\}/g, commentsSalesText);
++    html = html.replace(/\{\{commentsSatisfiedStat\}\}/g, commentsSatisfiedStat);
++    html = html.replace(/\{\{commentsSatisfiedText\}\}/g, commentsSatisfiedText);
++    html = html.replace(/\{\{commentsRepeatStat\}\}/g, commentsRepeatStat);
++    html = html.replace(/\{\{commentsRepeatText\}\}/g, commentsRepeatText);
++    html = html.replace(/\{\{commentsButtonText\}\}/g, commentsButtonText);
++
++    // Request section placeholders
++    const requestTitle = (options.requestTitle?.trim()) ? options.requestTitle : (dataObj.requestTitle || '');
++    const requestTimerText = (options.requestTimerText?.trim()) ? options.requestTimerText : (dataObj.requestTimerText || '');
++    const requestInfoTitle = (options.requestInfoTitle?.trim()) ? options.requestInfoTitle : (dataObj.requestInfoTitle || '');
++    const requestInfoDescription = (options.requestInfoDescription?.trim()) ? options.requestInfoDescription : (dataObj.requestInfoDescription || '');
++    const requestNamePlaceholder = (options.requestNamePlaceholder?.trim()) ? options.requestNamePlaceholder : (dataObj.requestNamePlaceholder || '');
++    const requestPhonePlaceholder = (options.requestPhonePlaceholder?.trim()) ? options.requestPhonePlaceholder : (dataObj.requestPhonePlaceholder || '');
++    const requestPhoneFormat = (options.requestPhoneFormat?.trim()) ? options.requestPhoneFormat : (dataObj.requestPhoneFormat || '');
++    const requestButtonText = (options.requestButtonText?.trim()) ? options.requestButtonText : (dataObj.requestButtonText || '');
++    const requestStockPrefix = (options.requestStockPrefix?.trim()) ? options.requestStockPrefix : (dataObj.requestStockPrefix || '');
++    const requestStockSuffix = (options.requestStockSuffix?.trim()) ? options.requestStockSuffix : (dataObj.requestStockSuffix || '');
++
++    html = html.replace(/\{\{requestTitle\}\}/g, requestTitle);
++    html = html.replace(/\{\{requestTimerText\}\}/g, requestTimerText);
++    html = html.replace(/\{\{requestInfoTitle\}\}/g, requestInfoTitle);
++    html = html.replace(/\{\{requestInfoDescription\}\}/g, requestInfoDescription);
++    html = html.replace(/\{\{requestNamePlaceholder\}\}/g, requestNamePlaceholder);
++    html = html.replace(/\{\{requestPhonePlaceholder\}\}/g, requestPhonePlaceholder);
++    html = html.replace(/\{\{requestPhoneFormat\}\}/g, requestPhoneFormat);
++    html = html.replace(/\{\{requestButtonText\}\}/g, requestButtonText);
++    html = html.replace(/\{\{requestStockPrefix\}\}/g, requestStockPrefix);
++    html = html.replace(/\{\{requestStockSuffix\}\}/g, requestStockSuffix);
+ 
+     // Замінити плейсхолдери для хедер текст, титл, ціна
+     const finalHeaderText = (options.headerText && options.headerText.trim()) ? options.headerText : (dataObj.headerText || '');
+     const finalHeroTitle = (options.heroTitle && options.heroTitle.trim()) ? options.heroTitle : (dataObj.heroTitle || '');
+-    const finalHeroPrice = (options.heroPrice && options.heroPrice.trim()) ? options.heroPrice : (dataObj.hero?.price || '');
+-    const finalStockCount = (options.stockCount && options.stockCount.toString().trim()) ? options.stockCount : (dataObj.hero?.stock_count || '19');
++    const finalHeroPrice = (options.heroPrice && options.heroPrice.trim()) ? options.heroPrice : (dataObj.heroPrice || dataObj.hero?.price || '');
++    const finalStockCount = (options.stockCount && options.stockCount.toString().trim()) ? options.stockCount : (dataObj.stockCount || dataObj.hero?.stock_count || '19');
+ 
+-    html = html.replace('{{headerText}}', finalHeaderText);
+-    html = html.replace('{{heroTitle}}', finalHeroTitle);
+-    html = html.replace('{{heroPrice}}', finalHeroPrice);
+-    html = html.replace('{{stockCount}}', finalStockCount);
++    html = html.replace(/\{\{headerText\}\}/g, finalHeaderText);
++    html = html.replace(/\{\{heroTitle\}\}/g, finalHeroTitle);
++    html = html.replace(/\{\{heroPrice\}\}/g, finalHeroPrice);
++    html = html.replace(/\{\{stockCount\}\}/g, finalStockCount);
+ 
+-    // Видалити таймер якщо вимкнено
+-    if (options.enableTimer !== 'on' && options.enableTimer !== true) {
++    // Видалити таймер якщо вимкнено (з fallback на dataObj)
++    const enableTimer = (options.enableTimer !== undefined) ? (options.enableTimer === 'on' || options.enableTimer === true) : (dataObj.enableTimer === true);
++    if (!enableTimer) {
+       // Видалити весь блок за допомогою HTML коментарів
+       html = html.replace(/\s*<!--\s*timer\s*-->[\s\S]*?<!--\s*\/timer\s*-->\s*/g, '');
+     }
+ 
+-    // Видалити блок "Залишилось X футболок" якщо вимкнено
+-    if (options.enableStock !== 'on' && options.enableStock !== true) {
++    // Видалити блок "Залишилось X футболок" якщо вимкнено (з fallback на dataObj)
++    const enableStock = (options.enableStock !== undefined) ? (options.enableStock === 'on' || options.enableStock === true) : (dataObj.enableStock === true);
++    if (!enableStock) {
+       // Видалити весь блок за допомогою HTML коментарів
+       html = html.replace(/\s*<!--\s*stock\s*-->[\s\S]*?<!--\s*\/stock\s*-->\s*/g, '');
+     }
+@@ -291,10 +447,29 @@ function generateHTML(dataObj, options = {}) {
+       );
+     }
+ 
+-    // Замінити imageUrl у plus-logo блоці
++    // Замінити imageUrl у plus-logo блоці (desktop JPG/PNG + mobile WebP)
+     const rawImageUrl = (options.imageUrl && options.imageUrl.trim()) ? options.imageUrl : (dataObj.imageUrl || '');
+-    const finalImageUrl = rawImageUrl.replace(/^\//, '');
+-    html = html.replace(`{{imageUrl}}`, finalImageUrl);
++    // Видалити початковий слеш і префікс 'public/'
++    let imageUrlDesktop = rawImageUrl.replace(/^\//, '').replace(/^public\//, '');
++    let imageUrlMobile;
++
++    // Якщо в конфігу вказано mobile файл (_m.webp), згенерувати desktop шлях
++    if (imageUrlDesktop.endsWith('_m.webp')) {
++      imageUrlMobile = imageUrlDesktop; // Залишити як mobile
++      imageUrlDesktop = imageUrlDesktop.replace('_m.webp', '.jpg'); // Спробувати .jpg
++      // Перевірити чи існує .jpg, інакше спробувати .png
++      const desktopJpgPath = path.join(__dirname, 'public', imageUrlDesktop);
++      const desktopPngPath = path.join(__dirname, 'public', imageUrlDesktop.replace('.jpg', '.png'));
++      if (!fs.existsSync(desktopJpgPath) && fs.existsSync(desktopPngPath)) {
++        imageUrlDesktop = imageUrlDesktop.replace('.jpg', '.png');
++      }
++    } else {
++      // Звичайний випадок: desktop файл в конфігу, генеруємо mobile
++      imageUrlMobile = imageUrlDesktop.replace(/\.(jpg|png)$/, '_m.webp');
++    }
++
++    html = html.replace('{{imageUrlDesktop}}', imageUrlDesktop);
++    html = html.replace('{{imageUrlMobile}}', imageUrlMobile);
+ 
+     const imageToggle = (options.enableImage !== undefined) ? options.enableImage : dataObj.enableImage;
+ 
+@@ -325,14 +500,48 @@ function generateHTML(dataObj, options = {}) {
+       html = html.replace(/\s*<!--\s*videoThumbnail\s*-->[\s\S]*?<!--\s*\/videoThumbnail\s*-->\s*/g, '');
+     }
+ 
+-    // Замінити фото розмірної сітки
++    // Видалити блок "FAQ" якщо вимкнено (з fallback на dataObj)
++    const enableFaq = (options.enableFaq !== undefined) ? (options.enableFaq === 'on' || options.enableFaq === true) : (dataObj.enableFaq === true);
++    if (!enableFaq) {
++      // Видалити весь блок за допомогою HTML коментарів
++      html = html.replace(/\s*<!--\s*faq\s*-->[\s\S]*?<!--\s*\/faq\s*-->\s*/g, '');
++    }
++
++    // Видалити блок "Як придбати?" якщо вимкнено (з fallback на dataObj)
++    const enableHow = (options.enableHow !== undefined) ? (options.enableHow === 'on' || options.enableHow === true) : (dataObj.enableHow === true);
++    if (!enableHow) {
++      // Видалити весь блок за допомогою HTML коментарів
++      html = html.replace(/\s*<!--\s*how\s*-->[\s\S]*?<!--\s*\/how\s*-->\s*/g, '');
++    }
++
++    // Видалити блок "Відгуки" якщо вимкнено (з fallback на dataObj)
++    const enableComments = (options.enableComments !== undefined) ? (options.enableComments === 'on' || options.enableComments === true) : (dataObj.enableComments === true);
++    if (!enableComments) {
++      // Видалити весь блок за допомогою HTML коментарів
++      html = html.replace(/\s*<!--\s*comments\s*-->[\s\S]*?<!--\s*\/comments\s*-->\s*/g, '');
++    }
++
++    // Видалити блок "Форма замовлення (REQUEST)" якщо вимкнено (з fallback на dataObj)
++    const enableRequest = (options.enableRequest !== undefined) ? (options.enableRequest === 'on' || options.enableRequest === true) : (dataObj.enableRequest === true);
++    if (!enableRequest) {
++      // Видалити весь блок за допомогою HTML коментарів
++      html = html.replace(/\s*<!--\s*request\s*-->[\s\S]*?<!--\s*\/request\s*-->\s*/g, '');
++    }
++
++    // Замінити фото розмірної сітки (desktop PNG + mobile WebP)
+     const rawSizeChartImage = (options.sizeChartImage && options.sizeChartImage.trim()) ? options.sizeChartImage : (dataObj.sizeChartImage || 'img/info/info-1.webp');
+-    const finalSizeChartImage = rawSizeChartImage.replace(/^\//, '');
+-    html = html.replace('{{sizeChartImage}}', finalSizeChartImage);
++    // Видалити початковий слеш і префікс 'public/'
++    const sizeChartDesktop = rawSizeChartImage.replace(/^\//, '').replace(/^public\//, '');
++    // Згенерувати mobile шлях: size-chart-123.png -> size-chart-123_m.webp
++    const sizeChartMobile = sizeChartDesktop.replace(/\.png$/, '_m.webp');
++
++    html = html.replace('{{sizeChartImageDesktop}}', sizeChartDesktop);
++    html = html.replace('{{sizeChartImageMobile}}', sizeChartMobile);
+ 
+     // Генерація інформаційного блоку (список характеристик)
+-    // Збираємо ColorHex з увімкнених продуктів для автогенерації кольорів
++    // Збираємо ColorHex та Size ТІЛЬКИ з product1-5 (не враховуємо product8/9 - це bundles "2 разом")
+     const productColors = [];
++    const productSizes = [];
+     for (let i = 1; i <= 5; i++) {
+       const enabledOpt = options[`enableProduct${i}`] === 'on' || options[`enableProduct${i}`] === true;
+       const enabledData = dataObj[`enableProduct${i}`] === true;
+@@ -340,31 +549,22 @@ function generateHTML(dataObj, options = {}) {
+       if (enabled) {
+         const colorHex = (options[`product${i}ColorHex`] && options[`product${i}ColorHex`].trim()) ? options[`product${i}ColorHex`] : (dataObj[`product${i}ColorHex`] || '');
+         if (colorHex) productColors.push(colorHex);
++
++        const size = (options[`product${i}Size`] && options[`product${i}Size`].trim()) ? options[`product${i}Size`] : (dataObj[`product${i}Size`] || '');
++        if (size) productSizes.push(size);
+       }
+     }
+-    // Продукти 8 та 9
+-    const enabled8Opt = options.enableProduct8 === 'on' || options.enableProduct8 === true;
+-    const enabled8Data = dataObj.enableProduct8 === true;
+-    const enabled8 = enabled8Opt || (options.enableProduct8 === undefined && enabled8Data);
+-    if (enabled8) {
+-      const colorHex8 = (options.product8ColorHex && options.product8ColorHex.trim()) ? options.product8ColorHex : (dataObj.product8ColorHex || '');
+-      if (colorHex8) productColors.push(colorHex8);
+-    }
+-    const enabled9Opt = options.enableProduct9 === 'on' || options.enableProduct9 === true;
+-    const enabled9Data = dataObj.enableProduct9 === true;
+-    const enabled9 = enabled9Opt || (options.enableProduct9 === undefined && enabled9Data);
+-    if (enabled9) {
+-      const colorHex9 = (options.product9ColorHex && options.product9ColorHex.trim()) ? options.product9ColorHex : (dataObj.product9ColorHex || '');
+-      if (colorHex9) productColors.push(colorHex9);
+-    }
+ 
+-    // Генеруємо SVG кружечки для кольорів
++    // Генеруємо SVG кружечки для кольорів (для інформаційного блоку)
+     const colorCircles = productColors.map(color => {
+       return `<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="13" cy="13" r="13" fill="${color}" />
+           </svg>`;
+     }).join('\n           ');
+ 
++    // Генеруємо автоматичні розміри для product8/product9 (об'єднуємо всі розміри з product1-5)
++    const autoSizes = productSizes.join(', ');
++
+     // Обробка кожного поля інформаційного блоку
+     const infoBrandLabel = (options.infoBrandLabel && options.infoBrandLabel.trim()) ? options.infoBrandLabel : (dataObj.infoBrandLabel || 'Бренд');
+     const infoBrandValue = (options.infoBrandValue && options.infoBrandValue.trim()) ? options.infoBrandValue : (dataObj.infoBrandValue || 'Kopo™ (Україна)');
+@@ -455,7 +655,7 @@ function generateHTML(dataObj, options = {}) {
+       }
+     }
+ 
+-    // Замінити дані для продуктів 8 та 9 (те ж саме як продукти 1-5)
++    // Замінити дані для продуктів 8 та 9 (bundles)
+     const product8Name = (options.product8Name && options.product8Name.trim()) ? options.product8Name : (dataObj.product8Name || '');
+     const product8Color = (options.product8Color && options.product8Color.trim()) ? options.product8Color : (dataObj.product8Color || '');
+     const product8ColorHex = (options.product8ColorHex && options.product8ColorHex.trim()) ? options.product8ColorHex : (dataObj.product8ColorHex || '');
+@@ -467,10 +667,12 @@ function generateHTML(dataObj, options = {}) {
+     html = html.replace('{{product8Name}}', product8Name);
+     html = html.replace('{{product8Color}}', product8Color);
+     html = html.replace('{{product8ColorHex}}', product8ColorHex);
+-    html = html.replace('{{product8Size}}', product8Size);
++    html = html.replace('{{product8Size}}', autoSizes); // Автогенеровані розміри з product1-5
+     html = html.replace('{{product8Material}}', product8Material);
+     html = html.replace('{{product8PriceOld}}', product8PriceOld);
+     html = html.replace('{{product8Price}}', product8Price);
++    // Автогенеровані кольори для product8 (з product1-5)
++    html = html.replace('{{product8ColorCircles}}', colorCircles);
+ 
+     const product9Name = (options.product9Name && options.product9Name.trim()) ? options.product9Name : (dataObj.product9Name || '');
+     const product9Color = (options.product9Color && options.product9Color.trim()) ? options.product9Color : (dataObj.product9Color || '');
+@@ -483,10 +685,12 @@ function generateHTML(dataObj, options = {}) {
+     html = html.replace('{{product9Name}}', product9Name);
+     html = html.replace('{{product9Color}}', product9Color);
+     html = html.replace('{{product9ColorHex}}', product9ColorHex);
+-    html = html.replace('{{product9Size}}', product9Size);
++    html = html.replace('{{product9Size}}', autoSizes); // Автогенеровані розміри з product1-5
+     html = html.replace('{{product9Material}}', product9Material);
+     html = html.replace('{{product9PriceOld}}', product9PriceOld);
+     html = html.replace('{{product9Price}}', product9Price);
++    // Автогенеровані кольори для product9 (з product1-5)
++    html = html.replace('{{product9ColorCircles}}', colorCircles);
+ 
+     // Генерувати слайди для product8 та product9
+     const product8Images = options.product8Images || dataObj.product8Images || [];
+@@ -505,72 +709,6 @@ function generateHTML(dataObj, options = {}) {
+       html = html.replace(new RegExp(`<!--product9-->\\s*[\\s\\S]*?<!--\\/product9-->\\s*`, 'g'), '');
+     }
+ 
+-    // Замінити Comments секцію
+-    const commentsLabel = (options.commentsLabel && options.commentsLabel.trim()) ? options.commentsLabel : (dataObj.comments?.label || 'Відгуки');
+-    const commentsTitle = (options.commentsTitle && options.commentsTitle.trim()) ? options.commentsTitle : (dataObj.comments?.title || 'Піклуємось про кожного.');
+-    const commentsSalesStat = (options.commentsSalesStat && options.commentsSalesStat.trim()) ? options.commentsSalesStat : (dataObj.comments?.stats?.sales || '> 3500');
+-    const commentsSalesText = (options.commentsSalesText && options.commentsSalesText.trim()) ? options.commentsSalesText : (dataObj.comments?.text?.[0] || 'продажів');
+-    const commentsSatisfiedStat = (options.commentsSatisfiedStat && options.commentsSatisfiedStat.trim()) ? options.commentsSatisfiedStat : (dataObj.comments?.stats?.satisfied || '98%');
+-    const commentsSatisfiedText = (options.commentsSatisfiedText && options.commentsSatisfiedText.trim()) ? options.commentsSatisfiedText : (dataObj.comments?.text?.[1] || 'задоволених клієнтів');
+-    const commentsRepeatStat = (options.commentsRepeatStat && options.commentsRepeatStat.trim()) ? options.commentsRepeatStat : (dataObj.comments?.stats?.repeat || '48%');
+-    const commentsRepeatText = (options.commentsRepeatText && options.commentsRepeatText.trim()) ? options.commentsRepeatText : (dataObj.comments?.text?.[2] || 'вже повторно зробили замовлення для себе або близьких');
+-    const commentsButtonText = (options.commentsButtonText && options.commentsButtonText.trim()) ? options.commentsButtonText : 'ЗАЛИШИТИ ВІДГУК';
+-
+-    html = html.replace('{{commentsLabel}}', commentsLabel);
+-    html = html.replace('{{commentsTitle}}', commentsTitle);
+-    html = html.replace('{{commentsSalesStat}}', commentsSalesStat);
+-    html = html.replace('{{commentsSalesText}}', commentsSalesText);
+-    html = html.replace('{{commentsSatisfiedStat}}', commentsSatisfiedStat);
+-    html = html.replace('{{commentsSatisfiedText}}', commentsSatisfiedText);
+-    html = html.replace('{{commentsRepeatStat}}', commentsRepeatStat);
+-    html = html.replace('{{commentsRepeatText}}', commentsRepeatText);
+-    html = html.replace('{{commentsButtonText}}', commentsButtonText);
+-
+-    // Видалити Comments секцію якщо вимкнено
+-    const enableComments = (options.enableComments === 'on' || options.enableComments === true) || (options.enableComments === undefined && dataObj.enableComments !== false);
+-    if (!enableComments) {
+-      html = html.replace(/\s*<!--\s*comments\s*-->[\s\S]*?<!--\s*\/comments\s*-->\s*/g, '');
+-    }
+-
+-    // Замінити FAQ секцію
+-    const faqLabel = (options.faqLabel && options.faqLabel.trim()) ? options.faqLabel : (dataObj.faq?.label || 'Доставка і оплата');
+-    const faqTitle = (options.faqTitle && options.faqTitle.trim()) ? options.faqTitle : (dataObj.faq?.title || 'Швидко, зручно, надійно.');
+-
+-    html = html.replace('{{faqLabel}}', faqLabel);
+-    html = html.replace('{{faqTitle}}', faqTitle);
+-
+-    // Видалити FAQ секцію якщо вимкнено
+-    const enableFaq = (options.enableFaq === 'on' || options.enableFaq === true) || (options.enableFaq === undefined && dataObj.enableFaq !== false);
+-    if (!enableFaq) {
+-      html = html.replace(/\s*<!--\s*faq\s*-->[\s\S]*?<!--\s*\/faq\s*-->\s*/g, '');
+-    }
+-
+-    // Замінити How to Buy секцію
+-    const howLabel = (options.howLabel && options.howLabel.trim()) ? options.howLabel : (dataObj.how_to_buy?.label || 'Як придбати футболки?');
+-    const howTitle = (options.howTitle && options.howTitle.trim()) ? options.howTitle : (dataObj.how_to_buy?.title || 'Лише декілька простих кроків');
+-
+-    html = html.replace('{{howLabel}}', howLabel);
+-    html = html.replace('{{howTitle}}', howTitle);
+-
+-    // Видалити How to Buy секцію якщо вимкнено
+-    const enableHow = (options.enableHow === 'on' || options.enableHow === true) || (options.enableHow === undefined && dataObj.enableHow !== false);
+-    if (!enableHow) {
+-      html = html.replace(/\s*<!--\s*how\s*-->[\s\S]*?<!--\s*\/how\s*-->\s*/g, '');
+-    }
+-
+-    // Замінити Request Form поля
+-    const requestInfoTitle = (options.requestInfoTitle && options.requestInfoTitle.trim()) ? options.requestInfoTitle : (dataObj.request?.info_title || 'Залиште заявку');
+-    const requestInfoDescription = (options.requestInfoDescription && options.requestInfoDescription.trim()) ? options.requestInfoDescription : (dataObj.request?.info_description || 'Якщо бажаєте замовити або потрібна наша допомога');
+-    const requestButtonText = (options.requestButtonText && options.requestButtonText.trim()) ? options.requestButtonText : 'ЗАЛИШИТИ ЗАЯВКУ';
+-    const requestNamePlaceholder = (options.requestNamePlaceholder && options.requestNamePlaceholder.trim()) ? options.requestNamePlaceholder : 'Введіть Ваше ім`я';
+-    const requestPhonePlaceholder = (options.requestPhonePlaceholder && options.requestPhonePlaceholder.trim()) ? options.requestPhonePlaceholder : 'Введіть Ваш телефон';
+-
+-    html = html.replace('{{requestInfoTitle}}', requestInfoTitle);
+-    html = html.replace('{{requestInfoDescription}}', requestInfoDescription);
+-    html = html.replace('{{requestButtonText}}', requestButtonText);
+-    html = html.replace('{{requestNamePlaceholder}}', requestNamePlaceholder);
+-    html = html.replace('{{requestPhonePlaceholder}}', requestPhonePlaceholder);
+-
+     // Замінити Footer copyright
+     const footerCopyright = (options.footerCopyright && options.footerCopyright.trim()) ? options.footerCopyright : (dataObj.footer?.copyright || '© 2022 «KOPO»');
+     html = html.replace('{{footerCopyright}}', footerCopyright);
+@@ -605,6 +743,32 @@ app.get('/api/data', (req, res) => {
+   }
+ });
+ 
++// GET /api/data/original - Отримати оригінальні дані з landing-data.json
++app.get('/api/data/original', (req, res) => {
++  try {
++    const dataPath = path.join(__dirname, 'data', 'landing-data.json');
++    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
++    console.log(`✅ Оригінальні дані відправлені (${Object.keys(data).length} полів)`);
++    res.json(data);
++  } catch (err) {
++    console.error('❌ Помилка при читанні оригінальних даних:', err.message);
++    res.status(500).json({ error: 'Помилка при читанні даних' });
++  }
++});
++
++// GET /api/data/saved - Отримати збережені дані з user-config.json
++app.get('/api/data/saved', (req, res) => {
++  try {
++    const dataPath = path.join(__dirname, 'data', 'user-config.json');
++    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
++    console.log(`✅ Збережені дані відправлені (${Object.keys(data).length} полів)`);
++    res.json(data);
++  } catch (err) {
++    console.error('❌ Помилка при читанні збережених даних:', err.message);
++    res.status(500).json({ error: 'Помилка при читанні даних' });
++  }
++});
++
+ // GET /api/original-form-data - Отримати оригінальні дані з landing-data.json
+ app.get('/api/original-form-data', (req, res) => {
+   try {
+@@ -1388,6 +1552,89 @@ app.post('/upload-size-chart-image', uploadSizeChartImage.single('sizeChartImage
+   }
+ });
+ 
++// Multer для завантаження фото відгуків
++const reviewImageStorage = multer.diskStorage({
++  destination: (req, file, cb) => {
++    const reviewsDir = path.join(__dirname, 'public', 'img', 'reviews');
++    if (!fs.existsSync(reviewsDir)) {
++      fs.mkdirSync(reviewsDir, { recursive: true });
++    }
++    cb(null, reviewsDir);
++  },
++  filename: (req, file, cb) => {
++    const reviewId = req.query.reviewId || '1';
++    const ext = path.extname(file.originalname);
++    const timestamp = Date.now();
++    cb(null, `review-${reviewId}-${timestamp}${ext}`);
++  }
++});
++
++const uploadReviewImage = multer({
++  storage: reviewImageStorage,
++  limits: {
++    fileSize: 5 * 1024 * 1024 // 5MB
++  },
++  fileFilter: (req, file, cb) => {
++    if (!file.mimetype.startsWith('image/')) {
++      return cb(new Error('Тільки фото дозволені!'));
++    }
++    cb(null, true);
++  }
++});
++
++// Директорія для фото відгуків
++const reviewImageDir = path.join(__dirname, 'public', 'img', 'reviews');
++if (!fs.existsSync(reviewImageDir)) {
++  fs.mkdirSync(reviewImageDir, { recursive: true });
++}
++
++// POST /upload-review-image - Завантажити фото для відгуку
++app.post('/upload-review-image', uploadReviewImage.single('reviewImage'), async (req, res) => {
++  try {
++    if (!req.file) {
++      return res.status(400).json({ error: 'Файл не завантажений' });
++    }
++
++    const reviewId = req.query.reviewId || '1';
++    console.log(`\n⭐ ФОТО ВІДГУКУ ${reviewId} ЗАВАНТАЖЕНО`);
++    console.log(`📁 Оригінальний файл: ${req.file.filename}`);
++    console.log(`📏 Розмір: ${(req.file.size / 1024).toFixed(2)} KB`);
++
++    // Отримати базову назву без розширення
++    const timestamp = Date.now();
++    const basename = `review-${reviewId}-${timestamp}`;
++    const uploadedPath = req.file.path;
++
++    // Пересохранити для веб (оптимізований JPG)
++    const reviewPath = path.join(reviewImageDir, `${basename}.jpg`);
++    await sharp(uploadedPath)
++      .resize(400, 400, { fit: 'cover' })
++      .jpeg({ quality: 85 })
++      .toFile(reviewPath);
++    console.log(`✅ Відгук фото: ${basename}.jpg (400x400, 85% quality)`);
++
++    // Видалити оригінальний завантажений файл
++    fs.unlinkSync(uploadedPath);
++    console.log(`✅ Оригінальний файл видалено\n`);
++
++    res.json({
++      success: true,
++      filename: `/public/img/reviews/${basename}.jpg`,
++      message: 'Фото відгуку успішно завантажено'
++    });
++  } catch (err) {
++    console.error('❌ Помилка при завантаженні:', err.message);
++    if (req.file && req.file.path) {
++      try {
++        fs.unlinkSync(req.file.path);
++      } catch (e) {
++        // Ігноруємо помилку видалення
++      }
++    }
++    res.status(500).json({ error: err.message });
++  }
++});
++
+ // GET /generate - Генерувати та відправити HTML з параметрами
+ app.get('/generate', (req, res) => {
+   try {
+@@ -1730,6 +1977,80 @@ app.get('/export', (req, res) => {
+   }
+ });
+ 
++// POST /api/submit-order - Проксі для SalesDrive API
++app.post('/api/submit-order', async (req, res) => {
++  const SALESDRIVE_API_URL = 'https://comoyo.salesdrive.me/handler/';
++  const SALESDRIVE_API_KEY = 'Ycxui0h7tqIgGn3EJi1AcBgUaTpnXSgpJ4U-AUldjbFFepXWHuj2QQ3ekCpgX76Yz';
++
++  try {
++    const { productName, productPrice, customerName, customerPhone } = req.body;
++
++    // Валідація обов'язкових полів
++    if (!productName || !productPrice || !customerName || !customerPhone) {
++      return res.status(400).json({
++        success: false,
++        message: 'Всі поля обов\'язкові'
++      });
++    }
++
++    // Підготовка даних для SalesDrive API
++    const salesDrivePayload = {
++      getResultData: "1",
++      products: [{
++        name: productName,
++        costPerItem: productPrice,
++        amount: 1
++      }],
++      fName: customerName,
++      phone: customerPhone,
++      sajt: "comoyo.online",
++      organizationId: "1"
++    };
++
++    // Відправка запиту на SalesDrive API
++    const fetch = (await import('node-fetch')).default;
++    const response = await fetch(SALESDRIVE_API_URL, {
++      method: 'POST',
++      headers: {
++        'X-Api-Key': SALESDRIVE_API_KEY,
++        'Content-Type': 'application/json'
++      },
++      body: JSON.stringify(salesDrivePayload)
++    });
++
++    const data = await response.json();
++
++    if (response.ok) {
++      console.log('✅ Замовлення успішно відправлено до CRM:', {
++        product: productName,
++        customer: customerName,
++        phone: customerPhone
++      });
++
++      res.json({
++        success: true,
++        message: 'Замовлення прийнято! Наш менеджер зв\'яжеться з вами найближчим часом.',
++        data: data
++      });
++    } else {
++      console.error('❌ Помилка від SalesDrive API:', data);
++      res.status(response.status).json({
++        success: false,
++        message: 'Помилка при обробці замовлення. Спробуйте ще раз.',
++        error: data
++      });
++    }
++
++  } catch (err) {
++    console.error('❌ Помилка при відправці до SalesDrive:', err.message);
++    res.status(500).json({
++      success: false,
++      message: 'Помилка сервера. Спробуйте пізніше.',
++      error: err.message
++    });
++  }
++});
++
+ // Статичні файли (CSS, JS, фото, шрифти) - МАЮТЬ БУТИ В КІНЦІ!
+ app.use(express.static(path.join(__dirname)));
+ 

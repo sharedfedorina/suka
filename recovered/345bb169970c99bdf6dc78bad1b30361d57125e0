@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test Preview</title>
+</head>
+<body>
+  <h1>Test Preview Button</h1>
+  <button onclick="testClick()">Test Button</button>
+
+  <script src="/js/form.js"></script>
+  <script>
+    function testClick() {
+      console.log('Button clicked!');
+      console.log('previewSite function exists:', typeof previewSite);
+      try {
+        previewSite();
+      } catch(e) {
+        console.error('Error calling previewSite:', e);
+        alert('ERROR: ' + e.message);
+      }
+    }
+  </script>
+</body>
+</html>

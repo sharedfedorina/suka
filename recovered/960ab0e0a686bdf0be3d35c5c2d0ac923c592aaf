@@ -1,0 +1,92 @@
+
+╔═════════════════════════════════════════╗
+║  🚀  КОНСТРУКТОР ЛЕНДІНГІВ - ЗАПУЩЕНО  ║
+╚═════════════════════════════════════════╝
+
+✅ Сервер працює на порту: 6614
+🔗 Головна сторінка: http://localhost:6614/
+📊 API дані: http://localhost:6614/api/data
+🎨 Генерувати сайт: http://localhost:6614/generate
+
+⏹️  Для зупинки натисніть CTRL+C
+
+
+🎨 ГЕНЕРУВАННЯ САЙТУ...
+📝 Параметри: {
+  headerText: undefined,
+  heroTitle: undefined,
+  heroPrice: undefined,
+  enableTimer: undefined,
+  enableStock: undefined,
+  heroImage: undefined,
+  enableImage: undefined,
+  imageUrl: undefined,
+  enableVideo: undefined,
+  videoUrl: undefined,
+  enableVideoThumbnail: undefined,
+  videoThumbnailDesktop: undefined,
+  videoThumbnailMobile: undefined,
+  sizeChartImage: undefined,
+  infoEnableBrand: undefined,
+  infoBrandLabel: undefined,
+  infoBrandValue: undefined,
+  infoEnableModel: undefined,
+  infoModelLabel: undefined,
+  infoModelValue: undefined,
+  infoEnableQuantity: undefined,
+  infoQuantityLabel: undefined,
+  infoQuantityValue: undefined,
+  infoEnableColors: undefined,
+  infoColorsLabel: undefined,
+  infoEnableSizes: undefined,
+  infoSizesLabel: undefined,
+  infoSizesValue: undefined,
+  infoEnableMaterial: undefined,
+  infoMaterialLabel: undefined,
+  infoMaterialValue: undefined,
+  infoEnablePackaging: undefined,
+  infoPackagingLabel: undefined,
+  infoPackagingValue: undefined,
+  product1Images: [
+    '/public/img/products/product-1762701318946.jpg',
+    '/public/img/products/product-1762701318987.jpg',
+    '/public/img/products/product-1762701319031.jpg',
+    '/public/img/products/product-1762701319053.jpg'
+  ],
+  product2Images: [
+    '/public/img/products/product-1762701339436.jpg',
+    '/public/img/products/product-1762701339448.jpg',
+    '/public/img/products/product-1762701339476.jpg',
+    '/public/img/products/product-1762701339488.jpg'
+  ],
+  product3Images: [],
+  product4Images: [],
+  product5Images: [],
+  enableProduct1: undefined,
+  enableProduct2: undefined,
+  enableProduct3: undefined,
+  enableProduct4: undefined,
+  enableProduct5: undefined,
+  product8Name: undefined,
+  product8Color: undefined,
+  product8ColorHex: undefined,
+  product8Size: undefined,
+  product8Material: undefined,
+  product8PriceOld: undefined,
+  product8Price: undefined,
+  enableProduct8: undefined,
+  product8Images: [ '/public/img/products/product-1762712878681.jpg' ],
+  product9Name: undefined,
+  product9Color: undefined,
+  product9ColorHex: undefined,
+  product9Size: undefined,
+  product9Material: undefined,
+  product9PriceOld: undefined,
+  product9Price: undefined,
+  enableProduct9: undefined,
+  product9Images: []
+}
+✅ HTML успішно згенерований (59259 байт)
+✅ Сайт успішно згенерований
+📏 Розмір: 57.87 KB
+

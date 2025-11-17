@@ -15,6 +15,16 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'form.html'));
 });
 
+// Disable caching for JS files in development
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js')) {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+  }
+  next();
+});
+
 app.use(express.static(__dirname, { index: false }));
 
 // Налаштування multer для завантаження фото

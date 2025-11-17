@@ -1,0 +1,542 @@
+{
+  "headerText": "РОЗПРОДАЖ ХУДІ!",
+  "heroTitle": "Худі жіночі на флісі",
+  "enableTimer": false,
+  "enableStock": false,
+  "enableImage": true,
+  "heroImage": "/public/img/hero/hero-1762721124682_m.webp",
+  "imageUrl": "/public/img/hero/hero-1762721771652_m.webp",
+  "enableVideo": true,
+  "videoUrl": "/video/custom-video-1762701401126.mp4",
+  "page": {
+    "title": "Жіночі футболки оверсайз від українскського бренду Kopo",
+    "brand": "Kopo™ (Україна)"
+  },
+  "header": {
+    "announcement": "РОЗПРОДАЖ футболок!"
+  },
+  "hero": {
+    "title": "Жіночі футболки оверсайз",
+    "price": "від 330 грн",
+    "stock_count": "19"
+  },
+  "benefits": [
+    {
+      "id": 1,
+      "enabled": true,
+      "title": "Безкоштовна доставка",
+      "description": "Ми пропонуємо Максимально Безпечну покупку!"
+    },
+    {
+      "id": 2,
+      "enabled": true,
+      "title": "Накладний платіж",
+      "description": "Сплачуйте на пошті після огляду, якщо Вам все підійшло та сподобалось."
+    },
+    {
+      "id": 3,
+      "enabled": true,
+      "title": "Точно підберемо потрібний Вам розмір",
+      "description": "В наявності розміри від S до 5XL, обміняємо якщо раптом не підійде."
+    },
+    {
+      "id": 4,
+      "enabled": true,
+      "title": "Обмін та повернення",
+      "description": "Обміняємо розмір або повернемо кошти протягом 14 днів! Завжди готові допомогти."
+    },
+    {
+      "id": 5,
+      "enabled": true,
+      "title": "Власне виробництво в Україні!",
+      "description": "Зроблено українцями для українців з коханням. "
+    }
+  ],
+  "advantages": [
+    {
+      "id": 1,
+      "title": "Доступна ціна",
+      "description": "Якість та стиль за розумною ціною. Розпродаж футболок оверсайз від Kopo - це можливість придбати качественный одяг зі значною знижкою."
+    },
+    {
+      "id": 2,
+      "title": "Швидка доставка",
+      "description": "Отримуйте своє замовлення максимально швидко. Вже через 1-2 дні після замовлення ви зможете його отримати в поштовому відділенні."
+    },
+    {
+      "id": 3,
+      "title": "Якісні матеріали",
+      "description": "Футболки виконані з турецької тканини високої якості. 95% бавовна, 5% еластан. Дуже приємні до тіла та комфортні в будь-яку пору року."
+    },
+    {
+      "id": 4,
+      "title": "Універсальний дизайн",
+      "description": "Жіночі футболки оверсайз Kopo - це базовий гардероб, що підходить для людей всіх розмірів та типів фігури. Носіть з легкістю!"
+    },
+    {
+      "id": 5,
+      "title": "Перевірена якість",
+      "description": "Перед відправкою всі посилки проходять ретельну перевірку, щоб Ви отримали замовлення в найкращому вигляді та прослужило багато років."
+    }
+  ],
+  "products": [
+    {
+      "id": "product1",
+      "name": "Жіноча футболка оверсайз",
+      "color": "Рожевий",
+      "color_hex": "#fc5f88",
+      "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+      "material": "95% бавовна, 5% еластан",
+      "price_old": "585 грн",
+      "price_new": "390 грн",
+      "images": [
+        "img/products/product_1.jpg",
+        "img/products/product_1_1.jpg",
+        "img/products/product_1_2.jpg",
+        "img/products/product_1_3.jpg",
+        "img/products/product_1_4.jpg",
+        "img/products/product_1_5.jpg"
+      ]
+    },
+    {
+      "id": "product2",
+      "name": "Жіноча футболка оверсайз",
+      "color": "Пудра",
+      "color_hex": "#e2bcc9",
+      "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+      "material": "95% бавовна, 5% еластан",
+      "price_old": "585 грн",
+      "price_new": "390 грн",
+      "images": [
+        "img/products/product_2.jpg",
+        "img/products/product_2_1.jpg",
+        "img/products/product_2_2.jpg",
+        "img/products/product_2_3.jpg",
+        "img/products/product_2_4.jpg",
+        "img/products/product_2_5.jpg",
+        "img/products/product_2_6.jpg"
+      ]
+    },
+    {
+      "id": "product3",
+      "name": "Жіноча футболка оверсайз",
+      "color": "Червоний",
+      "color_hex": "#f80e28",
+      "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+      "material": "95% бавовна, 5% еластан",
+      "price_old": "585 грн",
+      "price_new": "390 грн",
+      "images": [
+        "img/products/product_3.jpg",
+        "img/products/product_3_1.jpg",
+        "img/products/product_3_2.jpg",
+        "img/products/product_3_3.jpg",
+        "img/products/product_3_4.jpg",
+        "img/products/product_3_5.jpg",
+        "img/products/product_3_6.jpg",
+        "img/products/product_3_7.jpg",
+        "img/products/product_3_8.jpg"
+      ]
+    },
+    {
+      "id": "product4",
+      "name": "Жіноча футболка оверсайз",
+      "color": "Білий",
+      "color_hex": "#eef2f6",
+      "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+      "material": "95% бавовна, 5% еластан",
+      "price_old": "585 грн",
+      "price_new": "390 грн",
+      "images": [
+        "img/products/product_4.jpg",
+        "img/products/product_4_1.jpg",
+        "img/products/product_4_2.jpg",
+        "img/products/product_4_3.jpg",
+        "img/products/product_4_4.jpg",
+        "img/products/product_4_5.jpg",
+        "img/products/product_4_6.jpg",
+        "img/products/product_4_7.jpg"
+      ]
+    },
+    {
+      "id": "product5",
+      "name": "Жіноча футболка оверсайз",
+      "color": "Бежевий",
+      "color_hex": "#f6dcc2",
+      "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+      "material": "95% бавовна, 5% еластан",
+      "price_old": "585 грн",
+      "price_new": "390 грн",
+      "images": [
+        "img/products/product_5.jpg",
+        "img/products/product_5_1.jpg",
+        "img/products/product_5_2.jpg",
+        "img/products/product_5_3.jpg",
+        "img/products/product_5_4.jpg",
+        "img/products/product_5_5.jpg",
+        "img/products/product_5_6.jpg",
+        "img/products/product_5_7.jpg"
+      ]
+    },
+    {
+      "id": "product6",
+      "name": "Набір із 2-х футболок",
+      "color": "Кольори на вибір",
+      "colors": [
+        {
+          "hex": "#131215"
+        },
+        {
+          "hex": "#f0f1f4"
+        },
+        {
+          "hex": "#f8dfc8"
+        },
+        {
+          "hex": "#fc678f"
+        },
+        {
+          "hex": "#f91029"
+        },
+        {
+          "hex": "#e7c0cd"
+        },
+        {
+          "hex": "#fc325a"
+        }
+      ],
+      "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+      "material": "95% бавовна, 5% еластан",
+      "price_old": "1170 грн",
+      "price_new": "749 грн",
+      "images": [
+        "img/products/product_6.jpg",
+        "img/products/product_6_1.jpg",
+        "img/products/product_6_2.jpg",
+        "img/products/product_6_3.jpg",
+        "img/products/product_6_4.jpg",
+        "img/products/product_6_5.jpg",
+        "img/products/product_6_6.jpg"
+      ]
+    },
+    {
+      "id": "product7",
+      "name": "Набір із 3-х футболок",
+      "color": "Кольори на вибір",
+      "colors": [
+        {
+          "hex": "#131215"
+        },
+        {
+          "hex": "#f0f1f4"
+        },
+        {
+          "hex": "#f8dfc8"
+        },
+        {
+          "hex": "#fc678f"
+        },
+        {
+          "hex": "#f91029"
+        },
+        {
+          "hex": "#e7c0cd"
+        },
+        {
+          "hex": "#fc325a"
+        }
+      ],
+      "size": "S, M, L, XL, 2XL, 3XL, 4XL, 5XL",
+      "material": "95% бавовна, 5% еластан",
+      "price_old": "1755 грн",
+      "price_new": "990 грн",
+      "images": [
+        "img/products/product_7.jpg",
+        "img/products/product_7_1.jpg",
+        "img/products/product_7_2.jpg",
+        "img/products/product_7_3.jpg",
+        "img/products/product_7_4.jpg",
+        "img/products/product_7_5.jpg",
+        "img/products/product_7_6.jpg"
+      ]
+    }
+  ],
+  "info": {
+    "label": "Розмірна сітка",
+    "title": "Вагаєтесь з розміром?",
+    "subtitle": "Ми допоможемо.",
+    "note": "*Великі розміри: 2XL-5XL - додається до вартості +10%",
+    "image": "img/info/info-1.webp"
+  },
+  "tabs": {
+    "label": "Основні переваги футболок",
+    "title": "Якісні матеріали + Ідеальний пошив",
+    "items": [
+      {
+        "id": 1,
+        "title": "Максимальний комфорт та зручність",
+        "description": "Досконалі лекала та професійний крій - зробили наші хітові жіночі футболки оверсайз максимально універсальними, вони дуже зручні та комфортні, гарно виглядають на усіх типах фігури. Якісний пошив - кожна футболка проходить додатковий контроль якості, ми слідкуємо за кожним етапом виробництва.",
+        "image": "img/tabs/tabs-1.jpg"
+      },
+      {
+        "id": 2,
+        "title": "Натуральні матеріали",
+        "description": "Футболки виконані з турецької тканини високої якості. Вони дуже приємні до тіла, утеплені якісним флісом, що дарує максимальний комфорт в холодну пору року. Натуральний склад тканини: 95% бавовна, 5% еластан.",
+        "image": "img/tabs/tabs-2.jpg"
+      },
+      {
+        "id": 3,
+        "title": "Універсальність та практичність",
+        "description": "Завжди актуальні базові кольори - пасують під все! Чудово витримують багаторазові прання - зберігають форму та колір. Прослужать не один сезон.",
+        "image": "img/tabs/tabs-3.jpg"
+      }
+    ]
+  },
+  "comments": {
+    "label": "Відгуки",
+    "title": "Піклуємось про кожного.",
+    "stats": {
+      "sales": "> 3500",
+      "satisfied": "98%",
+      "repeat": "48%"
+    },
+    "text": [
+      "продажів",
+      "задоволених клієнтів",
+      "вже повторно зробили замовлення для себе або близьких"
+    ]
+  },
+  "faq": {
+    "label": "Доставка і оплата",
+    "title": "Швидко, зручно, надійно.",
+    "image": "img/faq/faq-1.png",
+    "items": [
+      {
+        "id": 1,
+        "title": "Доставка",
+        "description": "Отримуйте своє замовлення максимально швидко. Вже через 1-2 дні після замовлення ви зможете його отримати в поштовому відділенні."
+      },
+      {
+        "id": 2,
+        "title": "Оплата",
+        "description": "Сплачуйте за товар після перегляду на пошті (накладний платіж) або на картку, як забажаєте."
+      },
+      {
+        "id": 3,
+        "title": "Надійність",
+        "description": "Перед відправкою всі посилки проходять ретельну перевірку, щоб Ви отримали замовлення в найкращому вигляді."
+      },
+      {
+        "id": 4,
+        "title": "Наші партнери",
+        "description": "Наші офіційні партнери Нова пошта та Укрпошта."
+      }
+    ]
+  },
+  "how_to_buy": {
+    "label": "Як придбати футболки?",
+    "title": "Лише декілька простих кроків",
+    "steps": [
+      "Залиште заявку на обрані Вами футболки",
+      "Ми Вам швидко зателефонуємо",
+      "Доставимо за 1-2 дні",
+      "Сплачуйте при отриманні"
+    ]
+  },
+  "request": {
+    "title": "Жіночі футболки оверсайз",
+    "timer_text": "До кінця акції залишилося",
+    "info_title": "Залиште заявку",
+    "info_description": "Якщо бажаєте замовити або потрібна наша допомога",
+    "stock_count": "19",
+    "image": "img/start/start-1.png"
+  },
+  "footer": {
+    "copyright": "© 2022 «KOPO»",
+    "links": [
+      {
+        "text": "Обмін та повернення",
+        "href": "exchange.html"
+      },
+      {
+        "text": "Політика конфіденційності",
+        "href": "politics.html"
+      },
+      {
+        "text": "Угода користувача",
+        "href": "agrement.html"
+      }
+    ]
+  },
+  "product1Name": "Худі на флісі БЕЖ",
+  "product1Color": "Чорний",
+  "product1ColorHex": "#a18368",
+  "product1Size": "XS, S, M, L, XL, XXL",
+  "product1Material": "Бавовна 50%, поліестер 50%",
+  "product1PriceOld": "800",
+  "product1Price": "610 грн",
+  "enableProduct1": true,
+  "product2Name": "Худі на флісі ЛАВАНДА",
+  "product2Color": "Лаванда",
+  "product2ColorHex": "#6b5d96",
+  "product2Size": "XS, S, M, L, XL",
+  "product2Material": "Бавовна 50%, поліестер 50%",
+  "product2PriceOld": "800",
+  "product2Price": "610 грн",
+  "enableProduct2": true,
+  "product3Name": "Жіноча футболка оверсайз",
+  "product3Color": "Пудра",
+  "product3ColorHex": "#e2bcc9",
+  "product3Size": "",
+  "product3Material": "95% бавовна, 5% еластан",
+  "product3PriceOld": "585 грн",
+  "product3Price": "390 грн",
+  "enableProduct3": false,
+  "product4Name": "Жіноча футболка оверсайз",
+  "product4Color": "Бежевий",
+  "product4ColorHex": "#d9cfc1",
+  "product4Size": "",
+  "product4Material": "95% бавовна, 5% еластан",
+  "product4PriceOld": "585 грн",
+  "product4Price": "390 грн",
+  "enableProduct4": false,
+  "product5Name": "Жіноча футболка оверсайз",
+  "product5Color": "Хакі",
+  "product5ColorHex": "#9b9c7c",
+  "product5Size": "",
+  "product5Material": "95% бавовна, 5% еластан",
+  "product5PriceOld": "585 грн",
+  "product5Price": "390 грн",
+  "enableProduct5": false,
+  "product1Images": [
+    "/public/img/products/product-1762701318946.jpg",
+    "/public/img/products/product-1762701318987.jpg",
+    "/public/img/products/product-1762701319031.jpg",
+    "/public/img/products/product-1762701319053.jpg"
+  ],
+  "product2Images": [
+    "/public/img/products/product-1762701339436.jpg",
+    "/public/img/products/product-1762701339448.jpg",
+    "/public/img/products/product-1762701339476.jpg",
+    "/public/img/products/product-1762701339488.jpg"
+  ],
+  "product3Images": [],
+  "product4Images": [],
+  "product5Images": [],
+  "heroPrice": "всього 610 грн",
+  "enableVideoThumbnail": true,
+  "videoThumbnailDesktop": "img/video/video-thumb-1762701409708.jpg",
+  "videoThumbnailMobile": "img/video/video-thumb-1762701409708_m.webp",
+  "sizeChartImage": "/public/img/info/size-chart-1762721756678.png",
+  "infoEnableBrand": true,
+  "infoBrandLabel": "Бренд",
+  "infoBrandValue": "ComoYo™ (Україна)",
+  "infoEnableModel": true,
+  "infoModelLabel": "Модель",
+  "infoModelValue": "Жіноча",
+  "infoEnableQuantity": true,
+  "infoQuantityLabel": "Кількість",
+  "infoQuantityValue": "Одне худі або набір",
+  "infoEnableColors": true,
+  "infoColorsLabel": "Кольори",
+  "infoEnableSizes": true,
+  "infoSizesLabel": "Розміри",
+  "infoSizesValue": "від XS до XL",
+  "infoEnableMaterial": true,
+  "infoMaterialLabel": "Матеріал",
+  "infoMaterialValue": "Бавовна 50%, поліестер 50%",
+  "infoEnablePackaging": false,
+  "infoPackagingLabel": "Упаковка",
+  "infoPackagingValue": "Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.",
+  "product8Name": "2 Худі РАЗОМ",
+  "product8Color": "Лаванда, Бежевий",
+  "product8ColorHex": "#000000",
+  "product8Size": "",
+  "product8Material": "Бавовна 50%, поліестер 50%",
+  "product8PriceOld": "1598",
+  "product8Price": "1100 грн",
+  "enableProduct8": true,
+  "product8Images": [
+    "/public/img/products/product-1762712878681.jpg"
+  ],
+  "product9Name": "",
+  "product9Color": "",
+  "product9ColorHex": "#000000",
+  "product9Size": "",
+  "product9Material": "",
+  "product9PriceOld": "",
+  "product9Price": "",
+  "enableProduct9": false,
+  "product9Images": [],
+  "enableTabs": true,
+  "tabsLabel": "кідьлпОсновні переваги футболок",
+  "tabsTitle": "фіжтбсаЯкісні матеріали + Ідеальний пошив",
+  "enableTabItem1": true,
+  "tab1Title": "авифМаксимальний комфорт та зручність",
+  "tab1Description": "авиваДосконалі лекала та професійний крій - зробили наші хітові жіночі футболки оверсайз максимально універсальними, вони дуже зручні та комфортні, гарно виглядають на усіх типах фігури. Якісний пошив - кожна футболка проходить додатковий контроль якості, ми слідкуємо за кожним етапом виробництва.",
+  "tab1Image": "/public/img/tabs/tabs-1-1763056873944.jpg",
+  "enableTabItem2": true,
+  "tab2Title": "віаНатуральні матеріали",
+  "tab2Description": "віаФутболки виконані з турецької тканини високої якості. Вони дуже приємні до тіла, утеплені якісним флісом, що дарує максимальний комфорт в холодну пору року. Натуральний склад тканини: 95% бавовна, 5% еластан.",
+  "tab2Image": "/public/img/tabs/tabs-2-1763056889511.jpg",
+  "enableTabItem3": true,
+  "tab3Title": "вімаУніверсальність та практичність",
+  "tab3Description": "іуиМЗавжди актуальні базові кольори - пасують під все! Чудово витримують багаторазові прання - зберігають форму та колір. Прослужать не один сезон.",
+  "tab3Image": "/public/img/tabs/tabs-3-1763056904020.jpg",
+  "enableFaq": true,
+  "faqLabel": "МВАИВ",
+  "faqTitle": "АВИАВИ",
+  "faqImage": "/public/img/faq/faq-1-1763056943639.png",
+  "enableFaqItem1": true,
+  "faqItem1Title": "АВИ",
+  "faqItem1Description": "АВИ",
+  "enableFaqItem2": true,
+  "faqItem2Title": "ВАИПИ",
+  "faqItem2Description": "ПВИ",
+  "enableFaqItem3": true,
+  "faqItem3Title": "ВАИ",
+  "faqItem3Description": "ВАИВ",
+  "enableFaqItem4": true,
+  "faqItem4Title": "АВИАВ",
+  "faqItem4Description": "АВИ",
+  "enableHow": true,
+  "howLabel": "wqqw",
+  "howTitle": "ewfew",
+  "howStep1": "wef",
+  "howStep2": "wef",
+  "howStep3": "wfew",
+  "howStep4": "wef",
+  "enableComments": true,
+  "commentsLabel": "",
+  "commentsTitle": "",
+  "commentsSalesStat": "УЦПАУЦ",
+  "commentsSalesText": "УЦКП",
+  "commentsSatisfiedStat": "ЦУПАЦУ",
+  "commentsSatisfiedText": "УЦП",
+  "commentsRepeatStat": "УЦП",
+  "commentsRepeatText": "УЦП",
+  "commentsImages": [
+    "/public/img/comments/comment-1763064742961.webp",
+    "/public/img/comments/comment-1763064743133.webp",
+    "/public/img/comments/comment-1763064743311.webp",
+    "/public/img/comments/comment-1763064743448.webp"
+  ],
+  "requestInfoTitle": "qqЗалиште заявку",
+  "requestInfoDescription": "qqЯкщо бажаєте замовити або потрібна наша допомога",
+  "requestButtonText": "qqЗАЛИШИТИ ЗАЯВКУ",
+  "requestNamePlaceholder": "qqВаше ім'я",
+  "requestPhonePlaceholder": "qqВаш телефон",
+  "footerCopyright": "© 2023 «ComoYo»",
+  "footerLink1": "обмін",
+  "footerLink2": "конф",
+  "footerLink3": "угоді",
+  "salesdriveApiKey": "Ycxui0h7tqIgGn3EJi1AcBgUaTpnXSgpJ4U-AUldjbFFepXWHuj2QQ3ekCpgX76Yz",
+  "salesdriveEndpoint": "https://example.salesdrive.me/handler/",
+  "salesdriveFunnelId": "funnel_789",
+  "metaPixelId": "3670672943154298",
+  "metaAccessToken": "",
+  "metaTestEventCode": "",
+  "productId": "w.2.02",
+  "sku": "w.2.02",
+  "website": "hoodie.comoyo.online"
+}
