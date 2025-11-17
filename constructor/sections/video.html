@@ -7,7 +7,6 @@
               type="checkbox"
               id="enableVideo"
               name="enableVideo"
-              checked
               style="width: auto; margin: 0;"
             />
             <label for="enableVideo" style="margin: 0;">Показувати відео блок</label>
@@ -40,6 +39,10 @@
             <input type="hidden" id="videoThumbnailDesktop" name="videoThumbnailDesktop" value="" />
             <input type="hidden" id="videoThumbnailMobile" name="videoThumbnailMobile" value="" />
             <small class="helper-text">Зображення-прев'ю перед запуском відео</small>
+            <div id="videoThumbnailPreview" class="image-preview">
+              <img id="videoThumbnailPreviewImg" src="" alt="Video Thumbnail preview" style="max-width: 100%; display: none;" />
+              <div id="videoThumbnailPreviewEmpty" class="image-preview-empty">Прев'ю не завантажено</div>
+            </div>
           </div>
 
           <div class="form-group">

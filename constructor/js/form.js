@@ -1529,25 +1529,24 @@ function showVideoPreview(videoPath) {
 }
 
 function showVideoThumbnailPreview(imagePath) {
-  const previewDiv = document.getElementById('videoThumbnailPreview');
-  const imageEl = document.getElementById('previewVideoThumbnail');
-  const statusEl = document.getElementById('videoThumbnailStatus');
+  const previewImg = document.getElementById('videoThumbnailPreviewImg');
+  const previewEmpty = document.getElementById('videoThumbnailPreviewEmpty');
 
-  if (!previewDiv || !imageEl || !statusEl) return;
+  if (!previewImg || !previewEmpty) return;
 
   if (!imagePath) {
-    previewDiv.style.display = 'none';
-    if (imageEl.getAttribute('src')) {
-      imageEl.removeAttribute('src');
+    previewImg.style.display = 'none';
+    previewEmpty.style.display = 'block';
+    if (previewImg.getAttribute('src')) {
+      previewImg.removeAttribute('src');
     }
-    statusEl.textContent = '';
     return;
   }
 
-  previewDiv.style.display = 'block';
-  imageEl.src = imagePath;
-  imageEl.alt = "Прев'ю відео";
-  statusEl.textContent = imagePath;
+  previewImg.src = imagePath;
+  previewImg.alt = "Прев'ю відео";
+  previewImg.style.display = 'block';
+  previewEmpty.style.display = 'none';
 }
 
 
