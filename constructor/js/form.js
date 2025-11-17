@@ -1967,11 +1967,28 @@ function getFormParams() {
 
 
 function previewSite() {
+  // Use POST instead of GET to avoid URL length limits
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/generate';
+  form.target = '_blank';
+  form.style.display = 'none';
 
-  const params = getFormParams();
+  // Get all form data as URLSearchParams
+  const params = new URLSearchParams(getFormParams());
 
-  window.open('/generate?' + params, '_blank');
+  // Add each parameter as hidden input
+  for (const [key, value] of params) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  }
 
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
 }
 
 
