@@ -9,6 +9,7 @@ const app = express();
 const PORT = 6614;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Для обробки form data
 
 // GET / - Сервірування конструктора з окремих файлів
 app.get('/', (req, res) => {
