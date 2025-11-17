@@ -7,7 +7,6 @@
               type="checkbox"
               id="enableImage"
               name="enableImage"
-              checked
               style="width: auto; margin: 0;"
             />
             <label for="enableImage" style="margin: 0;">Показувати додаткове зображення (plus-logo)</label>
@@ -19,7 +18,8 @@
             <input type="hidden" id="imageUrl" name="imageUrl" value="" />
             <small class="helper-text">Додаткове фото для блоку plus-logo</small>
             <div id="imageUrlPreview" class="image-preview">
-              <div class="image-preview-empty">Фото не завантажено</div>
+              <img id="imageUrlPreviewImg" src="" alt="Plus Logo preview" style="max-width: 100%; display: none;" />
+              <div id="imageUrlPreviewEmpty" class="image-preview-empty">Фото не завантажено</div>
             </div>
           </div>
 

@@ -1146,10 +1146,14 @@ async function loadSavedValues() {
 
     imageUrlValue = formData.imageUrl;
 
+    // Show plus-logo image preview
     if (formData.imageUrl) {
-      const previewImg = document.getElementById('previewImageUpload');
-      if (previewImg) {
+      const previewImg = document.getElementById('imageUrlPreviewImg');
+      const previewEmpty = document.getElementById('imageUrlPreviewEmpty');
+      if (previewImg && previewEmpty) {
         previewImg.src = formData.imageUrl;
+        previewImg.style.display = 'block';
+        previewEmpty.style.display = 'none';
       }
     }
 
