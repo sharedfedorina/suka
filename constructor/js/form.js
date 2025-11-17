@@ -1130,7 +1130,16 @@ async function loadSavedValues() {
 
     uploadedHeroImageFilename = formData.heroImage;
 
-    showImagePreview(formData.heroImage);
+    // Show hero image preview
+    if (formData.heroImage) {
+      const previewImg = document.getElementById('heroImagePreviewImg');
+      const previewEmpty = document.getElementById('heroImagePreviewEmpty');
+      if (previewImg && previewEmpty) {
+        previewImg.src = formData.heroImage;
+        previewImg.style.display = 'block';
+        previewEmpty.style.display = 'none';
+      }
+    }
 
     safeSetChecked('enableImage', formData.enableImage);
 
