@@ -1,0 +1,130 @@
+{
+  "description": "Mapping between user-config.json parameters and template.ejs placeholders",
+  "mapping": {
+    "headerText": "{{headerText}}",
+    "heroTitle": "{{heroTitle}}",
+    "heroPrice": "{{heroPrice}}",
+    "hero.stock_count": "{{stockCount}}",
+
+    "benefits[0].title": "{{benefit1Title}}",
+    "benefits[0].description": "{{benefit1Description}}",
+    "benefits[1].title": "{{benefit2Title}}",
+    "benefits[1].description": "{{benefit2Description}}",
+    "benefits[2].title": "{{benefit3Title}}",
+    "benefits[2].description": "{{benefit3Description}}",
+    "benefits[3].title": "{{benefit4Title}}",
+    "benefits[3].description": "{{benefit4Description}}",
+    "benefits[4].title": "{{benefit5Title}}",
+    "benefits[4].description": "{{benefit5Description}}",
+
+    "imageUrl": "{{imageUrl}}",
+    "videoUrl": "{{videoUrl}}",
+    "videoThumbnailDesktop": "{{videoThumbnailDesktop}}",
+    "videoThumbnailMobile": "{{videoThumbnailMobile}}",
+
+    "product1Name": "{{product1Name}}",
+    "product1Color": "{{product1Color}}",
+    "product1ColorHex": "{{product1ColorHex}}",
+    "product1Size": "{{product1Size}}",
+    "product1Material": "{{product1Material}}",
+    "product1PriceOld": "{{product1PriceOld}}",
+    "product1Price": "{{product1Price}}",
+
+    "product2Name": "{{product2Name}}",
+    "product2Color": "{{product2Color}}",
+    "product2ColorHex": "{{product2ColorHex}}",
+    "product2Size": "{{product2Size}}",
+    "product2Material": "{{product2Material}}",
+    "product2PriceOld": "{{product2PriceOld}}",
+    "product2Price": "{{product2Price}}",
+
+    "product3Name": "{{product3Name}}",
+    "product3Color": "{{product3Color}}",
+    "product3ColorHex": "{{product3ColorHex}}",
+    "product3Size": "{{product3Size}}",
+    "product3Material": "{{product3Material}}",
+    "product3PriceOld": "{{product3PriceOld}}",
+    "product3Price": "{{product3Price}}",
+
+    "product4Name": "{{product4Name}}",
+    "product4Color": "{{product4Color}}",
+    "product4ColorHex": "{{product4ColorHex}}",
+    "product4Size": "{{product4Size}}",
+    "product4Material": "{{product4Material}}",
+    "product4PriceOld": "{{product4PriceOld}}",
+    "product4Price": "{{product4Price}}",
+
+    "product5Name": "{{product5Name}}",
+    "product5Color": "{{product5Color}}",
+    "product5ColorHex": "{{product5ColorHex}}",
+    "product5Size": "{{product5Size}}",
+    "product5Material": "{{product5Material}}",
+    "product5PriceOld": "{{product5PriceOld}}",
+    "product5Price": "{{product5Price}}",
+
+    "product8Name": "{{product8Name}}",
+    "product8Size": "{{product8Size}}",
+    "product8Material": "{{product8Material}}",
+    "product8PriceOld": "{{product8PriceOld}}",
+    "product8Price": "{{product8Price}}",
+
+    "product9Name": "{{product9Name}}",
+    "product9Size": "{{product9Size}}",
+    "product9Material": "{{product9Material}}",
+    "product9PriceOld": "{{product9PriceOld}}",
+    "product9Price": "{{product9Price}}",
+
+    "sizeChartImage": "{{sizeChartImage}}",
+
+    "infoBrandLabel": "{{infoBrandLabel}}",
+    "infoBrandValue": "{{infoBrandValue}}",
+    "infoModelLabel": "{{infoModelLabel}}",
+    "infoModelValue": "{{infoModelValue}}",
+    "infoQuantityLabel": "{{infoQuantityLabel}}",
+    "infoQuantityValue": "{{infoQuantityValue}}",
+    "infoColorsLabel": "{{infoColorsLabel}}",
+    "infoSizesLabel": "{{infoSizesLabel}}",
+    "infoSizesValue": "{{infoSizesValue}}",
+    "infoMaterialLabel": "{{infoMaterialLabel}}",
+    "infoMaterialValue": "{{infoMaterialValue}}",
+    "infoPackagingLabel": "{{infoPackagingLabel}}",
+    "infoPackagingValue": "{{infoPackagingValue}}",
+
+    "commentsLabel": "{{commentsLabel}}",
+    "commentsTitle": "{{commentsTitle}}",
+    "commentsSalesStat": "{{commentsSalesStat}}",
+    "commentsSalesText": "{{commentsSalesText}}",
+    "commentsSatisfiedStat": "{{commentsSatisfiedStat}}",
+    "commentsSatisfiedText": "{{commentsSatisfiedText}}",
+    "commentsRepeatStat": "{{commentsRepeatStat}}",
+    "commentsRepeatText": "{{commentsRepeatText}}",
+    "commentsButtonText": "{{commentsButtonText}}",
+
+    "faqLabel": "{{faqLabel}}",
+    "faqTitle": "{{faqTitle}}",
+
+    "howLabel": "{{howLabel}}",
+    "howTitle": "{{howTitle}}",
+
+    "requestInfoTitle": "{{requestInfoTitle}}",
+    "requestInfoDescription": "{{requestInfoDescription}}",
+    "requestNamePlaceholder": "{{requestNamePlaceholder}}",
+    "requestPhonePlaceholder": "{{requestPhonePlaceholder}}",
+    "requestButtonText": "{{requestButtonText}}"
+  },
+
+  "specialPlaceholders": {
+    "description": "These placeholders are generated dynamically, not directly from config",
+    "placeholders": [
+      "{{product1Slides}}",
+      "{{product2Slides}}",
+      "{{product3Slides}}",
+      "{{product4Slides}}",
+      "{{product5Slides}}",
+      "{{product8Slides}}",
+      "{{product9Slides}}",
+      "{{infoColorCircles}}",
+      "{{footerCopyright}}"
+    ]
+  }
+}
