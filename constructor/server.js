@@ -11,19 +11,20 @@ const PORT = 6614;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Для обробки form data
 
+// Disable caching for JS and HTML files in development
+app.use((req, res, next) => {
+  if (req.url.endsWith('.js') || req.url.endsWith('.html') || req.url === '/') {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    res.set('Surrogate-Control', 'no-store');
+  }
+  next();
+});
+
 // GET / - Сервірування конструктора з окремих файлів
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'form.html'));
-});
-
-// Disable caching for JS files in development
-app.use((req, res, next) => {
-  if (req.url.endsWith('.js')) {
-    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-    res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-  }
-  next();
 });
 
 app.use(express.static(__dirname, { index: false }));

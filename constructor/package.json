@@ -5,9 +5,10 @@
   "scripts": {
     "start": "nodemon server.js",
     "dev": "node server.js",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "npm run test:unit && npm run test:integration && npm run test:button",
     "test:unit": "node test-preview-function.js",
     "test:integration": "node test-preview-integration.js",
+    "test:button": "node test-actual-button-click.js",
     "test:watch": "nodemon --exec npm test"
   },
   "keywords": [],
