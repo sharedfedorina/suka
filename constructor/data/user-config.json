@@ -16,7 +16,7 @@
   "videoSectionLabel": "Відеоогляд",
   "videoSectionTitle": "Краще один раз побачити",
   "sizeChartImage": "/public/img/info/size-chart-1762721756678.png",
-  "sizeChartLabel": "Розмірна сітка",
+  "sizeChartLabel": "Розмірна сітка1",
   "sizeChartTitle": "Вагаєтесь з розміром?<br> ",
   "infoEnableBrand": true,
   "infoBrandLabel": "Бренд",
@@ -70,6 +70,11 @@
       "description": "Зроблено українцями для українців з коханням. "
     }
   ],
+  "productsSectionLabel": "Замовляйте зараз зі знижкою",
+  "productsSectionTitle": "Обирайте колір або <br> Свій набір футболок",
+  "productOrderButtonText": "ЗАМОВИТИ",
+  "actionChooseText": "Обирайте колір або набір",
+  "actionPromoText": "Діють акційні ціни!",
   "product1Name": "Худі на флісі БЕЖ",
   "product1Color": "Чорний",
   "product1ColorHex": "#a18368",
