@@ -1758,9 +1758,9 @@ function getFormParams() {
     console.log('✓ enableImage:', enableImage);
 
   const imageUrl = imageUrlValue;
-  const enableVideo = document.getElementById('enableVideo').checked ? 'on' : 'off';
+  const enableVideo = safeGetChecked('enableVideo', false) ? 'on' : 'off';
   const videoUrl = videoUrlValue;
-  const enableVideoThumbnail = document.getElementById('enableVideoThumbnail').checked ? 'on' : 'off';
+  const enableVideoThumbnail = safeGetChecked('enableVideoThumbnail', false) ? 'on' : 'off';
   const videoThumbnailDesktop = videoThumbnailDesktopValue;
   const videoThumbnailMobile = videoThumbnailMobileValue;
 
@@ -1827,26 +1827,26 @@ function getFormParams() {
     sizeChartImage: sizeChartImageValue,
 
     // Info list (product characteristics)
-    infoEnableBrand: document.getElementById('infoEnableBrand').checked ? 'on' : 'off',
-    infoBrandLabel: document.getElementById('infoBrandLabel').value,
-    infoBrandValue: document.getElementById('infoBrandValue').value,
-    infoEnableModel: document.getElementById('infoEnableModel').checked ? 'on' : 'off',
-    infoModelLabel: document.getElementById('infoModelLabel').value,
-    infoModelValue: document.getElementById('infoModelValue').value,
-    infoEnableQuantity: document.getElementById('infoEnableQuantity').checked ? 'on' : 'off',
-    infoQuantityLabel: document.getElementById('infoQuantityLabel').value,
-    infoQuantityValue: document.getElementById('infoQuantityValue').value,
-    infoEnableColors: document.getElementById('infoEnableColors').checked ? 'on' : 'off',
-    infoColorsLabel: document.getElementById('infoColorsLabel').value,
-    infoEnableSizes: document.getElementById('infoEnableSizes').checked ? 'on' : 'off',
-    infoSizesLabel: document.getElementById('infoSizesLabel').value,
-    infoSizesValue: document.getElementById('infoSizesValue').value,
-    infoEnableMaterial: document.getElementById('infoEnableMaterial').checked ? 'on' : 'off',
-    infoMaterialLabel: document.getElementById('infoMaterialLabel').value,
-    infoMaterialValue: document.getElementById('infoMaterialValue').value,
-    infoEnablePackaging: document.getElementById('infoEnablePackaging').checked ? 'on' : 'off',
-    infoPackagingLabel: document.getElementById('infoPackagingLabel').value,
-    infoPackagingValue: document.getElementById('infoPackagingValue').value,
+    infoEnableBrand: safeGetChecked('infoEnableBrand', false) ? 'on' : 'off',
+    infoBrandLabel: safeGetValue('infoBrandLabel', ''),
+    infoBrandValue: safeGetValue('infoBrandValue', ''),
+    infoEnableModel: safeGetChecked('infoEnableModel', false) ? 'on' : 'off',
+    infoModelLabel: safeGetValue('infoModelLabel', ''),
+    infoModelValue: safeGetValue('infoModelValue', ''),
+    infoEnableQuantity: safeGetChecked('infoEnableQuantity', false) ? 'on' : 'off',
+    infoQuantityLabel: safeGetValue('infoQuantityLabel', ''),
+    infoQuantityValue: safeGetValue('infoQuantityValue', ''),
+    infoEnableColors: safeGetChecked('infoEnableColors', false) ? 'on' : 'off',
+    infoColorsLabel: safeGetValue('infoColorsLabel', ''),
+    infoEnableSizes: safeGetChecked('infoEnableSizes', false) ? 'on' : 'off',
+    infoSizesLabel: safeGetValue('infoSizesLabel', ''),
+    infoSizesValue: safeGetValue('infoSizesValue', ''),
+    infoEnableMaterial: safeGetChecked('infoEnableMaterial', false) ? 'on' : 'off',
+    infoMaterialLabel: safeGetValue('infoMaterialLabel', ''),
+    infoMaterialValue: safeGetValue('infoMaterialValue', ''),
+    infoEnablePackaging: safeGetChecked('infoEnablePackaging', false) ? 'on' : 'off',
+    infoPackagingLabel: safeGetValue('infoPackagingLabel', ''),
+    infoPackagingValue: safeGetValue('infoPackagingValue', ''),
 
     benefits: JSON.stringify(benefits),
 
@@ -1866,7 +1866,7 @@ function getFormParams() {
 
     product1Price: document.getElementById('product1Price').value,
 
-    enableProduct1: document.getElementById('enableProduct1').checked ? 'on' : 'off',
+    enableProduct1: safeGetChecked('enableProduct1', false) ? 'on' : 'off',
 
     product2Name: document.getElementById('product2Name').value,
 
@@ -1882,7 +1882,7 @@ function getFormParams() {
 
     product2Price: document.getElementById('product2Price').value,
 
-    enableProduct2: document.getElementById('enableProduct2').checked ? 'on' : 'off',
+    enableProduct2: safeGetChecked('enableProduct2', false) ? 'on' : 'off',
 
     product3Name: document.getElementById('product3Name').value,
 
@@ -1898,7 +1898,7 @@ function getFormParams() {
 
     product3Price: document.getElementById('product3Price').value,
 
-    enableProduct3: document.getElementById('enableProduct3').checked ? 'on' : 'off',
+    enableProduct3: safeGetChecked('enableProduct3', false) ? 'on' : 'off',
 
     product4Name: document.getElementById('product4Name').value,
 
@@ -1914,7 +1914,7 @@ function getFormParams() {
 
     product4Price: document.getElementById('product4Price').value,
 
-    enableProduct4: document.getElementById('enableProduct4').checked ? 'on' : 'off',
+    enableProduct4: safeGetChecked('enableProduct4', false) ? 'on' : 'off',
 
     product5Name: document.getElementById('product5Name').value,
 
@@ -1930,7 +1930,7 @@ function getFormParams() {
 
     product5Price: document.getElementById('product5Price').value,
 
-    enableProduct5: document.getElementById('enableProduct5').checked ? 'on' : 'off',
+    enableProduct5: safeGetChecked('enableProduct5', false) ? 'on' : 'off',
 
     // Product images
 
@@ -1952,7 +1952,7 @@ function getFormParams() {
     product8Material: document.getElementById('product8Material').value,
     product8PriceOld: document.getElementById('product8PriceOld').value,
     product8Price: document.getElementById('product8Price').value,
-    enableProduct8: document.getElementById('enableProduct8').checked ? 'on' : 'off',
+    enableProduct8: safeGetChecked('enableProduct8', false) ? 'on' : 'off',
     product8Images: JSON.stringify(product8Images),
 
     product9Name: document.getElementById('product9Name').value,
@@ -1962,7 +1962,7 @@ function getFormParams() {
     product9Material: document.getElementById('product9Material').value,
     product9PriceOld: document.getElementById('product9PriceOld').value,
     product9Price: document.getElementById('product9Price').value,
-    enableProduct9: document.getElementById('enableProduct9').checked ? 'on' : 'off',
+    enableProduct9: safeGetChecked('enableProduct9', false) ? 'on' : 'off',
     product9Images: JSON.stringify(product9Images)
 
   });
