@@ -2052,3 +2052,104 @@ if (constructorFormEl) {
   });
 }
 
+// ============================================================================
+// ФУНКЦІЇ ЗБЕРЕЖЕННЯ ТА ЗАВАНТАЖЕННЯ КОНФІГУ
+// ============================================================================
+
+/**
+ * Зберігає поточну конфігурацію форми на сервер
+ */
+async function saveConfig() {
+  try {
+    console.log('💾 Збереження конфігу...');
+
+    const formData = getFormParams();
+    const configObject = {};
+
+    // Перетворюємо URLSearchParams в об'єкт
+    for (const [key, value] of formData.entries()) {
+      configObject[key] = value;
+    }
+
+    const response = await fetch('/api/save-config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(configObject)
+    });
+
+    if (!response.ok) {
+      throw new Error('Помилка збереження: ' + response.statusText);
+    }
+
+    const result = await response.json();
+    console.log('✅ Конфіг збережено успішно');
+    alert('✅ Конфігурацію збережено!');
+
+  } catch (error) {
+    console.error('❌ Помилка збереження:', error);
+    alert('❌ Помилка збереження конфігурації:\n\n' + error.message);
+  }
+}
+
+/**
+ * Завантажує останню збережену конфігурацію з сервера
+ */
+async function loadConfig() {
+  try {
+    console.log('📂 Завантаження конфігу...');
+
+    const response = await fetch('/api/get-user-config');
+
+    if (!response.ok) {
+      throw new Error('Помилка завантаження: ' + response.statusText);
+    }
+
+    const config = await response.json();
+    console.log('✅ Конфіг завантажено:', Object.keys(config).length, 'ключів');
+
+    // Заповнюємо форму даними з конфігу
+    fillFormWithConfig(config);
+
+    alert('✅ Конфігурацію завантажено!');
+
+  } catch (error) {
+    console.error('❌ Помилка завантаження:', error);
+    alert('❌ Помилка завантаження конфігурації:\n\n' + error.message);
+  }
+}
+
+/**
+ * Заповнює форму даними з конфігу
+ */
+function fillFormWithConfig(config) {
+  console.log('📝 Заповнення форми...');
+
+  // Проходимо по всіх ключах конфігу
+  for (const [key, value] of Object.entries(config)) {
+    const element = document.getElementById(key);
+
+    if (!element) {
+      continue; // Пропускаємо якщо елемент не знайдено
+    }
+
+    // Checkbox
+    if (element.type === 'checkbox') {
+      element.checked = value === true || value === 'true' || value === 'on';
+    }
+    // Radio
+    else if (element.type === 'radio') {
+      if (element.value === value) {
+        element.checked = true;
+      }
+    }
+    // Input, textarea, select
+    else {
+      element.value = value;
+    }
+  }
+
+  console.log('✅ Форму заповнено');
+}
+
