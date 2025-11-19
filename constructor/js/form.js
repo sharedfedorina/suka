@@ -2134,6 +2134,12 @@ function fillFormWithConfig(config) {
       continue; // Пропускаємо якщо елемент не знайдено
     }
 
+    // Пропускаємо file inputs (браузер забороняє встановлювати value програмно)
+    if (element.type === 'file') {
+      console.log('⏭️  Пропущено file input:', key);
+      continue;
+    }
+
     // Checkbox
     if (element.type === 'checkbox') {
       element.checked = value === true || value === 'true' || value === 'on';
@@ -2146,7 +2152,11 @@ function fillFormWithConfig(config) {
     }
     // Input, textarea, select
     else {
-      element.value = value;
+      try {
+        element.value = value;
+      } catch (err) {
+        console.warn('⚠️  Не вдалось встановити value для', key, ':', err.message);
+      }
     }
   }
 
