@@ -1,0 +1,56 @@
+        <!--reviews-->
+        {{#if enableReviews}}
+        <section class="section reviews">
+            <div class="container">
+                <span class="section-label">{{reviewsLabel}}</span>
+                <h2 class="section-title title-xl">{{reviewsTitle}}</h2>
+                <div class="reviews-wrap">
+                    {{#if review1Name}}
+                    <div class="review-item">
+                        <div class="review-image">
+                            <img src="{{review1Image}}" alt="{{review1Name}}">
+                        </div>
+                        <div class="review-content">
+                            <h3 class="review-name">{{review1Name}}</h3>
+                            <p class="review-text">{{review1Text}}</p>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{#if review2Name}}
+                    <div class="review-item">
+                        <div class="review-image">
+                            <img src="{{review2Image}}" alt="{{review2Name}}">
+                        </div>
+                        <div class="review-content">
+                            <h3 class="review-name">{{review2Name}}</h3>
+                            <p class="review-text">{{review2Text}}</p>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{#if review3Name}}
+                    <div class="review-item">
+                        <div class="review-image">
+                            <img src="{{review3Image}}" alt="{{review3Name}}">
+                        </div>
+                        <div class="review-content">
+                            <h3 class="review-name">{{review3Name}}</h3>
+                            <p class="review-text">{{review3Text}}</p>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{#if review4Name}}
+                    <div class="review-item">
+                        <div class="review-image">
+                            <img src="{{review4Image}}" alt="{{review4Name}}">
+                        </div>
+                        <div class="review-content">
+                            <h3 class="review-name">{{review4Name}}</h3>
+                            <p class="review-text">{{review4Text}}</p>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </section>
+        {{/if}}
+        <!--/reviews-->

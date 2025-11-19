@@ -1,0 +1,12 @@
+<!-- SalesDrive integration -->
+{{#if enableSalesDrive}}
+<script>
+// SalesDrive CRM integration
+window.salesDriveConfig = {
+    apiKey: '{{salesDriveApiKey}}',
+    streamId: '{{salesDriveStreamId}}',
+    offerId: '{{salesDriveOfferId}}',
+    webmasterId: '{{salesDriveWebmasterId}}'
+};
+</script>
+{{/if}}
