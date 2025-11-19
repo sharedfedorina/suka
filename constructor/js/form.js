@@ -1995,9 +1995,26 @@ async function previewLanding() {
     const params = new URLSearchParams(formDataString);
     const configObject = {};
 
-    // Перетворюємо URLSearchParams в об'єкт
+    // Перетворюємо URLSearchParams в об'єкт з правильними типами
     for (const [key, value] of params.entries()) {
-      configObject[key] = value;
+      // Конвертуємо 'on'/'off' в boolean
+      if (value === 'on') {
+        configObject[key] = true;
+      } else if (value === 'off') {
+        configObject[key] = false;
+      }
+      // Парсимо JSON для масивів
+      else if (value.startsWith('[') || value.startsWith('{')) {
+        try {
+          configObject[key] = JSON.parse(value);
+        } catch {
+          configObject[key] = value; // Якщо не вдалось парсити - залишаємо як string
+        }
+      }
+      // Інші значення залишаємо як string
+      else {
+        configObject[key] = value;
+      }
     }
 
     console.log('📊 Config object keys:', Object.keys(configObject).length);
@@ -2069,9 +2086,26 @@ async function saveConfig() {
     const params = new URLSearchParams(formDataString);
     const configObject = {};
 
-    // Перетворюємо URLSearchParams в об'єкт
+    // Перетворюємо URLSearchParams в об'єкт з правильними типами
     for (const [key, value] of params.entries()) {
-      configObject[key] = value;
+      // Конвертуємо 'on'/'off' в boolean
+      if (value === 'on') {
+        configObject[key] = true;
+      } else if (value === 'off') {
+        configObject[key] = false;
+      }
+      // Парсимо JSON для масивів
+      else if (value.startsWith('[') || value.startsWith('{')) {
+        try {
+          configObject[key] = JSON.parse(value);
+        } catch {
+          configObject[key] = value; // Якщо не вдалось парсити - залишаємо як string
+        }
+      }
+      // Інші значення залишаємо як string
+      else {
+        configObject[key] = value;
+      }
     }
 
     console.log('📊 Config object keys:', Object.keys(configObject).length);
