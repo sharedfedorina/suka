@@ -1981,60 +1981,57 @@ function getFormParams() {
 
 
 
-function previewSite() {
-  // Use POST instead of GET to avoid URL length limits
-  console.log('🔍 Preview button clicked');
+/**
+ * Відкриває preview згенерованого лендінгу в новій вкладці
+ */
+async function previewLanding() {
+  console.log('👁️ Preview landing button clicked');
 
   try {
-    console.log('📊 Step 1: Getting form params...');
-    const paramsString = getFormParams();
+    console.log('📊 Step 1: Saving config...');
 
-    if (!paramsString) {
-      throw new Error('getFormParams() повернув порожній результат');
+    // Спочатку зберігаємо поточну конфігурацію
+    const formData = getFormParams();
+    const configObject = {};
+
+    for (const [key, value] of formData.entries()) {
+      configObject[key] = value;
     }
 
-    console.log('✅ Step 1 OK: Form params length:', paramsString.length);
+    const saveResponse = await fetch('/api/save-config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(configObject)
+    });
 
-    console.log('📊 Step 2: Parsing URLSearchParams...');
-    const params = new URLSearchParams(paramsString);
-    const paramsCount = Array.from(params).length;
-    console.log('✅ Step 2 OK: Total params:', paramsCount);
-
-    if (paramsCount === 0) {
-      throw new Error('Немає параметрів для відправки');
+    if (!saveResponse.ok) {
+      throw new Error('Помилка збереження конфігу: ' + saveResponse.statusText);
     }
 
-    console.log('📊 Step 3: Creating form...');
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/generate';
-    form.target = '_blank';
-    form.style.display = 'none';
-    console.log('✅ Step 3 OK: Form created');
+    console.log('✅ Step 1 OK: Config saved');
 
-    console.log('📊 Step 4: Adding hidden inputs...');
-    let inputCount = 0;
-    for (const [key, value] of params) {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = value;
-      form.appendChild(input);
-      inputCount++;
-    }
-    console.log('✅ Step 4 OK: Added', inputCount, 'inputs');
+    console.log('📊 Step 2: Opening preview...');
 
-    console.log('📊 Step 5: Submitting form...');
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-    console.log('✅ Step 5 OK: Form submitted successfully!');
+    // Відкриваємо preview в новій вкладці
+    window.open('/api/preview', '_blank');
+
+    console.log('✅ Step 2 OK: Preview opened');
 
   } catch (error) {
     console.error('❌ ERROR:', error);
     console.error('❌ Stack:', error.stack);
-    alert('ПОМИЛКА:\n\n' + error.message + '\n\nДивись консоль (F12) для деталей');
+    alert('ПОМИЛКА PREVIEW:\n\n' + error.message + '\n\nДивись консоль (F12) для деталей');
   }
+}
+
+/**
+ * Legacy function - redirects to previewLanding
+ */
+function previewSite() {
+  console.warn('⚠️  previewSite() is deprecated, use previewLanding() instead');
+  previewLanding();
 }
 
 
