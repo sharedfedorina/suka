@@ -1,0 +1,25 @@
+# Environment variables (містять секретні ключі!)
+.env
+.env.local
+.env.production
+.env.development
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+server.log.out
+
+# Netlify
+.netlify/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+nul

@@ -99,10 +99,10 @@
 
     <!-- Кнопки керування збереженням (закріплені при скролінгу) -->
     <div class="buttons-management">
-      <button type="button" id="saveButton" class="button button-secondary" onclick="saveFormToServer()" style="flex: 1;" disabled title="Спочатку завантажте дані">
+      <button type="button" id="saveButton" class="button button-secondary" onclick="saveConfig()" style="flex: 1;">
         💾 Зберегти
       </button>
-      <button type="button" id="loadButton" class="button button-secondary" onclick="loadSavedValues()" style="flex: 1;">
+      <button type="button" id="loadButton" class="button button-secondary" onclick="loadConfig()" style="flex: 1;">
         📂 Завантажити останні зміни
       </button>
     </div>
@@ -128,7 +128,7 @@
 
       <!-- Action buttons -->
       <div class="buttons">
-        <button type="button" class="button button-secondary" onclick="previewSite()">
+        <button type="button" class="button button-secondary" onclick="previewLanding()">
           👁️ ПЕРЕГЛЯД
         </button>
         <button type="submit" class="button button-primary">
@@ -154,6 +154,11 @@
       }
 
       console.log('All sections loaded');
+
+      // Викликаємо loadConfig() ПІСЛЯ завантаження секцій
+      if (typeof loadConfig === 'function') {
+        loadConfig();
+      }
     }
 
     // Load sections when DOM is ready
@@ -279,8 +284,15 @@
         const result = await response.json();
         if (result.success) {
           document.getElementById('heroImage').value = result.filename;
-          const preview = document.getElementById('heroImagePreview');
-          preview.innerHTML = `<img src="${result.filename}" alt="Hero" />`;
+
+          const previewImg = document.getElementById('heroImagePreviewImg');
+          const previewEmpty = document.getElementById('heroImagePreviewEmpty');
+
+          if (previewImg && previewEmpty) {
+            previewImg.src = result.filename;
+            previewImg.style.display = 'block';
+            previewEmpty.style.display = 'none';
+          }
         }
       } catch (error) {
         console.error('Error uploading hero image:', error);

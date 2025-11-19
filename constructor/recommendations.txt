@@ -1,0 +1,10 @@
+
+// ДОДАТИ В КОНФІГ (для темплейтів):
+"product1Slides": "",
+"product2Slides": "",
+"product3Slides": "",
+"product4Slides": "",
+"product5Slides": "",
+"product8Slides": "",
+"product9Slides": "",
+"infoColorCircles": "",

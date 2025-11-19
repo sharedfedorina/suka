@@ -1,0 +1,62 @@
+        <!--start-->
+        <section class="section start">
+            <div class="container">
+                <div class="start-wrap">
+                    <div class="start-text">
+                        <div class="swiper start-tabs">
+                            <div class="swiper-wrapper">
+
+                            </div>
+                        </div>
+                        <h1 class="start-title title-xl">{{heroTitle}}</h1>
+                        <div class="start-info">
+                            <div class="start-price price">
+                                <span class="price-total">{{heroPrice}}</span>
+                            </div>
+                            <a href="#products" class="start-btn btn-one btn-scroll">ВИБРАТИ<span></span></a>
+                        </div>
+                        <!--timer-->
+                        {{#if enableTimer}}
+                        <div class="start-timer timer">
+                            <span class="timer-descr">{{timerText}}</span>
+                            <ul class="timer-list">
+                                <li class="timer-list_point timer-list_hours"></li>
+                                <li class="timer-list_point timer-list_minutes"></li>
+                                <li class="timer-list_point timer-list_seconds"></li>
+                            </ul>
+                        </div>
+                        {{/if}}
+                        <!--/timer-->
+                        <!--stock-->
+                        {{#if enableStock}}
+                        <span class="start-numbers">Залишилось <b>{{stockCount}}</b> футболок по акції</span>
+                        {{/if}}
+                        <!--/stock-->
+                    </div>
+                    <div class="swiper start-slider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide start-slide">
+                                <picture>
+                                    <source srcset="{{heroImage}}" media="(min-width: 800px)">
+                                    <img src="{{heroImage}}" alt="img">
+                                </picture>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="start-navigation">
+                        <button class="start-arrow start-prev">
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 7.5H2M2 7.5L8.5 1M2 7.5L8.5 14" stroke-width="2" />
+                            </svg>
+                        </button>
+                        <div class="swiper-pagination start-fraction"></div>
+                        <button class="start-arrow start-next">
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 7.5H13M13 7.5L6.5 1M13 7.5L6.5 14" stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--/start-->

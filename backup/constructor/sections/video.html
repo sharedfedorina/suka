@@ -1,0 +1,71 @@
+      <details class="form-section">
+        <summary class="form-section-header">📹 Відео та мініатюра</summary>
+        <div class="form-section-content">
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+            <input
+              type="checkbox"
+              id="enableVideo"
+              name="enableVideo"
+              style="width: auto; margin: 0;"
+            />
+            <label for="enableVideo" style="margin: 0;">Показувати відео блок</label>
+          </div>
+
+          <div class="form-group">
+            <label for="videoUpload">📹 Завантажити відео</label>
+            <input type="file" id="videoUpload" name="videoUpload" accept="video/*" />
+            <input type="hidden" id="videoUrl" name="videoUrl" value="" />
+            <small class="helper-text">Відео у форматі MP4 (до 50MB)</small>
+            <div id="videoUploadPreview" style="display: none;" class="image-preview">
+              <video id="previewVideoUpload" controls muted playsinline preload="metadata" style="max-width: 100%; max-height: 300px; border-radius: 6px;"></video>
+              <p id="videoUploadStatus" style="margin: 8px 0 0; font-size: 0.9em; color: #2c3e50;"></p>
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+            <input
+              type="checkbox"
+              id="enableVideoThumbnail"
+              name="enableVideoThumbnail"
+              style="width: auto; margin: 0;"
+            />
+            <label for="enableVideoThumbnail" style="margin: 0;">Використовувати прев'ю для відео</label>
+          </div>
+
+          <div class="form-group">
+            <label for="videoThumbnailUpload">🖼️ Завантажити прев'ю відео</label>
+            <input type="file" id="videoThumbnailUpload" name="videoThumbnailUpload" accept="image/*" />
+            <input type="hidden" id="videoThumbnailDesktop" name="videoThumbnailDesktop" value="" />
+            <input type="hidden" id="videoThumbnailMobile" name="videoThumbnailMobile" value="" />
+            <small class="helper-text">Зображення-прев'ю перед запуском відео</small>
+            <div id="videoThumbnailPreview" class="image-preview">
+              <img id="videoThumbnailPreviewImg" src="" alt="Video Thumbnail preview" style="max-width: 100%; display: none;" />
+              <div id="videoThumbnailPreviewEmpty" class="image-preview-empty">Прев'ю не завантажено</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="videoSectionLabel">Мітка секції відео</label>
+            <input
+              type="text"
+              id="videoSectionLabel"
+              name="videoSectionLabel"
+              value="Відеоогляд"
+              placeholder="Напр.: Відеоогляд"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="videoSectionTitle">Заголовок секції відео</label>
+            <input
+              type="text"
+              id="videoSectionTitle"
+              name="videoSectionTitle"
+              value="Краще один раз побачити"
+              placeholder="Напр.: Краще один раз побачити"
+            />
+          </div>
+
+        </div>
+      </details>

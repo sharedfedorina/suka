@@ -1,0 +1,1399 @@
+{
+  "generatedAt": "2025-11-17T18:36:11.835Z",
+  "summary": {
+    "total": 210,
+    "existing": 95,
+    "missing": 115,
+    "percentage_missing": "54.8%"
+  },
+  "categories": {
+    "Meta/SEO": {
+      "count": 2,
+      "priority": "HIGH",
+      "items": [
+        {
+          "configKey": "page.title",
+          "placeholder": "{{pageTitle}}"
+        },
+        {
+          "configKey": "page.description",
+          "placeholder": "{{pageDescription}}"
+        }
+      ]
+    },
+    "Hero Section": {
+      "count": 3,
+      "priority": "HIGH",
+      "items": [
+        {
+          "configKey": "hero.stock_count",
+          "placeholder": "{{heroStock_count}}"
+        },
+        {
+          "configKey": "heroButtonText",
+          "placeholder": "{{heroButtonText}}"
+        },
+        {
+          "configKey": "heroImage",
+          "placeholder": "{{heroImage}}"
+        }
+      ]
+    },
+    "Video Section": {
+      "count": 4,
+      "priority": "MEDIUM",
+      "items": [
+        {
+          "configKey": "enableVideo",
+          "placeholder": "{{enableVideo}}"
+        },
+        {
+          "configKey": "enableVideoThumbnail",
+          "placeholder": "{{enableVideoThumbnail}}"
+        },
+        {
+          "configKey": "videoSectionLabel",
+          "placeholder": "{{videoSectionLabel}}"
+        },
+        {
+          "configKey": "videoSectionTitle",
+          "placeholder": "{{videoSectionTitle}}"
+        }
+      ]
+    },
+    "Products Section": {
+      "count": 4,
+      "priority": "HIGH",
+      "items": [
+        {
+          "configKey": "productsSectionLabel",
+          "placeholder": "{{productsSectionLabel}}"
+        },
+        {
+          "configKey": "productsSectionTitle",
+          "placeholder": "{{productsSectionTitle}}"
+        },
+        {
+          "configKey": "actionChooseText",
+          "placeholder": "{{actionChooseText}}"
+        },
+        {
+          "configKey": "actionPromoText",
+          "placeholder": "{{actionPromoText}}"
+        }
+      ]
+    },
+    "Size Chart": {
+      "count": 2,
+      "priority": "MEDIUM",
+      "items": [
+        {
+          "configKey": "sizeChartLabel",
+          "placeholder": "{{sizeChartLabel}}"
+        },
+        {
+          "configKey": "sizeChartTitle",
+          "placeholder": "{{sizeChartTitle}}"
+        }
+      ]
+    },
+    "Tabs Section": {
+      "count": 14,
+      "priority": "MEDIUM",
+      "items": [
+        {
+          "configKey": "tabsLabel",
+          "placeholder": "{{tabsLabel}}"
+        },
+        {
+          "configKey": "tabsTitle",
+          "placeholder": "{{tabsTitle}}"
+        },
+        {
+          "configKey": "tab1Title",
+          "placeholder": "{{tab1Title}}"
+        },
+        {
+          "configKey": "tab1Description",
+          "placeholder": "{{tab1Description}}"
+        },
+        {
+          "configKey": "tab1ImageDesktop",
+          "placeholder": "{{tab1ImageDesktop}}"
+        },
+        {
+          "configKey": "tab1ImageMobile",
+          "placeholder": "{{tab1ImageMobile}}"
+        },
+        {
+          "configKey": "tab2Title",
+          "placeholder": "{{tab2Title}}"
+        },
+        {
+          "configKey": "tab2Description",
+          "placeholder": "{{tab2Description}}"
+        },
+        {
+          "configKey": "tab2ImageDesktop",
+          "placeholder": "{{tab2ImageDesktop}}"
+        },
+        {
+          "configKey": "tab2ImageMobile",
+          "placeholder": "{{tab2ImageMobile}}"
+        },
+        {
+          "configKey": "tab3Title",
+          "placeholder": "{{tab3Title}}"
+        },
+        {
+          "configKey": "tab3Description",
+          "placeholder": "{{tab3Description}}"
+        },
+        {
+          "configKey": "tab3ImageDesktop",
+          "placeholder": "{{tab3ImageDesktop}}"
+        },
+        {
+          "configKey": "tab3ImageMobile",
+          "placeholder": "{{tab3ImageMobile}}"
+        }
+      ]
+    },
+    "Reviews Section": {
+      "count": 15,
+      "priority": "LOW",
+      "items": [
+        {
+          "configKey": "enableReviews",
+          "placeholder": "{{enableReviews}}"
+        },
+        {
+          "configKey": "reviewsLabel",
+          "placeholder": "{{reviewsLabel}}"
+        },
+        {
+          "configKey": "reviewsTitle",
+          "placeholder": "{{reviewsTitle}}"
+        },
+        {
+          "configKey": "review1Name",
+          "placeholder": "{{review1Name}}"
+        },
+        {
+          "configKey": "review1Text",
+          "placeholder": "{{review1Text}}"
+        },
+        {
+          "configKey": "review1Image",
+          "placeholder": "{{review1Image}}"
+        },
+        {
+          "configKey": "review2Name",
+          "placeholder": "{{review2Name}}"
+        },
+        {
+          "configKey": "review2Text",
+          "placeholder": "{{review2Text}}"
+        },
+        {
+          "configKey": "review2Image",
+          "placeholder": "{{review2Image}}"
+        },
+        {
+          "configKey": "review3Name",
+          "placeholder": "{{review3Name}}"
+        },
+        {
+          "configKey": "review3Text",
+          "placeholder": "{{review3Text}}"
+        },
+        {
+          "configKey": "review3Image",
+          "placeholder": "{{review3Image}}"
+        },
+        {
+          "configKey": "review4Name",
+          "placeholder": "{{review4Name}}"
+        },
+        {
+          "configKey": "review4Text",
+          "placeholder": "{{review4Text}}"
+        },
+        {
+          "configKey": "review4Image",
+          "placeholder": "{{review4Image}}"
+        }
+      ]
+    },
+    "FAQ Section": {
+      "count": 9,
+      "priority": "MEDIUM",
+      "items": [
+        {
+          "configKey": "enableFaq",
+          "placeholder": "{{enableFaq}}"
+        },
+        {
+          "configKey": "faq1Question",
+          "placeholder": "{{faq1Question}}"
+        },
+        {
+          "configKey": "faq1Answer",
+          "placeholder": "{{faq1Answer}}"
+        },
+        {
+          "configKey": "faq2Question",
+          "placeholder": "{{faq2Question}}"
+        },
+        {
+          "configKey": "faq2Answer",
+          "placeholder": "{{faq2Answer}}"
+        },
+        {
+          "configKey": "faq3Question",
+          "placeholder": "{{faq3Question}}"
+        },
+        {
+          "configKey": "faq3Answer",
+          "placeholder": "{{faq3Answer}}"
+        },
+        {
+          "configKey": "faq4Question",
+          "placeholder": "{{faq4Question}}"
+        },
+        {
+          "configKey": "faq4Answer",
+          "placeholder": "{{faq4Answer}}"
+        }
+      ]
+    },
+    "How To Buy Section": {
+      "count": 5,
+      "priority": "MEDIUM",
+      "items": [
+        {
+          "configKey": "enableHow",
+          "placeholder": "{{enableHow}}"
+        },
+        {
+          "configKey": "howStep1",
+          "placeholder": "{{howStep1}}"
+        },
+        {
+          "configKey": "howStep2",
+          "placeholder": "{{howStep2}}"
+        },
+        {
+          "configKey": "howStep3",
+          "placeholder": "{{howStep3}}"
+        },
+        {
+          "configKey": "howStep4",
+          "placeholder": "{{howStep4}}"
+        }
+      ]
+    },
+    "Request Form": {
+      "count": 6,
+      "priority": "HIGH",
+      "items": [
+        {
+          "configKey": "enableRequest",
+          "placeholder": "{{enableRequest}}"
+        },
+        {
+          "configKey": "requestTitle",
+          "placeholder": "{{requestTitle}}"
+        },
+        {
+          "configKey": "requestTimerText",
+          "placeholder": "{{requestTimerText}}"
+        },
+        {
+          "configKey": "requestPhoneFormat",
+          "placeholder": "{{requestPhoneFormat}}"
+        },
+        {
+          "configKey": "requestStockPrefix",
+          "placeholder": "{{requestStockPrefix}}"
+        },
+        {
+          "configKey": "requestStockSuffix",
+          "placeholder": "{{requestStockSuffix}}"
+        }
+      ]
+    },
+    "Enable Flags": {
+      "count": 23,
+      "priority": "LOW",
+      "items": [
+        {
+          "configKey": "enableTimer",
+          "placeholder": "{{enableTimer}}"
+        },
+        {
+          "configKey": "enableStock",
+          "placeholder": "{{enableStock}}"
+        },
+        {
+          "configKey": "enableImage",
+          "placeholder": "{{enableImage}}"
+        },
+        {
+          "configKey": "infoEnableBrand",
+          "placeholder": "{{infoEnableBrand}}"
+        },
+        {
+          "configKey": "infoEnableModel",
+          "placeholder": "{{infoEnableModel}}"
+        },
+        {
+          "configKey": "infoEnableQuantity",
+          "placeholder": "{{infoEnableQuantity}}"
+        },
+        {
+          "configKey": "infoEnableColors",
+          "placeholder": "{{infoEnableColors}}"
+        },
+        {
+          "configKey": "infoEnableSizes",
+          "placeholder": "{{infoEnableSizes}}"
+        },
+        {
+          "configKey": "infoEnableMaterial",
+          "placeholder": "{{infoEnableMaterial}}"
+        },
+        {
+          "configKey": "infoEnablePackaging",
+          "placeholder": "{{infoEnablePackaging}}"
+        },
+        {
+          "configKey": "enableProduct1",
+          "placeholder": "{{enableProduct1}}"
+        },
+        {
+          "configKey": "enableProduct2",
+          "placeholder": "{{enableProduct2}}"
+        },
+        {
+          "configKey": "enableProduct3",
+          "placeholder": "{{enableProduct3}}"
+        },
+        {
+          "configKey": "enableProduct4",
+          "placeholder": "{{enableProduct4}}"
+        },
+        {
+          "configKey": "enableProduct5",
+          "placeholder": "{{enableProduct5}}"
+        },
+        {
+          "configKey": "enableProduct8",
+          "placeholder": "{{enableProduct8}}"
+        },
+        {
+          "configKey": "enableProduct9",
+          "placeholder": "{{enableProduct9}}"
+        },
+        {
+          "configKey": "enableTabs",
+          "placeholder": "{{enableTabs}}"
+        },
+        {
+          "configKey": "enableTabItem1",
+          "placeholder": "{{enableTabItem1}}"
+        },
+        {
+          "configKey": "enableTabItem2",
+          "placeholder": "{{enableTabItem2}}"
+        },
+        {
+          "configKey": "enableTabItem3",
+          "placeholder": "{{enableTabItem3}}"
+        },
+        {
+          "configKey": "enableSalesDrive",
+          "placeholder": "{{enableSalesDrive}}"
+        },
+        {
+          "configKey": "enableComments",
+          "placeholder": "{{enableComments}}"
+        }
+      ]
+    },
+    "Benefits": {
+      "count": 10,
+      "priority": "LOW",
+      "items": [
+        {
+          "configKey": "benefits[0].id",
+          "placeholder": "{{benefit1Id}}"
+        },
+        {
+          "configKey": "benefits[0].enabled",
+          "placeholder": "{{benefit1Enabled}}"
+        },
+        {
+          "configKey": "benefits[1].id",
+          "placeholder": "{{benefit2Id}}"
+        },
+        {
+          "configKey": "benefits[1].enabled",
+          "placeholder": "{{benefit2Enabled}}"
+        },
+        {
+          "configKey": "benefits[2].id",
+          "placeholder": "{{benefit3Id}}"
+        },
+        {
+          "configKey": "benefits[2].enabled",
+          "placeholder": "{{benefit3Enabled}}"
+        },
+        {
+          "configKey": "benefits[3].id",
+          "placeholder": "{{benefit4Id}}"
+        },
+        {
+          "configKey": "benefits[3].enabled",
+          "placeholder": "{{benefit4Enabled}}"
+        },
+        {
+          "configKey": "benefits[4].id",
+          "placeholder": "{{benefit5Id}}"
+        },
+        {
+          "configKey": "benefits[4].enabled",
+          "placeholder": "{{benefit5Enabled}}"
+        }
+      ]
+    },
+    "Product Images": {
+      "count": 9,
+      "priority": "LOW",
+      "items": [
+        {
+          "configKey": "product1Images[0]",
+          "placeholder": "{{product1Images}}"
+        },
+        {
+          "configKey": "product1Images[1]",
+          "placeholder": "{{product1Images}}"
+        },
+        {
+          "configKey": "product1Images[2]",
+          "placeholder": "{{product1Images}}"
+        },
+        {
+          "configKey": "product1Images[3]",
+          "placeholder": "{{product1Images}}"
+        },
+        {
+          "configKey": "product2Images[0]",
+          "placeholder": "{{product2Images}}"
+        },
+        {
+          "configKey": "product2Images[1]",
+          "placeholder": "{{product2Images}}"
+        },
+        {
+          "configKey": "product2Images[2]",
+          "placeholder": "{{product2Images}}"
+        },
+        {
+          "configKey": "product2Images[3]",
+          "placeholder": "{{product2Images}}"
+        },
+        {
+          "configKey": "product8Images[0]",
+          "placeholder": "{{product8Images}}"
+        }
+      ]
+    },
+    "Other": {
+      "count": 9,
+      "priority": "LOW",
+      "items": [
+        {
+          "configKey": "productOrderButtonText",
+          "placeholder": "{{productOrderButtonText}}"
+        },
+        {
+          "configKey": "product8Color",
+          "placeholder": "{{product8Color}}"
+        },
+        {
+          "configKey": "product8ColorHex",
+          "placeholder": "{{product8ColorHex}}"
+        },
+        {
+          "configKey": "product9Color",
+          "placeholder": "{{product9Color}}"
+        },
+        {
+          "configKey": "product9ColorHex",
+          "placeholder": "{{product9ColorHex}}"
+        },
+        {
+          "configKey": "salesDriveApiKey",
+          "placeholder": "{{salesDriveApiKey}}"
+        },
+        {
+          "configKey": "salesDriveStreamId",
+          "placeholder": "{{salesDriveStreamId}}"
+        },
+        {
+          "configKey": "salesDriveOfferId",
+          "placeholder": "{{salesDriveOfferId}}"
+        },
+        {
+          "configKey": "salesDriveWebmasterId",
+          "placeholder": "{{salesDriveWebmasterId}}"
+        }
+      ]
+    }
+  },
+  "missingPlaceholders": [
+    {
+      "configKey": "page.title",
+      "placeholder": "{{pageTitle}}"
+    },
+    {
+      "configKey": "page.description",
+      "placeholder": "{{pageDescription}}"
+    },
+    {
+      "configKey": "hero.stock_count",
+      "placeholder": "{{heroStock_count}}"
+    },
+    {
+      "configKey": "heroButtonText",
+      "placeholder": "{{heroButtonText}}"
+    },
+    {
+      "configKey": "enableTimer",
+      "placeholder": "{{enableTimer}}"
+    },
+    {
+      "configKey": "enableStock",
+      "placeholder": "{{enableStock}}"
+    },
+    {
+      "configKey": "heroImage",
+      "placeholder": "{{heroImage}}"
+    },
+    {
+      "configKey": "enableImage",
+      "placeholder": "{{enableImage}}"
+    },
+    {
+      "configKey": "enableVideo",
+      "placeholder": "{{enableVideo}}"
+    },
+    {
+      "configKey": "enableVideoThumbnail",
+      "placeholder": "{{enableVideoThumbnail}}"
+    },
+    {
+      "configKey": "videoSectionLabel",
+      "placeholder": "{{videoSectionLabel}}"
+    },
+    {
+      "configKey": "videoSectionTitle",
+      "placeholder": "{{videoSectionTitle}}"
+    },
+    {
+      "configKey": "sizeChartLabel",
+      "placeholder": "{{sizeChartLabel}}"
+    },
+    {
+      "configKey": "sizeChartTitle",
+      "placeholder": "{{sizeChartTitle}}"
+    },
+    {
+      "configKey": "infoEnableBrand",
+      "placeholder": "{{infoEnableBrand}}"
+    },
+    {
+      "configKey": "infoEnableModel",
+      "placeholder": "{{infoEnableModel}}"
+    },
+    {
+      "configKey": "infoEnableQuantity",
+      "placeholder": "{{infoEnableQuantity}}"
+    },
+    {
+      "configKey": "infoEnableColors",
+      "placeholder": "{{infoEnableColors}}"
+    },
+    {
+      "configKey": "infoEnableSizes",
+      "placeholder": "{{infoEnableSizes}}"
+    },
+    {
+      "configKey": "infoEnableMaterial",
+      "placeholder": "{{infoEnableMaterial}}"
+    },
+    {
+      "configKey": "infoEnablePackaging",
+      "placeholder": "{{infoEnablePackaging}}"
+    },
+    {
+      "configKey": "benefits[0].id",
+      "placeholder": "{{benefit1Id}}"
+    },
+    {
+      "configKey": "benefits[0].enabled",
+      "placeholder": "{{benefit1Enabled}}"
+    },
+    {
+      "configKey": "benefits[1].id",
+      "placeholder": "{{benefit2Id}}"
+    },
+    {
+      "configKey": "benefits[1].enabled",
+      "placeholder": "{{benefit2Enabled}}"
+    },
+    {
+      "configKey": "benefits[2].id",
+      "placeholder": "{{benefit3Id}}"
+    },
+    {
+      "configKey": "benefits[2].enabled",
+      "placeholder": "{{benefit3Enabled}}"
+    },
+    {
+      "configKey": "benefits[3].id",
+      "placeholder": "{{benefit4Id}}"
+    },
+    {
+      "configKey": "benefits[3].enabled",
+      "placeholder": "{{benefit4Enabled}}"
+    },
+    {
+      "configKey": "benefits[4].id",
+      "placeholder": "{{benefit5Id}}"
+    },
+    {
+      "configKey": "benefits[4].enabled",
+      "placeholder": "{{benefit5Enabled}}"
+    },
+    {
+      "configKey": "productsSectionLabel",
+      "placeholder": "{{productsSectionLabel}}"
+    },
+    {
+      "configKey": "productsSectionTitle",
+      "placeholder": "{{productsSectionTitle}}"
+    },
+    {
+      "configKey": "productOrderButtonText",
+      "placeholder": "{{productOrderButtonText}}"
+    },
+    {
+      "configKey": "actionChooseText",
+      "placeholder": "{{actionChooseText}}"
+    },
+    {
+      "configKey": "actionPromoText",
+      "placeholder": "{{actionPromoText}}"
+    },
+    {
+      "configKey": "enableProduct1",
+      "placeholder": "{{enableProduct1}}"
+    },
+    {
+      "configKey": "enableProduct2",
+      "placeholder": "{{enableProduct2}}"
+    },
+    {
+      "configKey": "enableProduct3",
+      "placeholder": "{{enableProduct3}}"
+    },
+    {
+      "configKey": "enableProduct4",
+      "placeholder": "{{enableProduct4}}"
+    },
+    {
+      "configKey": "enableProduct5",
+      "placeholder": "{{enableProduct5}}"
+    },
+    {
+      "configKey": "product1Images[0]",
+      "placeholder": "{{product1Images}}"
+    },
+    {
+      "configKey": "product1Images[1]",
+      "placeholder": "{{product1Images}}"
+    },
+    {
+      "configKey": "product1Images[2]",
+      "placeholder": "{{product1Images}}"
+    },
+    {
+      "configKey": "product1Images[3]",
+      "placeholder": "{{product1Images}}"
+    },
+    {
+      "configKey": "product2Images[0]",
+      "placeholder": "{{product2Images}}"
+    },
+    {
+      "configKey": "product2Images[1]",
+      "placeholder": "{{product2Images}}"
+    },
+    {
+      "configKey": "product2Images[2]",
+      "placeholder": "{{product2Images}}"
+    },
+    {
+      "configKey": "product2Images[3]",
+      "placeholder": "{{product2Images}}"
+    },
+    {
+      "configKey": "product8Color",
+      "placeholder": "{{product8Color}}"
+    },
+    {
+      "configKey": "product8ColorHex",
+      "placeholder": "{{product8ColorHex}}"
+    },
+    {
+      "configKey": "enableProduct8",
+      "placeholder": "{{enableProduct8}}"
+    },
+    {
+      "configKey": "product8Images[0]",
+      "placeholder": "{{product8Images}}"
+    },
+    {
+      "configKey": "product9Color",
+      "placeholder": "{{product9Color}}"
+    },
+    {
+      "configKey": "product9ColorHex",
+      "placeholder": "{{product9ColorHex}}"
+    },
+    {
+      "configKey": "enableProduct9",
+      "placeholder": "{{enableProduct9}}"
+    },
+    {
+      "configKey": "enableTabs",
+      "placeholder": "{{enableTabs}}"
+    },
+    {
+      "configKey": "tabsLabel",
+      "placeholder": "{{tabsLabel}}"
+    },
+    {
+      "configKey": "tabsTitle",
+      "placeholder": "{{tabsTitle}}"
+    },
+    {
+      "configKey": "enableTabItem1",
+      "placeholder": "{{enableTabItem1}}"
+    },
+    {
+      "configKey": "tab1Title",
+      "placeholder": "{{tab1Title}}"
+    },
+    {
+      "configKey": "tab1Description",
+      "placeholder": "{{tab1Description}}"
+    },
+    {
+      "configKey": "tab1ImageDesktop",
+      "placeholder": "{{tab1ImageDesktop}}"
+    },
+    {
+      "configKey": "tab1ImageMobile",
+      "placeholder": "{{tab1ImageMobile}}"
+    },
+    {
+      "configKey": "enableTabItem2",
+      "placeholder": "{{enableTabItem2}}"
+    },
+    {
+      "configKey": "tab2Title",
+      "placeholder": "{{tab2Title}}"
+    },
+    {
+      "configKey": "tab2Description",
+      "placeholder": "{{tab2Description}}"
+    },
+    {
+      "configKey": "tab2ImageDesktop",
+      "placeholder": "{{tab2ImageDesktop}}"
+    },
+    {
+      "configKey": "tab2ImageMobile",
+      "placeholder": "{{tab2ImageMobile}}"
+    },
+    {
+      "configKey": "enableTabItem3",
+      "placeholder": "{{enableTabItem3}}"
+    },
+    {
+      "configKey": "tab3Title",
+      "placeholder": "{{tab3Title}}"
+    },
+    {
+      "configKey": "tab3Description",
+      "placeholder": "{{tab3Description}}"
+    },
+    {
+      "configKey": "tab3ImageDesktop",
+      "placeholder": "{{tab3ImageDesktop}}"
+    },
+    {
+      "configKey": "tab3ImageMobile",
+      "placeholder": "{{tab3ImageMobile}}"
+    },
+    {
+      "configKey": "enableSalesDrive",
+      "placeholder": "{{enableSalesDrive}}"
+    },
+    {
+      "configKey": "salesDriveApiKey",
+      "placeholder": "{{salesDriveApiKey}}"
+    },
+    {
+      "configKey": "salesDriveStreamId",
+      "placeholder": "{{salesDriveStreamId}}"
+    },
+    {
+      "configKey": "salesDriveOfferId",
+      "placeholder": "{{salesDriveOfferId}}"
+    },
+    {
+      "configKey": "salesDriveWebmasterId",
+      "placeholder": "{{salesDriveWebmasterId}}"
+    },
+    {
+      "configKey": "enableComments",
+      "placeholder": "{{enableComments}}"
+    },
+    {
+      "configKey": "enableReviews",
+      "placeholder": "{{enableReviews}}"
+    },
+    {
+      "configKey": "enableFaq",
+      "placeholder": "{{enableFaq}}"
+    },
+    {
+      "configKey": "enableHow",
+      "placeholder": "{{enableHow}}"
+    },
+    {
+      "configKey": "enableRequest",
+      "placeholder": "{{enableRequest}}"
+    },
+    {
+      "configKey": "reviewsLabel",
+      "placeholder": "{{reviewsLabel}}"
+    },
+    {
+      "configKey": "reviewsTitle",
+      "placeholder": "{{reviewsTitle}}"
+    },
+    {
+      "configKey": "review1Name",
+      "placeholder": "{{review1Name}}"
+    },
+    {
+      "configKey": "review1Text",
+      "placeholder": "{{review1Text}}"
+    },
+    {
+      "configKey": "review1Image",
+      "placeholder": "{{review1Image}}"
+    },
+    {
+      "configKey": "review2Name",
+      "placeholder": "{{review2Name}}"
+    },
+    {
+      "configKey": "review2Text",
+      "placeholder": "{{review2Text}}"
+    },
+    {
+      "configKey": "review2Image",
+      "placeholder": "{{review2Image}}"
+    },
+    {
+      "configKey": "review3Name",
+      "placeholder": "{{review3Name}}"
+    },
+    {
+      "configKey": "review3Text",
+      "placeholder": "{{review3Text}}"
+    },
+    {
+      "configKey": "review3Image",
+      "placeholder": "{{review3Image}}"
+    },
+    {
+      "configKey": "review4Name",
+      "placeholder": "{{review4Name}}"
+    },
+    {
+      "configKey": "review4Text",
+      "placeholder": "{{review4Text}}"
+    },
+    {
+      "configKey": "review4Image",
+      "placeholder": "{{review4Image}}"
+    },
+    {
+      "configKey": "faq1Question",
+      "placeholder": "{{faq1Question}}"
+    },
+    {
+      "configKey": "faq1Answer",
+      "placeholder": "{{faq1Answer}}"
+    },
+    {
+      "configKey": "faq2Question",
+      "placeholder": "{{faq2Question}}"
+    },
+    {
+      "configKey": "faq2Answer",
+      "placeholder": "{{faq2Answer}}"
+    },
+    {
+      "configKey": "faq3Question",
+      "placeholder": "{{faq3Question}}"
+    },
+    {
+      "configKey": "faq3Answer",
+      "placeholder": "{{faq3Answer}}"
+    },
+    {
+      "configKey": "faq4Question",
+      "placeholder": "{{faq4Question}}"
+    },
+    {
+      "configKey": "faq4Answer",
+      "placeholder": "{{faq4Answer}}"
+    },
+    {
+      "configKey": "howStep1",
+      "placeholder": "{{howStep1}}"
+    },
+    {
+      "configKey": "howStep2",
+      "placeholder": "{{howStep2}}"
+    },
+    {
+      "configKey": "howStep3",
+      "placeholder": "{{howStep3}}"
+    },
+    {
+      "configKey": "howStep4",
+      "placeholder": "{{howStep4}}"
+    },
+    {
+      "configKey": "requestTitle",
+      "placeholder": "{{requestTitle}}"
+    },
+    {
+      "configKey": "requestTimerText",
+      "placeholder": "{{requestTimerText}}"
+    },
+    {
+      "configKey": "requestPhoneFormat",
+      "placeholder": "{{requestPhoneFormat}}"
+    },
+    {
+      "configKey": "requestStockPrefix",
+      "placeholder": "{{requestStockPrefix}}"
+    },
+    {
+      "configKey": "requestStockSuffix",
+      "placeholder": "{{requestStockSuffix}}"
+    }
+  ],
+  "existingPlaceholders": [
+    {
+      "configKey": "hero.price",
+      "placeholder": "{{heroPrice}}"
+    },
+    {
+      "configKey": "headerText",
+      "placeholder": "{{headerText}}"
+    },
+    {
+      "configKey": "heroTitle",
+      "placeholder": "{{heroTitle}}"
+    },
+    {
+      "configKey": "heroPrice",
+      "placeholder": "{{heroPrice}}"
+    },
+    {
+      "configKey": "imageUrl",
+      "placeholder": "{{imageUrl}}"
+    },
+    {
+      "configKey": "videoUrl",
+      "placeholder": "{{videoUrl}}"
+    },
+    {
+      "configKey": "videoThumbnailDesktop",
+      "placeholder": "{{videoThumbnailDesktop}}"
+    },
+    {
+      "configKey": "videoThumbnailMobile",
+      "placeholder": "{{videoThumbnailMobile}}"
+    },
+    {
+      "configKey": "sizeChartImage",
+      "placeholder": "{{sizeChartImage}}"
+    },
+    {
+      "configKey": "infoBrandLabel",
+      "placeholder": "{{infoBrandLabel}}"
+    },
+    {
+      "configKey": "infoBrandValue",
+      "placeholder": "{{infoBrandValue}}"
+    },
+    {
+      "configKey": "infoModelLabel",
+      "placeholder": "{{infoModelLabel}}"
+    },
+    {
+      "configKey": "infoModelValue",
+      "placeholder": "{{infoModelValue}}"
+    },
+    {
+      "configKey": "infoQuantityLabel",
+      "placeholder": "{{infoQuantityLabel}}"
+    },
+    {
+      "configKey": "infoQuantityValue",
+      "placeholder": "{{infoQuantityValue}}"
+    },
+    {
+      "configKey": "infoColorsLabel",
+      "placeholder": "{{infoColorsLabel}}"
+    },
+    {
+      "configKey": "infoSizesLabel",
+      "placeholder": "{{infoSizesLabel}}"
+    },
+    {
+      "configKey": "infoSizesValue",
+      "placeholder": "{{infoSizesValue}}"
+    },
+    {
+      "configKey": "infoMaterialLabel",
+      "placeholder": "{{infoMaterialLabel}}"
+    },
+    {
+      "configKey": "infoMaterialValue",
+      "placeholder": "{{infoMaterialValue}}"
+    },
+    {
+      "configKey": "infoPackagingLabel",
+      "placeholder": "{{infoPackagingLabel}}"
+    },
+    {
+      "configKey": "infoPackagingValue",
+      "placeholder": "{{infoPackagingValue}}"
+    },
+    {
+      "configKey": "benefits[0].title",
+      "placeholder": "{{benefit1Title}}"
+    },
+    {
+      "configKey": "benefits[0].description",
+      "placeholder": "{{benefit1Description}}"
+    },
+    {
+      "configKey": "benefits[1].title",
+      "placeholder": "{{benefit2Title}}"
+    },
+    {
+      "configKey": "benefits[1].description",
+      "placeholder": "{{benefit2Description}}"
+    },
+    {
+      "configKey": "benefits[2].title",
+      "placeholder": "{{benefit3Title}}"
+    },
+    {
+      "configKey": "benefits[2].description",
+      "placeholder": "{{benefit3Description}}"
+    },
+    {
+      "configKey": "benefits[3].title",
+      "placeholder": "{{benefit4Title}}"
+    },
+    {
+      "configKey": "benefits[3].description",
+      "placeholder": "{{benefit4Description}}"
+    },
+    {
+      "configKey": "benefits[4].title",
+      "placeholder": "{{benefit5Title}}"
+    },
+    {
+      "configKey": "benefits[4].description",
+      "placeholder": "{{benefit5Description}}"
+    },
+    {
+      "configKey": "product1Name",
+      "placeholder": "{{product1Name}}"
+    },
+    {
+      "configKey": "product1Color",
+      "placeholder": "{{product1Color}}"
+    },
+    {
+      "configKey": "product1ColorHex",
+      "placeholder": "{{product1ColorHex}}"
+    },
+    {
+      "configKey": "product1Size",
+      "placeholder": "{{product1Size}}"
+    },
+    {
+      "configKey": "product1Material",
+      "placeholder": "{{product1Material}}"
+    },
+    {
+      "configKey": "product1PriceOld",
+      "placeholder": "{{product1PriceOld}}"
+    },
+    {
+      "configKey": "product1Price",
+      "placeholder": "{{product1Price}}"
+    },
+    {
+      "configKey": "product2Name",
+      "placeholder": "{{product2Name}}"
+    },
+    {
+      "configKey": "product2Color",
+      "placeholder": "{{product2Color}}"
+    },
+    {
+      "configKey": "product2ColorHex",
+      "placeholder": "{{product2ColorHex}}"
+    },
+    {
+      "configKey": "product2Size",
+      "placeholder": "{{product2Size}}"
+    },
+    {
+      "configKey": "product2Material",
+      "placeholder": "{{product2Material}}"
+    },
+    {
+      "configKey": "product2PriceOld",
+      "placeholder": "{{product2PriceOld}}"
+    },
+    {
+      "configKey": "product2Price",
+      "placeholder": "{{product2Price}}"
+    },
+    {
+      "configKey": "product3Name",
+      "placeholder": "{{product3Name}}"
+    },
+    {
+      "configKey": "product3Color",
+      "placeholder": "{{product3Color}}"
+    },
+    {
+      "configKey": "product3ColorHex",
+      "placeholder": "{{product3ColorHex}}"
+    },
+    {
+      "configKey": "product3Size",
+      "placeholder": "{{product3Size}}"
+    },
+    {
+      "configKey": "product3Material",
+      "placeholder": "{{product3Material}}"
+    },
+    {
+      "configKey": "product3PriceOld",
+      "placeholder": "{{product3PriceOld}}"
+    },
+    {
+      "configKey": "product3Price",
+      "placeholder": "{{product3Price}}"
+    },
+    {
+      "configKey": "product4Name",
+      "placeholder": "{{product4Name}}"
+    },
+    {
+      "configKey": "product4Color",
+      "placeholder": "{{product4Color}}"
+    },
+    {
+      "configKey": "product4ColorHex",
+      "placeholder": "{{product4ColorHex}}"
+    },
+    {
+      "configKey": "product4Size",
+      "placeholder": "{{product4Size}}"
+    },
+    {
+      "configKey": "product4Material",
+      "placeholder": "{{product4Material}}"
+    },
+    {
+      "configKey": "product4PriceOld",
+      "placeholder": "{{product4PriceOld}}"
+    },
+    {
+      "configKey": "product4Price",
+      "placeholder": "{{product4Price}}"
+    },
+    {
+      "configKey": "product5Name",
+      "placeholder": "{{product5Name}}"
+    },
+    {
+      "configKey": "product5Color",
+      "placeholder": "{{product5Color}}"
+    },
+    {
+      "configKey": "product5ColorHex",
+      "placeholder": "{{product5ColorHex}}"
+    },
+    {
+      "configKey": "product5Size",
+      "placeholder": "{{product5Size}}"
+    },
+    {
+      "configKey": "product5Material",
+      "placeholder": "{{product5Material}}"
+    },
+    {
+      "configKey": "product5PriceOld",
+      "placeholder": "{{product5PriceOld}}"
+    },
+    {
+      "configKey": "product5Price",
+      "placeholder": "{{product5Price}}"
+    },
+    {
+      "configKey": "product8Name",
+      "placeholder": "{{product8Name}}"
+    },
+    {
+      "configKey": "product8Size",
+      "placeholder": "{{product8Size}}"
+    },
+    {
+      "configKey": "product8Material",
+      "placeholder": "{{product8Material}}"
+    },
+    {
+      "configKey": "product8PriceOld",
+      "placeholder": "{{product8PriceOld}}"
+    },
+    {
+      "configKey": "product8Price",
+      "placeholder": "{{product8Price}}"
+    },
+    {
+      "configKey": "product9Name",
+      "placeholder": "{{product9Name}}"
+    },
+    {
+      "configKey": "product9Size",
+      "placeholder": "{{product9Size}}"
+    },
+    {
+      "configKey": "product9Material",
+      "placeholder": "{{product9Material}}"
+    },
+    {
+      "configKey": "product9PriceOld",
+      "placeholder": "{{product9PriceOld}}"
+    },
+    {
+      "configKey": "product9Price",
+      "placeholder": "{{product9Price}}"
+    },
+    {
+      "configKey": "commentsLabel",
+      "placeholder": "{{commentsLabel}}"
+    },
+    {
+      "configKey": "commentsTitle",
+      "placeholder": "{{commentsTitle}}"
+    },
+    {
+      "configKey": "commentsSalesStat",
+      "placeholder": "{{commentsSalesStat}}"
+    },
+    {
+      "configKey": "commentsSalesText",
+      "placeholder": "{{commentsSalesText}}"
+    },
+    {
+      "configKey": "commentsSatisfiedStat",
+      "placeholder": "{{commentsSatisfiedStat}}"
+    },
+    {
+      "configKey": "commentsSatisfiedText",
+      "placeholder": "{{commentsSatisfiedText}}"
+    },
+    {
+      "configKey": "commentsRepeatStat",
+      "placeholder": "{{commentsRepeatStat}}"
+    },
+    {
+      "configKey": "commentsRepeatText",
+      "placeholder": "{{commentsRepeatText}}"
+    },
+    {
+      "configKey": "commentsButtonText",
+      "placeholder": "{{commentsButtonText}}"
+    },
+    {
+      "configKey": "faqLabel",
+      "placeholder": "{{faqLabel}}"
+    },
+    {
+      "configKey": "faqTitle",
+      "placeholder": "{{faqTitle}}"
+    },
+    {
+      "configKey": "howLabel",
+      "placeholder": "{{howLabel}}"
+    },
+    {
+      "configKey": "howTitle",
+      "placeholder": "{{howTitle}}"
+    },
+    {
+      "configKey": "requestInfoTitle",
+      "placeholder": "{{requestInfoTitle}}"
+    },
+    {
+      "configKey": "requestInfoDescription",
+      "placeholder": "{{requestInfoDescription}}"
+    },
+    {
+      "configKey": "requestNamePlaceholder",
+      "placeholder": "{{requestNamePlaceholder}}"
+    },
+    {
+      "configKey": "requestPhonePlaceholder",
+      "placeholder": "{{requestPhonePlaceholder}}"
+    },
+    {
+      "configKey": "requestButtonText",
+      "placeholder": "{{requestButtonText}}"
+    }
+  ]
+}

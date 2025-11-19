@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# Pre-commit hook для захисту критичних файлів проекту конструктора лендінгів
+# Установка: скопіюйте цей файл в .git/hooks/pre-commit і зробіть executable
+
+echo "🔒 Перевірка змін перед commit..."
+
+# Критичні файли які не можна видаляти
+CRITICAL_FILES=(
+  "user-config.json"
+  "package.json"
+  ".env"
+  "server.js"
+  "netlify.toml"
+)
+
+# Перевірка видалених файлів
+deleted_files=$(git diff --cached --name-only --diff-filter=D)
+
+for critical_file in "${CRITICAL_FILES[@]}"; do
+  if echo "$deleted_files" | grep -q "^$critical_file$"; then
+    echo ""
+    echo "🚨 ПОМИЛКА: Заборонено видаляти критичний файл: $critical_file"
+    echo ""
+    echo "Якщо це помилка Claude Code - відміни зміни:"
+    echo "  git reset HEAD $critical_file"
+    echo "  git checkout -- $critical_file"
+    echo ""
+    exit 1
+  fi
+done
+
+# Перевірка структури папок
+CRITICAL_DIRS=(
+  "sections"
+  "modules"
+  "server/replacements"
+  "lib"
+)
+
+for critical_dir in "${CRITICAL_DIRS[@]}"; do
+  # Перевірка чи не видалені всі файли з критичної папки
+  if [ -d "$critical_dir" ]; then
+    files_in_dir=$(find "$critical_dir" -type f | wc -l)
+    if [ "$files_in_dir" -eq 0 ]; then
+      echo ""
+      echo "🚨 ПОМИЛКА: Критична папка порожня: $critical_dir/"
+      echo ""
+      echo "Відновіть файли з останнього commit:"
+      echo "  git checkout HEAD -- $critical_dir/"
+      echo ""
+      exit 1
+    fi
+  fi
+done
+
+# Перевірка на великі файли (> 5MB)
+large_files=$(git diff --cached --name-only | while read file; do
+  if [ -f "$file" ]; then
+    size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null)
+    if [ "$size" -gt 5242880 ]; then
+      echo "$file ($(($size / 1024 / 1024))MB)"
+    fi
+  fi
+done)
+
+if [ ! -z "$large_files" ]; then
+  echo ""
+  echo "⚠️  ПОПЕРЕДЖЕННЯ: Великі файли в commit:"
+  echo "$large_files"
+  echo ""
+  echo "Рекомендується перевірити чи це правильно."
+  echo ""
+  read -p "Продовжити commit? (y/n) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+fi
+
+# Перевірка user-config.json на валідність JSON
+if echo "$deleted_files" | grep -v -q "^user-config.json$"; then
+  if git diff --cached --name-only | grep -q "^user-config.json$"; then
+    echo "📝 Перевірка user-config.json..."
+    if ! git show :user-config.json | python3 -m json.tool > /dev/null 2>&1; then
+      echo ""
+      echo "🚨 ПОМИЛКА: user-config.json містить невалідний JSON!"
+      echo ""
+      echo "Перевірте синтаксис JSON перед commit."
+      echo ""
+      exit 1
+    fi
+    echo "✅ user-config.json валідний"
+  fi
+fi
+
+# Все ОК
+echo "✅ Всі перевірки пройдено"
+echo ""
+
+exit 0

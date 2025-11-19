@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Конструктор - Генерування Лендінгу</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Accordion section styles */
+    .form-section {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background: white;
+      overflow: hidden;
+    }
+
+    .form-section-header {
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #f8f9fa;
+      user-select: none;
+      list-style: none;
+    }
+
+    .form-section-header::-webkit-details-marker {
+      display: none;
+    }
+
+    .form-section-header:hover {
+      background: #e9ecef;
+    }
+
+    .form-section-content {
+      padding: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    /* Image preview styles */
+    .image-preview {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border: 2px dashed #ddd;
+      text-align: center;
+    }
+
+    .image-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 6px;
+    }
+
+    .image-preview-empty {
+      color: #999;
+      padding: 20px;
+    }
+
+    /* File input styles */
+    input[type="file"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 5px;
+    }
+
+    /* Helper text */
+    .helper-text {
+      color: #666;
+      font-size: 0.9em;
+      margin-top: 5px;
+      display: block;
+    }
+
+    /* Product gallery preview */
+    .product-gallery-preview {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .product-gallery-preview img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Конструктор Лендінгів</h1>
+    <p class="subtitle">Налаштуй текст и функції твого сайту</p>
+
+    <!-- Кнопки керування збереженням (закріплені при скролінгу) -->
+    <div class="buttons-management">
+      <button type="button" id="saveButton" class="button button-secondary" onclick="saveFormToServer()" style="flex: 1;" disabled title="Спочатку завантажте дані">
+        💾 Зберегти
+      </button>
+      <button type="button" id="loadButton" class="button button-secondary" onclick="loadSavedValues()" style="flex: 1;">
+        📂 Завантажити останні зміни
+      </button>
+    </div>
+
+    <form id="constructorForm">
+      <!-- Sections will be loaded dynamically -->
+      <div id="section-basic"></div>
+      <div id="section-hero"></div>
+      <div id="section-benefits"></div>
+      <div id="section-pluslogo"></div>
+      <div id="section-video"></div>
+      <div id="section-products"></div>
+      <div id="section-sizechart"></div>
+      <div id="section-tabs"></div>
+      <div id="section-comments"></div>
+      <div id="section-reviews"></div>
+      <div id="section-faq"></div>
+      <div id="section-howto"></div>
+      <div id="section-request"></div>
+      <div id="section-footer"></div>
+      <div id="section-seo"></div>
+      <div id="section-salesdrive"></div>
+
+      <!-- Action buttons -->
+      <div class="buttons">
+        <button type="button" class="button button-secondary" onclick="previewSite()">
+          👁️ ПЕРЕГЛЯД
+        </button>
+        <button type="submit" class="button button-primary">
+          📦 ГЕНЕРУВАТИ ZIP
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Load form sections dynamically
+    async function loadFormSections() {
+      const sections = ['basic', 'hero', 'benefits', 'pluslogo', 'video', 'products', 'sizechart', 'tabs', 'comments', 'reviews', 'faq', 'howto', 'request', 'footer', 'seo', 'salesdrive'];
+
+      for (const section of sections) {
+        try {
+          const response = await fetch(`/sections/${section}.html`);
+          const html = await response.text();
+          document.getElementById(`section-${section}`).innerHTML = html;
+        } catch (error) {
+          console.error(`Failed to load section ${section}:`, error);
+        }
+      }
+
+      console.log('All sections loaded');
+    }
+
+    // Load sections when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadFormSections);
+    } else {
+      loadFormSections();
+    }
+  </script>
+
+  <script src="/js/form.js?v=20250117"></script>
+  <script>
+    // Additional handlers for review images
+    async function handleReview1ImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('reviewImage', file);
+
+      try {
+        const response = await fetch('/upload-review-image?reviewId=1', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById('review1Image').value = result.filename;
+          const preview = document.getElementById('review1ImagePreview');
+          preview.innerHTML = `<img src="${result.filename}" alt="Review 1" />`;
+        }
+      } catch (error) {
+        console.error('Error uploading review image:', error);
+      }
+    }
+
+    async function handleReview2ImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('reviewImage', file);
+
+      try {
+        const response = await fetch('/upload-review-image?reviewId=2', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById('review2Image').value = result.filename;
+          const preview = document.getElementById('review2ImagePreview');
+          preview.innerHTML = `<img src="${result.filename}" alt="Review 2" />`;
+        }
+      } catch (error) {
+        console.error('Error uploading review image:', error);
+      }
+    }
+
+    async function handleReview3ImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('reviewImage', file);
+
+      try {
+        const response = await fetch('/upload-review-image?reviewId=3', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById('review3Image').value = result.filename;
+          const preview = document.getElementById('review3ImagePreview');
+          preview.innerHTML = `<img src="${result.filename}" alt="Review 3" />`;
+        }
+      } catch (error) {
+        console.error('Error uploading review image:', error);
+      }
+    }
+
+    async function handleReview4ImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('reviewImage', file);
+
+      try {
+        const response = await fetch('/upload-review-image?reviewId=4', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById('review4Image').value = result.filename;
+          const preview = document.getElementById('review4ImagePreview');
+          preview.innerHTML = `<img src="${result.filename}" alt="Review 4" />`;
+        }
+      } catch (error) {
+        console.error('Error uploading review image:', error);
+      }
+    }
+
+    async function handleHeroImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('heroImage', file);
+
+      try {
+        const response = await fetch('/upload-hero-image', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById('heroImage').value = result.filename;
+          const preview = document.getElementById('heroImagePreview');
+          preview.innerHTML = `<img src="${result.filename}" alt="Hero" />`;
+        }
+      } catch (error) {
+        console.error('Error uploading hero image:', error);
+      }
+    }
+
+    async function handleImageUrlUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('imageUpload', file);
+
+      try {
+        const response = await fetch('/upload-image', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          document.getElementById('imageUrl').value = result.imageUrl;
+          const preview = document.getElementById('imageUrlPreview');
+          preview.innerHTML = `<img src="${result.imageUrl}" alt="Plus Logo" />`;
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+      <details class="form-section">
+        <summary class="form-section-header">🖼️ Hero секція (головне зображення та медіа)</summary>
+        <div class="form-section-content">
+
+          <h3 style="margin-top: 0; color: #555;">Головне зображення Hero</h3>
+
+          <div class="form-group">
+            <label for="heroImageUpload">🖼️ Завантажити головне зображення</label>
+            <input type="file" id="heroImageUpload" accept="image/*" onchange="handleHeroImageUpload(event)" />
+            <input type="hidden" id="heroImage" name="heroImage" value="" />
+            <small class="helper-text">Основне фото у Hero секції (рекомендовано 800x800px або більше)</small>
+            <div id="heroImagePreview" class="image-preview">
+              <img id="heroImagePreviewImg" src="" alt="Hero preview" style="max-width: 100%; display: none;" />
+              <div id="heroImagePreviewEmpty" class="image-preview-empty">Фото не завантажено</div>
+            </div>
+          </div>
+
+          <h3 style="margin-top: 25px; color: #555;">Таймер та складські залишки</h3>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+            <input
+              type="checkbox"
+              id="enableTimer"
+              name="enableTimer"
+              style="width: auto; margin: 0;"
+            />
+            <label for="enableTimer" style="margin: 0;">Показувати таймер</label>
+          </div>
+
+          <div class="form-group">
+            <label for="timerText">Текст таймера акції</label>
+            <input
+              type="text"
+              id="timerText"
+              name="timerText"
+              value="До кінця акції залишилося"
+              placeholder="Напр.: До кінця акції залишилося"
+            />
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+            <input
+              type="checkbox"
+              id="enableStock"
+              name="enableStock"
+              style="width: auto; margin: 0;"
+            />
+            <label for="enableStock" style="margin: 0;">Показувати кількість товарів</label>
+          </div>
+
+          <div class="form-group">
+            <label for="stockCount">Кількість залишків</label>
+            <input
+              type="text"
+              id="stockCount"
+              name="stockCount"
+              value="19"
+              placeholder="Напр.: 19"
+            />
+          </div>
+
+        </div>
+      </details>
