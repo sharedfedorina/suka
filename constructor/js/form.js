@@ -1990,13 +1990,17 @@ async function previewLanding() {
   try {
     console.log('📊 Step 1: Saving config...');
 
-    // Спочатку зберігаємо поточну конфігурацію
-    const formData = getFormParams();
+    // getFormParams() повертає string, а не URLSearchParams
+    const formDataString = getFormParams();
+    const params = new URLSearchParams(formDataString);
     const configObject = {};
 
-    for (const [key, value] of formData.entries()) {
+    // Перетворюємо URLSearchParams в об'єкт
+    for (const [key, value] of params.entries()) {
       configObject[key] = value;
     }
+
+    console.log('📊 Config object keys:', Object.keys(configObject).length);
 
     const saveResponse = await fetch('/api/save-config', {
       method: 'POST',
@@ -2060,13 +2064,17 @@ async function saveConfig() {
   try {
     console.log('💾 Збереження конфігу...');
 
-    const formData = getFormParams();
+    // getFormParams() повертає string, а не URLSearchParams
+    const formDataString = getFormParams();
+    const params = new URLSearchParams(formDataString);
     const configObject = {};
 
     // Перетворюємо URLSearchParams в об'єкт
-    for (const [key, value] of formData.entries()) {
+    for (const [key, value] of params.entries()) {
       configObject[key] = value;
     }
+
+    console.log('📊 Config object keys:', Object.keys(configObject).length);
 
     const response = await fetch('/api/save-config', {
       method: 'POST',
