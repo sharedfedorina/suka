@@ -59,25 +59,44 @@ function replacePlaceholders(html, config) {
 }
 
 /**
- * Генерує фінальний HTML: читає index.html + замінює MODULE плейсхолдери + замінює дані
+ * Генерує фінальний HTML: читає base.html + замінює MODULE плейсхолдери + замінює дані
  */
 function generateHTML(config) {
   try {
     console.log('\n🔨 Генерація HTML...');
 
-    // 1. Читаємо index.html (з MODULE плейсхолдерами)
-    const indexPath = path.join(__dirname, '..', 'index.html');
-    let html = fs.readFileSync(indexPath, 'utf8');
+    // 1. Читаємо base.html (template з MODULE плейсхолдерами)
+    const basePath = path.join(PATHS.MODULES, 'base.html');
+    let html = fs.readFileSync(basePath, 'utf8');
 
-    // 2. Замінюємо {{MODULE_BASIC}} на вміст modules/basic.html
-    const basicPath = path.join(PATHS.MODULES, 'basic.html');
-    const basicContent = fs.readFileSync(basicPath, 'utf8');
-    html = html.replace('{{MODULE_BASIC}}', basicContent);
+    // 2. Замінюємо всі {{MODULE_*}} плейсхолдери на відповідні модулі
+    const modules = [
+      'basic', 'hero', 'benefits', 'pluslogo', 'video',
+      'products', 'sizechart', 'tabs', 'comments', 'reviews',
+      'faq', 'howto', 'request', 'footer', 'salesdrive'
+    ];
 
-    // 3. Обробляємо умовні блоки {{#if}}...{{/if}}
+    modules.forEach(moduleName => {
+      const placeholder = `{{MODULE_${moduleName.toUpperCase()}}}`;
+      const modulePath = path.join(PATHS.MODULES, `${moduleName}.html`);
+
+      if (fs.existsSync(modulePath)) {
+        const moduleContent = fs.readFileSync(modulePath, 'utf8');
+        html = html.replace(placeholder, moduleContent);
+      } else {
+        console.warn(`⚠️  Модуль не знайдений: ${moduleName}.html`);
+        html = html.replace(placeholder, '');
+      }
+    });
+
+    // 3. Застосовуємо модульні replacements
+    const applyAllReplacements = require('../server/replacements/index');
+    html = applyAllReplacements(html, {}, config);
+
+    // 4. Обробляємо умовні блоки {{#if}}...{{/if}}
     html = processConditionals(html, config);
 
-    // 4. Замінюємо плейсхолдери даних {{headerText}} і т.д.
+    // 5. Замінюємо плейсхолдери даних {{headerText}} і т.д.
     html = replacePlaceholders(html, config);
 
     console.log(`✅ HTML згенеровано (${html.length} байт)\n`);
