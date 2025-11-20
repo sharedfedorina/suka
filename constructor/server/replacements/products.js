@@ -15,6 +15,10 @@ module.exports = function applyProductsReplacements(html, options, dataObj) {
   html = html.replace(/\{\{actionChooseText\}\}/g, actionChooseText);
   html = html.replace(/\{\{actionPromoText\}\}/g, actionPromoText);
 
+  // Info color circles placeholder
+  const infoColorCircles = options.infoColorCircles || dataObj.infoColorCircles || '';
+  html = html.replace(/\{\{infoColorCircles\}\}/g, infoColorCircles);
+
   // Process each product (1-9)
   for (let i = 1; i <= 9; i++) {
     const enableProduct = options[`enableProduct${i}`] || dataObj[`enableProduct${i}`] || false;
@@ -36,16 +40,16 @@ module.exports = function applyProductsReplacements(html, options, dataObj) {
     html = html.replace(new RegExp(`\\{\\{product${i}PriceOld\\}\\}`, 'g'), productPriceOld);
     html = html.replace(new RegExp(`\\{\\{product${i}Price\\}\\}`, 'g'), productPrice);
 
-    // Generate image slides for products
+    // Generate image slides for products (with correct placeholder names)
     if (productImages && productImages.length > 0) {
       const slides = productImages.map(img => `
         <div class="swiper-slide">
           <img src="${img}" alt="Product ${i}">
         </div>
       `).join('');
-      html = html.replace(new RegExp(`\\{\\{PRODUCT${i}_SLIDES\\}\\}`, 'g'), slides);
+      html = html.replace(new RegExp(`\\{\\{product${i}Slides\\}\\}`, 'g'), slides);
     } else {
-      html = html.replace(new RegExp(`\\{\\{PRODUCT${i}_SLIDES\\}\\}`, 'g'), '');
+      html = html.replace(new RegExp(`\\{\\{product${i}Slides\\}\\}`, 'g'), '');
     }
 
     // Replace individual image placeholders
