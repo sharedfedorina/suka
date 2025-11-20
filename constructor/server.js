@@ -55,7 +55,7 @@ app.get('/api/get-user-config', (req, res) => {
 app.post('/api/save-config', (req, res) => {
   try {
     logger.log('Збереження конфігу...');
-    const success = configManager.saveConfig(req.body);
+    const success = configManager.updateConfig(req.body);
     if (success) {
       logger.log('Конфіг успішно збережено');
       res.json({ success: true, message: 'Конфіг збережено' });
