@@ -96,5 +96,15 @@
   "product9PriceOld": "",
   "product9Price": "",
   "enableProduct9": false,
-  "product9Images": []
+  "product9Images": [],
+  "testKey": "testValue",
+  "newField": "This should be added",
+  "product1Slides": "",
+  "product2Slides": "",
+  "product3Slides": "",
+  "product4Slides": "",
+  "product5Slides": "",
+  "product8Slides": "",
+  "product9Slides": "",
+  "infoColorCircles": ""
 }
