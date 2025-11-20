@@ -59,28 +59,31 @@ function replacePlaceholders(html, config) {
 }
 
 /**
- * Генерує фінальний HTML: конкатенує модулі + замінює плейсхолдери
+ * Генерує фінальний HTML: читає index.html + замінює MODULE плейсхолдери + замінює дані
  */
 function generateHTML(config) {
   try {
     console.log('\n🔨 Генерація HTML...');
 
-    // 1. Склеюємо всі модулі (templates лендінгу)
-    let html = assembleModules();
-    console.log(`✅ Модулі склеєно (${SECTIONS.length} файлів)`);
+    // 1. Читаємо index.html (з MODULE плейсхолдерами)
+    const indexPath = path.join(__dirname, '..', 'index.html');
+    let html = fs.readFileSync(indexPath, 'utf8');
 
-    // 2. Обробляємо умовні блоки {{#if}}...{{/if}}
+    // 2. Замінюємо {{MODULE_BASIC}} на вміст modules/basic.html
+    const basicPath = path.join(PATHS.MODULES, 'basic.html');
+    const basicContent = fs.readFileSync(basicPath, 'utf8');
+    html = html.replace('{{MODULE_BASIC}}', basicContent);
+
+    // 3. Обробляємо умовні блоки {{#if}}...{{/if}}
     html = processConditionals(html, config);
-    console.log(`✅ Умовні блоки оброблено`);
 
-    // 3. Замінюємо плейсхолдери {{key}}
+    // 4. Замінюємо плейсхолдери даних {{headerText}} і т.д.
     html = replacePlaceholders(html, config);
-    console.log(`✅ Плейсхолдери замінено (${Object.keys(config).length} ключів)`);
 
-    console.log(`✅ HTML успішно згенерований (${html.length} байт)\n`);
+    console.log(`✅ HTML згенеровано (${html.length} байт)\n`);
     return html;
   } catch (err) {
-    console.error('❌ Помилка при генеруванні HTML:', err.message);
+    console.error('❌ Помилка при генерації HTML:', err.message);
     throw err;
   }
 }
