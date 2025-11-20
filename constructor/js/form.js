@@ -726,6 +726,10 @@ function initBenefitsForm(benefits) {
 
 // Функція для збереження конфігурації на сервер
 
+// ВИДАЛЕНО: saveFormToServer() - дублікат функції saveConfig()
+// Використовуйте saveConfig() замість цієї функції
+
+/*
 async function saveFormToServer() {
 
   // Зібрати дані переваг
@@ -1083,6 +1087,7 @@ async function saveFormToServer() {
   }
 
 }
+*/
 
 
 
