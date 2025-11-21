@@ -179,11 +179,19 @@ async function generateChatReview(data) {
     // Зберігаємо зображення
     const fileName = `review-${timestamp}.png`;
     const filePath = path.join(__dirname, '..', 'public', 'img', 'comments', fileName);
-    const buffer = canvas.toBuffer();  // Використовуємо синхронний метод без параметрів
-    fs.writeFileSync(filePath, buffer);
 
-    logger.log(`Згенеровано відгук: ${fileName}`);
-    return `/public/img/comments/${fileName}`;
+    // Використовуємо stream для збереження
+    const stream = canvas.createPNGStream();
+    const out = fs.createWriteStream(filePath);
+
+    return new Promise((resolve, reject) => {
+      stream.pipe(out);
+      out.on('finish', () => {
+        logger.log(`Згенеровано відгук: ${fileName}`);
+        resolve(`/public/img/comments/${fileName}`);
+      });
+      out.on('error', reject);
+    });
 
   } catch (error) {
     logger.error('Помилка генерації відгуку:', error);
