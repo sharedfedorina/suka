@@ -42,6 +42,9 @@ function processConditionals(html, config) {
     }
   });
 
+  // Очищаємо непарні {{/if}} які могли залишитись
+  html = html.replace(/\{\{\/if\}\}/g, '');
+
   return html;
 }
 
