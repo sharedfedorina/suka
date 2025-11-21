@@ -25,13 +25,13 @@
           </div>
 
           <div class="form-group">
-            <label for="sizeChartImageUpload">🖼️ Завантажити фото розмірної сітки</label>
-            <input type="file" id="sizeChartImageUpload" accept="image/*" />
+            <label for="sizeChartImageInput">🖼️ Завантажити фото розмірної сітки</label>
+            <input type="file" id="sizeChartImageInput" accept="image/*" />
             <input type="hidden" id="sizeChartImage" name="sizeChartImage" value="" />
             <button type="button" onclick="handleSizeChartImageUpload()" style="margin-top: 8px; padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">📤 Завантажити</button>
             <small class="helper-text">Таблиця з розмірами одягу</small>
             <div id="sizeChartImagePreview" class="image-preview" style="display: none;">
-              <img id="sizeChartImageImg" src="" alt="Size Chart" />
+              <img id="previewSizeChartImage" src="" alt="Size Chart" />
               <p id="sizeChartUploadStatus" style="margin: 8px 0 0; font-size: 0.9em; color: #2c3e50;"></p>
             </div>
         </div>
