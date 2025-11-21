@@ -31,7 +31,11 @@ function processConditionals(html, config) {
   const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
 
   html = html.replace(ifRegex, (match, key, content) => {
-    const value = config[key];
+    let value = config[key];
+
+    // Конвертуємо string boolean значення у справжні boolean
+    if (value === 'true') value = true;
+    if (value === 'false') value = false;
 
     // Якщо значення truthy (true, "text", 123, тощо) → залишаємо контент
     // Якщо falsy (false, "", 0, null, undefined) → видаляємо блок
