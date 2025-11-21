@@ -122,5 +122,22 @@
             />
           </div>
 
+          <h3 style="margin-top: 20px; color: #555;">Зображення секції замовлення</h3>
+
+          <div class="form-group">
+            <label for="requestImageUpload">🖼️ Завантажити зображення для форми замовлення</label>
+            <input type="file" id="requestImageUpload" accept="image/*" onchange="handleRequestImageUpload(event)" />
+            <input type="hidden" id="requestImageDesktop" name="requestImageDesktop" value="img/start/start-1.png" />
+            <input type="hidden" id="requestImageMobile" name="requestImageMobile" value="img/start/start-1_m.webp" />
+            <small class="helper-text">Зображення в секції замовлення (request section)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="popupImageUpload">🖼️ Завантажити зображення для popup</label>
+            <input type="file" id="popupImageUpload" accept="image/*" onchange="handlePopupImageUpload(event)" />
+            <input type="hidden" id="popupImage" name="popupImage" value="img/popup/popup-1.png" />
+            <small class="helper-text">Зображення яке показується в popup вікні</small>
+          </div>
+
         </div>
       </details>
