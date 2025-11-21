@@ -25,26 +25,40 @@ function assembleModules() {
 
 /**
  * Обробляє умовні блоки {{#if condition}}...{{/if}}
+ * ВАЖЛИВО: Обробка вкладених умов - потрібно обробляти ітеративно
  */
 function processConditionals(html, config) {
-  // Regex для пошуку {{#if key}}...{{/if}}
-  const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
+  // Обробляємо умовні блоки ітеративно, поки є що обробляти
+  // Це потрібно для вкладених conditionals
+  let iterations = 0;
+  let hasConditionals = true;
 
-  html = html.replace(ifRegex, (match, key, content) => {
-    let value = config[key];
+  while (hasConditionals && iterations < 20) {
+    iterations++;
+    let foundAny = false;
 
-    // Конвертуємо string boolean значення у справжні boolean
-    if (value === 'true') value = true;
-    if (value === 'false') value = false;
+    // Regex для пошуку {{#if key}}...{{/if}}
+    const ifRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
 
-    // Якщо значення truthy (true, "text", 123, тощо) → залишаємо контент
-    // Якщо falsy (false, "", 0, null, undefined) → видаляємо блок
-    if (value) {
-      return content;
-    } else {
-      return '';
-    }
-  });
+    html = html.replace(ifRegex, (match, key, content) => {
+      foundAny = true;
+      let value = config[key];
+
+      // Конвертуємо string boolean значення у справжні boolean
+      if (value === 'true') value = true;
+      if (value === 'false') value = false;
+
+      // Якщо значення truthy (true, "text", 123, тощо) → залишаємо контент
+      // Якщо falsy (false, "", 0, null, undefined) → видаляємо блок
+      if (value) {
+        return content;
+      } else {
+        return '';
+      }
+    });
+
+    hasConditionals = foundAny;
+  }
 
   // Очищаємо непарні {{/if}} які могли залишитись
   html = html.replace(/\{\{\/if\}\}/g, '');
