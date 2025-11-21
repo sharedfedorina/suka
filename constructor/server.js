@@ -136,38 +136,25 @@ app.get('/api/preview', (req, res) => {
 // API для генерації чат-відгуків
 // ============================================================================
 
-app.post('/api/generate-chat-review', (req, res) => {
+app.post('/api/generate-chat-review', async (req, res) => {
   logger.request(req);
   logger.log('Генерація чат-відгуку...');
 
   try {
     const { clientName, clientMessage, shopResponse, template } = req.body;
 
-    // Список доступних шаблонів відгуків
-    const availableReviews = [
-      '/public/img/comments/comments-1.webp',
-      '/public/img/comments/comments-2.webp',
-      '/public/img/comments/comments-3.webp',
-      '/public/img/comments/comments-4.webp',
-      '/public/img/comments/comment-1763063634737.webp',
-      '/public/img/comments/comment-1763063646110.webp',
-      '/public/img/comments/comment-1763063646266.webp',
-      '/public/img/comments/comment-1763063646370.webp'
-    ];
+    // Імпортуємо генератор
+    const { generateChatReview } = require('./lib/review-generator');
 
-    // Вибираємо випадковий шаблон або по індексу
-    const templateIndex = parseInt(template) - 1;
-    let imagePath;
+    // Генеруємо відгук з текстом
+    const imagePath = await generateChatReview({
+      clientName: clientName || 'Клієнт',
+      clientMessage: clientMessage || 'Дякую за товар!',
+      shopResponse: shopResponse || 'Дякуємо за відгук!',
+      template: template || '1'
+    });
 
-    if (templateIndex >= 0 && templateIndex < 4) {
-      imagePath = availableReviews[templateIndex];
-    } else {
-      // Випадковий вибір з інших
-      const randomIndex = Math.floor(Math.random() * (availableReviews.length - 4)) + 4;
-      imagePath = availableReviews[randomIndex];
-    }
-
-    // Зберігаємо дані відгуку (для майбутньої canvas генерації)
+    // Дані відгуку для повернення
     const reviewData = {
       clientName,
       clientMessage,
@@ -182,7 +169,25 @@ app.post('/api/generate-chat-review', (req, res) => {
 
   } catch (err) {
     logger.error('Помилка генерації чат-відгуку', err);
-    res.status(500).json({ error: 'Помилка генерації відгуку' });
+
+    // Якщо генерація не вдалась, повертаємо існуючий файл як fallback
+    const fallbackImages = [
+      '/public/img/comments/comments-1.webp',
+      '/public/img/comments/comments-2.webp',
+      '/public/img/comments/comments-3.webp',
+      '/public/img/comments/comments-4.webp'
+    ];
+
+    const template = req.body.template || '1';
+    const templateIndex = parseInt(template) - 1;
+    const fallbackImage = fallbackImages[templateIndex] || fallbackImages[0];
+
+    res.json({
+      success: true,
+      imagePath: fallbackImage,
+      data: req.body,
+      fallback: true
+    });
   }
 });
 
