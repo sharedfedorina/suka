@@ -315,8 +315,15 @@
         const result = await response.json();
         if (result.success) {
           document.getElementById('imageUrl').value = result.imageUrl;
-          const preview = document.getElementById('imageUrlPreview');
-          preview.innerHTML = `<img src="${result.imageUrl}" alt="Plus Logo" />`;
+
+          const previewImg = document.getElementById('imageUrlPreviewImg');
+          const previewEmpty = document.getElementById('imageUrlPreviewEmpty');
+
+          if (previewImg && previewEmpty) {
+            previewImg.src = result.imageUrl;
+            previewImg.style.display = 'block';
+            previewEmpty.style.display = 'none';
+          }
         }
       } catch (error) {
         console.error('Error uploading image:', error);
