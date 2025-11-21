@@ -126,5 +126,15 @@
             ></textarea>
           </div>
 
+          <h3 style="margin-top: 20px; color: #555;">Зображення FAQ</h3>
+
+          <div class="form-group">
+            <label for="faqImageUpload">🖼️ Завантажити зображення FAQ</label>
+            <input type="file" id="faqImageUpload" accept="image/*" onchange="handleFaqImageUpload(event)" />
+            <input type="hidden" id="faqImageDesktop" name="faqImageDesktop" value="img/faq/faq-1.png" />
+            <input type="hidden" id="faqImageMobile" name="faqImageMobile" value="img/faq/faq-1_m.png" />
+            <small class="helper-text">Зображення яке показується в FAQ секції</small>
+          </div>
+
         </div>
       </details>
