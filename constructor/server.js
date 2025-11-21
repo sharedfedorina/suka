@@ -143,11 +143,11 @@ app.post('/api/generate-chat-review', async (req, res) => {
   try {
     const { clientName, clientMessage, shopResponse, template } = req.body;
 
-    // Імпортуємо простий генератор на базі Sharp
-    const { generateSimpleReview } = require('./lib/simple-generator');
+    // Імпортуємо Instagram-стиль генератор
+    const { generateInstagramReview } = require('./lib/instagram-generator');
 
     // Генеруємо відгук з текстом
-    const imagePath = await generateSimpleReview({
+    const imagePath = await generateInstagramReview({
       clientName: clientName || 'Клієнт',
       clientMessage: clientMessage || 'Дякую за товар!',
       shopResponse: shopResponse || 'Дякуємо за відгук!',
