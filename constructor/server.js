@@ -32,6 +32,8 @@ app.use('/public', express.static(PATHS.PUBLIC));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/sections', express.static(PATHS.SECTIONS));
+app.use('/icons', express.static(path.join(__dirname, 'icons')));
+app.use('/img', express.static(path.join(__dirname, 'public', 'img')));
 
 logger.log('Middleware налаштовано');
 
