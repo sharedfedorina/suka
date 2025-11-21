@@ -337,3 +337,34 @@ var commentsSwiper = new Swiper('.comments-slider', {
   nextEl: '.comments-next',
  },
 });
+
+// Reviews chat slider
+var reviewsChatSwiper = new Swiper('.reviews-chat-slider', {
+ loop: true,
+ observer: true,
+ observeParents: true,
+ slidesPerView: 1,
+ spaceBetween: 30,
+ speed: 800,
+ grabCursor: true,
+ autoplay: {
+  delay: 5000,
+  disableOnInteraction: false,
+ },
+ pagination: {
+  el: '.swiper-pagination',
+  clickable: true,
+ },
+ navigation: {
+  prevEl: '.swiper-button-prev',
+  nextEl: '.swiper-button-next',
+ },
+ breakpoints: {
+  768: {
+   slidesPerView: 2,
+  },
+  1024: {
+   slidesPerView: 3,
+  },
+ },
+});

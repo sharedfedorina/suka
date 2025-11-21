@@ -4,53 +4,92 @@
             <div class="container">
                 <span class="section-label">{{reviewsLabel}}</span>
                 <h2 class="section-title title-xl">{{reviewsTitle}}</h2>
-                <div class="reviews-wrap">
-                    {{#if review1Name}}
-                    <div class="review-item">
-                        <div class="review-image">
-                            <img src="{{review1Image}}" alt="{{review1Name}}">
+                <div class="reviews-chat-wrap">
+                    <div class="swiper reviews-chat-slider">
+                        <div class="swiper-wrapper">
+                            {{#if review1Enabled}}
+                            <div class="swiper-slide">
+                                <div class="chat-review-item">
+                                    <img src="{{review1Image}}" alt="Відгук від {{review1Name}}" class="chat-review-image">
+                                </div>
+                            </div>
+                            {{/if}}
+                            {{#if review2Enabled}}
+                            <div class="swiper-slide">
+                                <div class="chat-review-item">
+                                    <img src="{{review2Image}}" alt="Відгук від {{review2Name}}" class="chat-review-image">
+                                </div>
+                            </div>
+                            {{/if}}
+                            {{#if review3Enabled}}
+                            <div class="swiper-slide">
+                                <div class="chat-review-item">
+                                    <img src="{{review3Image}}" alt="Відгук від {{review3Name}}" class="chat-review-image">
+                                </div>
+                            </div>
+                            {{/if}}
+                            {{#if review4Enabled}}
+                            <div class="swiper-slide">
+                                <div class="chat-review-item">
+                                    <img src="{{review4Image}}" alt="Відгук від {{review4Name}}" class="chat-review-image">
+                                </div>
+                            </div>
+                            {{/if}}
                         </div>
-                        <div class="review-content">
-                            <h3 class="review-name">{{review1Name}}</h3>
-                            <p class="review-text">{{review1Text}}</p>
-                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
                     </div>
-                    {{/if}}
-                    {{#if review2Name}}
-                    <div class="review-item">
-                        <div class="review-image">
-                            <img src="{{review2Image}}" alt="{{review2Name}}">
-                        </div>
-                        <div class="review-content">
-                            <h3 class="review-name">{{review2Name}}</h3>
-                            <p class="review-text">{{review2Text}}</p>
-                        </div>
-                    </div>
-                    {{/if}}
-                    {{#if review3Name}}
-                    <div class="review-item">
-                        <div class="review-image">
-                            <img src="{{review3Image}}" alt="{{review3Name}}">
-                        </div>
-                        <div class="review-content">
-                            <h3 class="review-name">{{review3Name}}</h3>
-                            <p class="review-text">{{review3Text}}</p>
-                        </div>
-                    </div>
-                    {{/if}}
-                    {{#if review4Name}}
-                    <div class="review-item">
-                        <div class="review-image">
-                            <img src="{{review4Image}}" alt="{{review4Name}}">
-                        </div>
-                        <div class="review-content">
-                            <h3 class="review-name">{{review4Name}}</h3>
-                            <p class="review-text">{{review4Text}}</p>
-                        </div>
-                    </div>
-                    {{/if}}
                 </div>
             </div>
         </section>
+        <style>
+            .reviews-chat-wrap {
+                margin-top: 40px;
+                position: relative;
+            }
+
+            .reviews-chat-slider {
+                padding: 0 50px;
+            }
+
+            .chat-review-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .chat-review-image {
+                max-width: 100%;
+                max-height: 600px;
+                height: auto;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .reviews-chat-slider .swiper-button-prev,
+            .reviews-chat-slider .swiper-button-next {
+                color: var(--color-primary, #333);
+            }
+
+            .reviews-chat-slider .swiper-pagination-bullet-active {
+                background-color: var(--color-primary, #333);
+            }
+
+            @media (max-width: 768px) {
+                .reviews-chat-slider {
+                    padding: 0 20px;
+                }
+
+                .chat-review-item {
+                    padding: 10px;
+                }
+
+                .chat-review-image {
+                    max-height: 500px;
+                }
+            }
+        </style>
         {{/if}}
         <!--/reviews-->

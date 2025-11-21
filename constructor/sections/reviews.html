@@ -1,5 +1,5 @@
       <details class="form-section">
-        <summary class="form-section-header">⭐ Відгуки клієнтів (з фото)</summary>
+        <summary class="form-section-header">💬 Відгуки клієнтів (чат-стиль)</summary>
         <div class="form-section-content">
 
           <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
@@ -34,137 +34,136 @@
             />
           </div>
 
-          <h3 style="margin-top: 20px; color: #555;">Відгук 1</h3>
+          <h3 style="margin-top: 20px; color: #555;">🎨 Генератор чат-відгуків</h3>
 
-          <div class="form-group">
-            <label for="review1Name">Ім'я клієнта</label>
-            <input
-              type="text"
-              id="review1Name"
-              name="review1Name"
-              value=""
-              placeholder="Напр.: Олена К."
-            />
+          <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; margin-bottom: 20px;">
+
+            <div class="form-group">
+              <label for="chatClientName">Ім'я клієнта</label>
+              <input
+                type="text"
+                id="chatClientName"
+                placeholder="Напр.: Олена"
+                style="background: white;"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="chatClientMessage">Повідомлення клієнта (подяка)</label>
+              <textarea
+                id="chatClientMessage"
+                rows="3"
+                placeholder="Напр.: Дякую за чудові худі! Дуже теплі та стильні 😍"
+                style="background: white;"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="chatShopResponse">Відповідь від ComoYo</label>
+              <textarea
+                id="chatShopResponse"
+                rows="2"
+                placeholder="Напр.: Дякуємо за відгук! ❤️"
+                style="background: white;"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="chatTemplate">Шаблон чату</label>
+              <select id="chatTemplate" style="background: white;">
+                <option value="1">Шаблон 1 - Світлий</option>
+                <option value="2">Шаблон 2 - Темний</option>
+                <option value="3">Шаблон 3 - Instagram</option>
+                <option value="4">Шаблон 4 - Messenger</option>
+              </select>
+            </div>
+
+            <button type="button" onclick="generateChatReview()" class="button button-primary" style="width: 100%;">
+              🎨 Згенерувати відгук
+            </button>
+
+            <div id="chatPreview" style="margin-top: 15px; text-align: center; min-height: 200px; background: white; border-radius: 8px; padding: 10px;">
+              <p style="color: #999;">Тут з'явиться preview відгуку</p>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="review1Text">Текст відгуку</label>
-            <textarea
-              id="review1Text"
-              name="review1Text"
-              rows="3"
-              placeholder="Напр.: Чудові худі! Дуже теплі та комфортні."
-            ></textarea>
+          <h3 style="margin-top: 20px; color: #555;">📋 Список згенерованих відгуків</h3>
+
+          <div id="generatedReviews" style="margin-bottom: 20px;">
+            <!-- Динамічний список відгуків буде тут -->
           </div>
 
-          <div class="form-group">
-            <label for="review1ImageUpload">🖼️ Фото до відгуку 1</label>
-            <input type="file" id="review1ImageUpload" accept="image/*" onchange="handleReview1ImageUpload(event)" />
+          <div id="reviewsList">
+            <!-- Статичні поля для збереження в конфіг (приховані) -->
+            <input type="hidden" id="review1Name" name="review1Name" value="" />
+            <input type="hidden" id="review1Text" name="review1Text" value="" />
             <input type="hidden" id="review1Image" name="review1Image" value="" />
-            <small class="helper-text">Фото клієнта або товару</small>
-            <div id="review1ImagePreview" class="image-preview">
-              <div class="image-preview-empty">Фото не завантажено</div>
-            </div>
-          </div>
+            <input type="hidden" id="review1Enabled" name="review1Enabled" value="false" />
 
-          <h3 style="margin-top: 20px; color: #555;">Відгук 2</h3>
-
-          <div class="form-group">
-            <label for="review2Name">Ім'я клієнта</label>
-            <input
-              type="text"
-              id="review2Name"
-              name="review2Name"
-              value=""
-              placeholder="Напр.: Марина П."
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="review2Text">Текст відгуку</label>
-            <textarea
-              id="review2Text"
-              name="review2Text"
-              rows="3"
-              placeholder="Напр.: Відмінна якість тканини та пошиву."
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="review2ImageUpload">🖼️ Фото до відгуку 2</label>
-            <input type="file" id="review2ImageUpload" accept="image/*" onchange="handleReview2ImageUpload(event)" />
+            <input type="hidden" id="review2Name" name="review2Name" value="" />
+            <input type="hidden" id="review2Text" name="review2Text" value="" />
             <input type="hidden" id="review2Image" name="review2Image" value="" />
-            <small class="helper-text">Фото клієнта або товару</small>
-            <div id="review2ImagePreview" class="image-preview">
-              <div class="image-preview-empty">Фото не завантажено</div>
-            </div>
-          </div>
+            <input type="hidden" id="review2Enabled" name="review2Enabled" value="false" />
 
-          <h3 style="margin-top: 20px; color: #555;">Відгук 3</h3>
-
-          <div class="form-group">
-            <label for="review3Name">Ім'я клієнта</label>
-            <input
-              type="text"
-              id="review3Name"
-              name="review3Name"
-              value=""
-              placeholder="Напр.: Анна С."
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="review3Text">Текст відгуку</label>
-            <textarea
-              id="review3Text"
-              name="review3Text"
-              rows="3"
-              placeholder="Напр.: Дуже задоволена покупкою!"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="review3ImageUpload">🖼️ Фото до відгуку 3</label>
-            <input type="file" id="review3ImageUpload" accept="image/*" onchange="handleReview3ImageUpload(event)" />
+            <input type="hidden" id="review3Name" name="review3Name" value="" />
+            <input type="hidden" id="review3Text" name="review3Text" value="" />
             <input type="hidden" id="review3Image" name="review3Image" value="" />
-            <small class="helper-text">Фото клієнта або товару</small>
-            <div id="review3ImagePreview" class="image-preview">
-              <div class="image-preview-empty">Фото не завантажено</div>
-            </div>
-          </div>
+            <input type="hidden" id="review3Enabled" name="review3Enabled" value="false" />
 
-          <h3 style="margin-top: 20px; color: #555;">Відгук 4</h3>
-
-          <div class="form-group">
-            <label for="review4Name">Ім'я клієнта</label>
-            <input
-              type="text"
-              id="review4Name"
-              name="review4Name"
-              value=""
-              placeholder="Напр.: Юлія В."
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="review4Text">Текст відгуку</label>
-            <textarea
-              id="review4Text"
-              name="review4Text"
-              rows="3"
-              placeholder="Напр.: Рекомендую всім подругам!"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="review4ImageUpload">🖼️ Фото до відгуку 4</label>
-            <input type="file" id="review4ImageUpload" accept="image/*" onchange="handleReview4ImageUpload(event)" />
+            <input type="hidden" id="review4Name" name="review4Name" value="" />
+            <input type="hidden" id="review4Text" name="review4Text" value="" />
             <input type="hidden" id="review4Image" name="review4Image" value="" />
-            <small class="helper-text">Фото клієнта або товару</small>
-            <div id="review4ImagePreview" class="image-preview">
-              <div class="image-preview-empty">Фото не завантажено</div>
-            </div>
+            <input type="hidden" id="review4Enabled" name="review4Enabled" value="false" />
           </div>
 
         </div>
       </details>
+
+      <style>
+        .review-item-container {
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 15px;
+          margin-bottom: 15px;
+          background: white;
+        }
+
+        .review-item-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+
+        .review-item-controls {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+
+        .review-item-preview {
+          text-align: center;
+          padding: 10px;
+          background: #f5f5f5;
+          border-radius: 5px;
+        }
+
+        .review-item-preview img {
+          max-width: 200px;
+          height: auto;
+          border-radius: 5px;
+        }
+
+        .delete-review-btn {
+          background: #dc3545;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .delete-review-btn:hover {
+          background: #c82333;
+        }
+      </style>

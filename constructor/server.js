@@ -132,6 +132,60 @@ app.get('/api/preview', (req, res) => {
   }
 });
 
+// ============================================================================
+// API для генерації чат-відгуків
+// ============================================================================
+
+app.post('/api/generate-chat-review', (req, res) => {
+  logger.request(req);
+  logger.log('Генерація чат-відгуку...');
+
+  try {
+    const { clientName, clientMessage, shopResponse, template } = req.body;
+
+    // Список доступних шаблонів відгуків
+    const availableReviews = [
+      '/public/img/comments/comments-1.webp',
+      '/public/img/comments/comments-2.webp',
+      '/public/img/comments/comments-3.webp',
+      '/public/img/comments/comments-4.webp',
+      '/public/img/comments/comment-1763063634737.webp',
+      '/public/img/comments/comment-1763063646110.webp',
+      '/public/img/comments/comment-1763063646266.webp',
+      '/public/img/comments/comment-1763063646370.webp'
+    ];
+
+    // Вибираємо випадковий шаблон або по індексу
+    const templateIndex = parseInt(template) - 1;
+    let imagePath;
+
+    if (templateIndex >= 0 && templateIndex < 4) {
+      imagePath = availableReviews[templateIndex];
+    } else {
+      // Випадковий вибір з інших
+      const randomIndex = Math.floor(Math.random() * (availableReviews.length - 4)) + 4;
+      imagePath = availableReviews[randomIndex];
+    }
+
+    // Зберігаємо дані відгуку (для майбутньої canvas генерації)
+    const reviewData = {
+      clientName,
+      clientMessage,
+      shopResponse,
+      template,
+      imagePath,
+      timestamp: Date.now()
+    };
+
+    logger.log('Чат-відгук згенеровано:', reviewData);
+    res.json({ success: true, imagePath, data: reviewData });
+
+  } catch (err) {
+    logger.error('Помилка генерації чат-відгуку', err);
+    res.status(500).json({ error: 'Помилка генерації відгуку' });
+  }
+});
+
 app.post('/api/generate', (req, res) => {
   try {
     logger.log('Генерація index.html...');

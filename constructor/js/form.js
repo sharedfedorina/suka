@@ -2021,15 +2021,19 @@ function getFormParams() {
     review1Name: safeGetValue('review1Name', ''),
     review1Text: safeGetValue('review1Text', ''),
     review1Image: safeGetValue('review1Image', ''),
+    review1Enabled: safeGetValue('review1Enabled', 'false'),
     review2Name: safeGetValue('review2Name', ''),
     review2Text: safeGetValue('review2Text', ''),
     review2Image: safeGetValue('review2Image', ''),
+    review2Enabled: safeGetValue('review2Enabled', 'false'),
     review3Name: safeGetValue('review3Name', ''),
     review3Text: safeGetValue('review3Text', ''),
     review3Image: safeGetValue('review3Image', ''),
+    review3Enabled: safeGetValue('review3Enabled', 'false'),
     review4Name: safeGetValue('review4Name', ''),
     review4Text: safeGetValue('review4Text', ''),
     review4Image: safeGetValue('review4Image', ''),
+    review4Enabled: safeGetValue('review4Enabled', 'false'),
 
     // FAQ section
     faqLabel: safeGetValue('faqLabel', ''),
@@ -2298,5 +2302,189 @@ function fillFormWithConfig(config) {
   }
 
   console.log('✅ Форму заповнено');
+
+  // Завантажуємо збережені відгуки
+  loadSavedReviews();
+}
+
+// ============================================================================
+// CHAT REVIEWS FUNCTIONS
+// ============================================================================
+
+let generatedReviewsData = [];
+
+/**
+ * Генерація чат-відгуку
+ */
+async function generateChatReview() {
+  try {
+    const clientName = document.getElementById('chatClientName').value.trim();
+    const clientMessage = document.getElementById('chatClientMessage').value.trim();
+    const shopResponse = document.getElementById('chatShopResponse').value.trim();
+    const template = document.getElementById('chatTemplate').value;
+
+    if (!clientName || !clientMessage) {
+      alert('Заповніть ім\'я клієнта та повідомлення!');
+      return;
+    }
+
+    console.log('🎨 Генеруємо відгук:', { clientName, clientMessage, shopResponse, template });
+
+    // Відправляємо запит на сервер для генерації
+    const response = await fetch('/api/generate-chat-review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientName,
+        clientMessage,
+        shopResponse,
+        template
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Помилка генерації');
+    }
+
+    const result = await response.json();
+
+    // Показуємо preview
+    const preview = document.getElementById('chatPreview');
+    preview.innerHTML = `<img src="${result.imagePath}" style="max-width: 100%; height: auto;" />`;
+
+    // Додаємо до списку
+    addReviewToList({
+      id: Date.now(),
+      name: clientName,
+      text: clientMessage,
+      response: shopResponse,
+      image: result.imagePath,
+      enabled: true
+    });
+
+    // Очищаємо форму
+    document.getElementById('chatClientName').value = '';
+    document.getElementById('chatClientMessage').value = '';
+    document.getElementById('chatShopResponse').value = '';
+
+  } catch (error) {
+    console.error('❌ Помилка генерації:', error);
+    alert('Помилка генерації відгуку: ' + error.message);
+  }
+}
+
+/**
+ * Додає відгук до списку
+ */
+function addReviewToList(review) {
+  generatedReviewsData.push(review);
+  renderReviewsList();
+  updateHiddenInputs();
+}
+
+/**
+ * Видаляє відгук зі списку
+ */
+function deleteReview(id) {
+  generatedReviewsData = generatedReviewsData.filter(r => r.id !== id);
+  renderReviewsList();
+  updateHiddenInputs();
+}
+
+/**
+ * Перемикає статус відгуку (увімкнений/вимкнений)
+ */
+function toggleReview(id) {
+  const review = generatedReviewsData.find(r => r.id === id);
+  if (review) {
+    review.enabled = !review.enabled;
+    renderReviewsList();
+    updateHiddenInputs();
+  }
+}
+
+/**
+ * Відображає список відгуків
+ */
+function renderReviewsList() {
+  const container = document.getElementById('generatedReviews');
+
+  if (generatedReviewsData.length === 0) {
+    container.innerHTML = '<p style="color: #999; text-align: center;">Немає згенерованих відгуків</p>';
+    return;
+  }
+
+  container.innerHTML = generatedReviewsData.map((review, index) => `
+    <div class="review-item-container">
+      <div class="review-item-header">
+        <div>
+          <strong>Відгук ${index + 1}:</strong> ${review.name}
+        </div>
+        <div class="review-item-controls">
+          <label style="margin: 0;">
+            <input type="checkbox"
+                   ${review.enabled ? 'checked' : ''}
+                   onchange="toggleReview(${review.id})"
+                   style="margin-right: 5px;">
+            Показувати
+          </label>
+          <button type="button"
+                  class="delete-review-btn"
+                  onclick="deleteReview(${review.id})">
+            🗑️ Видалити
+          </button>
+        </div>
+      </div>
+      <div class="review-item-preview">
+        <img src="${review.image}" alt="Review ${index + 1}" />
+      </div>
+    </div>
+  `).join('');
+}
+
+/**
+ * Оновлює приховані input для збереження в конфіг
+ */
+function updateHiddenInputs() {
+  // Беремо тільки перші 4 увімкнені відгуки
+  const enabledReviews = generatedReviewsData.filter(r => r.enabled).slice(0, 4);
+
+  // Оновлюємо hidden inputs
+  for (let i = 1; i <= 4; i++) {
+    const review = enabledReviews[i - 1];
+
+    document.getElementById(`review${i}Name`).value = review ? review.name : '';
+    document.getElementById(`review${i}Text`).value = review ? review.text : '';
+    document.getElementById(`review${i}Image`).value = review ? review.image : '';
+    document.getElementById(`review${i}Enabled`).value = review ? 'true' : 'false';
+  }
+}
+
+/**
+ * Завантажує збережені відгуки з конфігу
+ */
+function loadSavedReviews() {
+  generatedReviewsData = [];
+
+  // Завантажуємо з hidden inputs
+  for (let i = 1; i <= 4; i++) {
+    const name = document.getElementById(`review${i}Name`).value;
+    const text = document.getElementById(`review${i}Text`).value;
+    const image = document.getElementById(`review${i}Image`).value;
+    const enabled = document.getElementById(`review${i}Enabled`).value === 'true';
+
+    if (name && image) {
+      generatedReviewsData.push({
+        id: Date.now() + i,
+        name,
+        text,
+        response: '',  // Не зберігаємо відповідь, вона вже в зображенні
+        image,
+        enabled
+      });
+    }
+  }
+
+  renderReviewsList();
 }
 
