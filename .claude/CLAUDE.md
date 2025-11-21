@@ -319,6 +319,74 @@ Sharp → product-[timestamp]_m.webp
 
 ---
 
+## 8А. PREVIEW ФОТО В КОНСТРУКТОРІ (КРИТИЧНО!)
+
+### ЩО ТАКЕ PREVIEW?
+
+**Preview** = маленька картинка-прев'ю під кнопкою завантаження в формі конструктора.
+
+### Структура preview блоку:
+
+**HTML (`/sections/hero.html`):**
+```html
+<div id="heroImagePreview" class="image-preview">
+  <img id="heroImagePreviewImg" src="" alt="Hero preview" style="max-width: 100%; display: none;" />
+  <div id="heroImagePreviewEmpty" class="image-preview-empty">Фото не завантажено</div>
+</div>
+```
+
+**Логіка роботи:**
+- Якщо фото **НЕ завантажено** → показується текст "Фото не завантажено"
+- Якщо фото **завантажено** → показується маленька картинка
+
+### ДВА випадки коли треба показати preview:
+
+**1. Завантаження НОВОГО фото через форму:**
+```javascript
+// У функції handleHeroImageUpload()
+const previewImg = document.getElementById('heroImagePreviewImg');
+const previewEmpty = document.getElementById('heroImagePreviewEmpty');
+
+previewImg.src = result.filename;
+previewImg.style.display = 'block';
+previewEmpty.style.display = 'none';
+```
+
+**2. Підвантаження ІСНУЮЧОГО фото з конфігу:**
+```javascript
+// У функції fillFormWithConfig()
+if (config.heroImage) {
+  const previewImg = document.getElementById('heroImagePreviewImg');
+  const previewEmpty = document.getElementById('heroImagePreviewEmpty');
+
+  previewImg.src = config.heroImage;
+  previewImg.style.display = 'block';
+  previewEmpty.style.display = 'none';
+}
+```
+
+### ВСІХ фото поля що мають preview:
+
+1. `heroImage` → `heroImagePreview` (hero.html)
+2. `imageUrl` → `imageUrlPreview` (pluslogo.html)
+3. `sizeChartImage` → `sizeChartImagePreview` (sizechart.html)
+4. `videoThumbnailDesktop/Mobile` → `videoThumbnailPreview` (video.html)
+5. `product1Images...product9Images` → `product1ImagesList...` (products.html)
+6. `review1Image...review4Image` → динамічний список (reviews.html)
+
+### 🚨 КРИТИЧНО:
+
+**Якщо користувач каже "preview не працює"** → він має на увазі що:
+- При відкритті форми конструктора preview порожні (показують "Фото не завантажено")
+- Навіть якщо в `user-config.json` є шляхи до фото
+- Навіть якщо файли існують фізично
+
+**Причина:** Функція `fillFormWithConfig()` НЕ оновлює preview елементи!
+
+**Рішення:** Додати логіку показу preview в `fillFormWithConfig()` для ВСІХ фото полів.
+
+---
+
 ## 9. SALES DRIVE ІНТЕГРАЦІЯ
 
 ### Безпечний workflow:
