@@ -1,8 +1,11 @@
-до речі, порівняй конфіг з бекапом. перетерлося! значить ти щось треш постійно
 {
+  "pageTitle": "Худі жіночі на флісі - РОЗПРОДАЖ",
+  "pageDescription": "Якісні худі на флісі за вигідною ціною",
+  "heroStockCount": "19",
   "headerText": "РОЗПРОДАЖ ХУДІ!",
   "heroTitle": "Худі жіночі на флісі",
   "heroPrice": "всього 610 грн",
+  "heroButtonText": "ВИБРАТИ",
   "enableTimer": false,
   "enableStock": false,
   "heroImage": "/public/img/hero/hero-1762721124682_m.webp",
@@ -11,9 +14,13 @@
   "enableVideo": true,
   "videoUrl": "/video/custom-video-1762701401126.mp4",
   "enableVideoThumbnail": true,
-  "videoThumbnailDesktop": "img/video/video-thumb-1762701409708.jpg",
-  "videoThumbnailMobile": "img/video/video-thumb-1762701409708_m.webp",
+  "videoThumbnailDesktop": "/public/img/video/video-thumb-1762701409708.jpg",
+  "videoThumbnailMobile": "/public/img/video/video-thumb-1762701409708_m.webp",
+  "videoSectionLabel": "Відеоогляд",
+  "videoSectionTitle": "Краще один раз побачити",
   "sizeChartImage": "/public/img/info/size-chart-1762721756678.png",
+  "sizeChartLabel": "Розмірна сітка1",
+  "sizeChartTitle": "Вагаєтесь з розміром?<br> ",
   "infoEnableBrand": true,
   "infoBrandLabel": "Бренд",
   "infoBrandValue": "ComoYo™ (Україна)",
@@ -34,38 +41,21 @@
   "infoEnablePackaging": false,
   "infoPackagingLabel": "Упаковка",
   "infoPackagingValue": "Футболки запаковані у фірмовий пакет. Можлива упаковка у подарункову коробку за додаткову плату.",
-  "benefits": [
-    {
-      "id": 1,
-      "enabled": true,
-      "title": "Безкоштовна доставка",
-      "description": "Ми пропонуємо Максимально Безпечну покупку!"
-    },
-    {
-      "id": 2,
-      "enabled": true,
-      "title": "Накладний платіж",
-      "description": "Сплачуйте на пошті після огляду, якщо Вам все підійшло та сподобалось."
-    },
-    {
-      "id": 3,
-      "enabled": true,
-      "title": "Точно підберемо потрібний Вам розмір",
-      "description": "В наявності розміри від S до 5XL, обміняємо якщо раптом не підійде."
-    },
-    {
-      "id": 4,
-      "enabled": true,
-      "title": "Обмін та повернення",
-      "description": "Обміняємо розмір або повернемо кошти протягом 14 днів! Завжди готові допомогти."
-    },
-    {
-      "id": 5,
-      "enabled": true,
-      "title": "Власне виробництво в Україні!",
-      "description": "Зроблено українцями для українців з коханням. "
-    }
-  ],
+  "benefit1Title": "Безкоштовна доставка",
+  "benefit1Description": "Ми пропонуємо Максимально Безпечну покупку!",
+  "benefit2Title": "Накладний платіж",
+  "benefit2Description": "Сплачуйте на пошті після огляду, якщо Вам все підійшло та сподобалось.",
+  "benefit3Title": "Точно підберемо потрібний Вам розмір",
+  "benefit3Description": "В наявності розміри від S до 5XL, обміняємо якщо раптом не підійде.",
+  "benefit4Title": "Обмін та повернення",
+  "benefit4Description": "Обміняємо розмір або повернемо кошти протягом 14 днів! Завжди готові допомогти.",
+  "benefit5Title": "Власне виробництво в Україні!",
+  "benefit5Description": "Зроблено українцями для українців з коханням. ",
+  "productsSectionLabel": "Замовляйте зараз зі знижкою",
+  "productsSectionTitle": "Обирайте колір або <br> Свій набір футболок",
+  "productOrderButtonText": "ЗАМОВИТИ",
+  "actionChooseText": "Обирайте колір або набір",
+  "actionPromoText": "Діють акційні ціни!",
   "product1Name": "Худі на флісі БЕЖ",
   "product1Color": "Чорний",
   "product1ColorHex": "#a18368",

@@ -1968,7 +1968,100 @@ function getFormParams() {
     product9PriceOld: document.getElementById('product9PriceOld').value,
     product9Price: document.getElementById('product9Price').value,
     enableProduct9: safeGetChecked('enableProduct9', false) ? 'on' : 'off',
-    product9Images: JSON.stringify(product9Images)
+    product9Images: JSON.stringify(product9Images),
+
+    // TABS section
+    enableTabs: safeGetChecked('enableTabs', false) ? 'on' : 'off',
+    tabsLabel: safeGetValue('tabsLabel', ''),
+    tabsTitle: safeGetValue('tabsTitle', ''),
+    enableTabItem1: safeGetChecked('enableTabItem1', false) ? 'on' : 'off',
+    tab1Title: safeGetValue('tab1Title', ''),
+    tab1Description: safeGetValue('tab1Description', ''),
+    tab1ImageDesktop: safeGetValue('tab1ImageDesktop', ''),
+    tab1ImageMobile: safeGetValue('tab1ImageMobile', ''),
+    enableTabItem2: safeGetChecked('enableTabItem2', false) ? 'on' : 'off',
+    tab2Title: safeGetValue('tab2Title', ''),
+    tab2Description: safeGetValue('tab2Description', ''),
+    tab2ImageDesktop: safeGetValue('tab2ImageDesktop', ''),
+    tab2ImageMobile: safeGetValue('tab2ImageMobile', ''),
+    enableTabItem3: safeGetChecked('enableTabItem3', false) ? 'on' : 'off',
+    tab3Title: safeGetValue('tab3Title', ''),
+    tab3Description: safeGetValue('tab3Description', ''),
+    tab3ImageDesktop: safeGetValue('tab3ImageDesktop', ''),
+    tab3ImageMobile: safeGetValue('tab3ImageMobile', ''),
+
+    // Sales Drive configuration
+    enableSalesDrive: safeGetChecked('enableSalesDrive', false) ? 'on' : 'off',
+    salesDriveApiKey: safeGetValue('salesDriveApiKey', ''),
+    salesDriveStreamId: safeGetValue('salesDriveStreamId', ''),
+    salesDriveOfferId: safeGetValue('salesDriveOfferId', ''),
+    salesDriveWebmasterId: safeGetValue('salesDriveWebmasterId', ''),
+
+    // COMMENTS section
+    enableComments: safeGetChecked('enableComments', false) ? 'on' : 'off',
+    enableReviews: safeGetChecked('enableReviews', false) ? 'on' : 'off',
+    enableFaq: safeGetChecked('enableFaq', false) ? 'on' : 'off',
+    enableHow: safeGetChecked('enableHow', false) ? 'on' : 'off',
+    enableRequest: safeGetChecked('enableRequest', false) ? 'on' : 'off',
+
+    // Comments details
+    commentsLabel: safeGetValue('commentsLabel', ''),
+    commentsTitle: safeGetValue('commentsTitle', ''),
+    commentsSalesStat: safeGetValue('commentsSalesStat', ''),
+    commentsSalesText: safeGetValue('commentsSalesText', ''),
+    commentsSatisfiedStat: safeGetValue('commentsSatisfiedStat', ''),
+    commentsSatisfiedText: safeGetValue('commentsSatisfiedText', ''),
+    commentsRepeatStat: safeGetValue('commentsRepeatStat', ''),
+    commentsRepeatText: safeGetValue('commentsRepeatText', ''),
+    commentsButtonText: safeGetValue('commentsButtonText', ''),
+
+    // Reviews section
+    reviewsLabel: safeGetValue('reviewsLabel', ''),
+    reviewsTitle: safeGetValue('reviewsTitle', ''),
+    review1Name: safeGetValue('review1Name', ''),
+    review1Text: safeGetValue('review1Text', ''),
+    review1Image: safeGetValue('review1Image', ''),
+    review2Name: safeGetValue('review2Name', ''),
+    review2Text: safeGetValue('review2Text', ''),
+    review2Image: safeGetValue('review2Image', ''),
+    review3Name: safeGetValue('review3Name', ''),
+    review3Text: safeGetValue('review3Text', ''),
+    review3Image: safeGetValue('review3Image', ''),
+    review4Name: safeGetValue('review4Name', ''),
+    review4Text: safeGetValue('review4Text', ''),
+    review4Image: safeGetValue('review4Image', ''),
+
+    // FAQ section
+    faqLabel: safeGetValue('faqLabel', ''),
+    faqTitle: safeGetValue('faqTitle', ''),
+    faq1Question: safeGetValue('faq1Question', ''),
+    faq1Answer: safeGetValue('faq1Answer', ''),
+    faq2Question: safeGetValue('faq2Question', ''),
+    faq2Answer: safeGetValue('faq2Answer', ''),
+    faq3Question: safeGetValue('faq3Question', ''),
+    faq3Answer: safeGetValue('faq3Answer', ''),
+    faq4Question: safeGetValue('faq4Question', ''),
+    faq4Answer: safeGetValue('faq4Answer', ''),
+
+    // HOW-TO section
+    howLabel: safeGetValue('howLabel', ''),
+    howTitle: safeGetValue('howTitle', ''),
+    howStep1: safeGetValue('howStep1', ''),
+    howStep2: safeGetValue('howStep2', ''),
+    howStep3: safeGetValue('howStep3', ''),
+    howStep4: safeGetValue('howStep4', ''),
+
+    // REQUEST section (order form)
+    requestTitle: safeGetValue('requestTitle', ''),
+    requestTimerText: safeGetValue('requestTimerText', ''),
+    requestInfoTitle: safeGetValue('requestInfoTitle', ''),
+    requestInfoDescription: safeGetValue('requestInfoDescription', ''),
+    requestNamePlaceholder: safeGetValue('requestNamePlaceholder', ''),
+    requestPhonePlaceholder: safeGetValue('requestPhonePlaceholder', ''),
+    requestPhoneFormat: safeGetValue('requestPhoneFormat', ''),
+    requestButtonText: safeGetValue('requestButtonText', ''),
+    requestStockPrefix: safeGetValue('requestStockPrefix', ''),
+    requestStockSuffix: safeGetValue('requestStockSuffix', '')
 
   });
 
