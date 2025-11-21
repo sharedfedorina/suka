@@ -15,10 +15,12 @@ module.exports = function applyReviewsReplacements(html, options, dataObj) {
     const reviewName = options[`review${i}Name`] || dataObj[`review${i}Name`] || '';
     const reviewText = options[`review${i}Text`] || dataObj[`review${i}Text`] || '';
     const reviewImage = options[`review${i}Image`] || dataObj[`review${i}Image`] || '';
+    const reviewEnabled = options[`review${i}Enabled`] || dataObj[`review${i}Enabled`] || false;
 
     html = html.replace(new RegExp(`\\{\\{review${i}Name\\}\\}`, 'g'), reviewName);
     html = html.replace(new RegExp(`\\{\\{review${i}Text\\}\\}`, 'g'), reviewText);
     html = html.replace(new RegExp(`\\{\\{review${i}Image\\}\\}`, 'g'), reviewImage);
+    html = html.replace(new RegExp(`\\{\\{review${i}Enabled\\}\\}`, 'g'), reviewEnabled);
   }
 
   return html;
