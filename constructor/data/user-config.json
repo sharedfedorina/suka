@@ -206,6 +206,8 @@
   "review4Enabled": "false",
   "faqLabel": "Доставка і оплата",
   "faqTitle": "Швидко, зручно, надійно.",
+  "faqImageDesktop": "img/faq/faq-1.png",
+  "faqImageMobile": "img/faq/faq-1_m.png",
   "faq1Question": "Доставка",
   "faq1Answer": "",
   "faq2Question": "Оплата",
