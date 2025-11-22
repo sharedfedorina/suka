@@ -67,25 +67,32 @@ function extractFieldNames(filePath) {
   return names;
 }
 
-// Перевірити чи є плейсхолдер в template модулі
-function findPlaceholderInTemplate(fieldName, moduleName) {
-  const modulePath = path.join(__dirname, '..', 'modules', `${moduleName}.html`);
+// Перевірити чи є плейсхолдер в БУДЬ-ЯКОМУ template модулі
+function findPlaceholderInTemplate(fieldName) {
+  const modulesDir = path.join(__dirname, '..', 'modules');
+  const moduleFiles = fs.readdirSync(modulesDir).filter(f => f.endsWith('.html'));
 
-  if (!fs.existsSync(modulePath)) {
-    return '';
-  }
+  let totalCount = 0;
+  const foundInModules = [];
 
-  const content = fs.readFileSync(modulePath, 'utf8');
+  moduleFiles.forEach(file => {
+    const modulePath = path.join(modulesDir, file);
+    const content = fs.readFileSync(modulePath, 'utf8');
+    const regex = new RegExp(`\\{\\{${fieldName}\\}\\}`, 'g');
+    const matches = content.match(regex);
+    const count = matches ? matches.length : 0;
+
+    if (count > 0) {
+      totalCount += count;
+      foundInModules.push(file.replace('.html', ''));
+    }
+  });
+
+  if (totalCount === 0) return '';
+
   const placeholder = `{{${fieldName}}}`;
-
-  // Порахувати кількість входжень
-  const regex = new RegExp(`\\{\\{${fieldName}\\}\\}`, 'g');
-  const matches = content.match(regex);
-  const count = matches ? matches.length : 0;
-
-  if (count === 0) return '';
-  if (count === 1) return placeholder;
-  return `${placeholder} (x${count})`;
+  if (totalCount === 1) return placeholder;
+  return `${placeholder} (x${totalCount})`;
 }
 
 // Мапінг секцій до модулів
@@ -145,7 +152,6 @@ async function main() {
       }
 
       const fields = extractFieldNames(filePath);
-      const moduleName = SECTION_TO_MODULE[section.name] || section.name.toLowerCase();
 
       if (fields.length === 0) {
         console.log(`${section.name.padEnd(12)} | (немає полів)`.padEnd(59) + ' | '.padEnd(26) + ' | '.padEnd(26) + ' | ');
@@ -157,7 +163,7 @@ async function main() {
                           typeof configValue === 'object' ? '[object]' :
                           String(configValue).substring(0, 23);
 
-          const placeholder = findPlaceholderInTemplate(field, moduleName);
+          const placeholder = findPlaceholderInTemplate(field);
           const htmlValue = findValueInHTML(field, configValue, html);
 
           console.log(`${section.name.padEnd(12)} | ${field.padEnd(28)} | ${valueStr.padEnd(23)} | ${placeholder.padEnd(23)} | ${htmlValue}`);

@@ -639,83 +639,7 @@ async function handleSizeChartImageUpload() {
 
 // ========== ІНІЦІАЛІЗАЦІЯ ФОРМИ ==========
 
-
-
-function initBenefitsForm(benefits) {
-
-  const container = document.getElementById('benefitsContainer');
-
-  if (!container) return;
-
-
-
-  container.innerHTML = benefits.map((benefit, index) => `
-
-    <div style="border: 1px solid #ddd; padding: 12px; margin-bottom: 12px; border-radius: 6px; background: #f9f9f9;">
-
-      <div style="display: flex; align-items: center; margin-bottom: 10px;">
-
-        <input
-
-          type="checkbox"
-
-          id="benefit-enabled-${benefit.id}"
-
-          class="benefit-enabled"
-
-          data-id="${benefit.id}"
-
-          ${benefit.enabled ? 'checked' : ''}
-
-          style="width: 20px; height: 20px; cursor: pointer; margin-right: 10px;"
-
-        />
-
-        <label for="benefit-enabled-${benefit.id}" style="cursor: pointer; flex: 1; margin: 0;">Показувати перевагу ${benefit.id}</label>
-
-      </div>
-
-      <div style="margin-left: 30px;">
-
-        <input
-
-          type="text"
-
-          class="benefit-title"
-
-          data-id="${benefit.id}"
-
-          placeholder="Назва переваги"
-
-          value="${benefit.title}"
-
-          style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold;"
-
-        />
-
-        <textarea
-
-          class="benefit-description"
-
-          data-id="${benefit.id}"
-
-          placeholder="Опис переваги"
-
-          style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Segoe UI', Arial, sans-serif; min-height: 60px;"
-
-        >${benefit.description}</textarea>
-
-      </div>
-
-    </div>
-
-  `).join('');
-
-}
-
-
-
-// Ініціалізуємо форму при завантаженні сторінки
+// Benefits form removed - now using simple flat structure with name attributes
 
 
 
@@ -1346,13 +1270,7 @@ async function loadSavedValues() {
       renderProductImages(9);
     }
 
-    // Завантажити переваги
-
-    if (formData.benefits) {
-
-      initBenefitsForm(formData.benefits);
-
-    }
+    // Benefits are loaded automatically via standard form fields (benefit1Title, benefit1Description, etc.)
 
     // Завантажити дані TABS секції
     safeSetChecked('enableTabs', formData.enableTabs);
